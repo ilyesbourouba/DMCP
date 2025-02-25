@@ -10,12 +10,9 @@
         CMS Platform
     </title>
 
-    <!--     Fonts and icons     -->
     <link href="https://fonts.googleapis.com/css?family=Open+Sans:300,400,600,700" rel="stylesheet" />
-    <!-- CSS Files -->
     <link id="pagestyle" href="../../../assets/css/soft-ui-dashboard.min.css?v=1.0.7" rel="stylesheet" />
     <link rel="stylesheet" href="../assets/css/style.css" rel="stylesheet">
-    <!-- Anti-flicker snippet (recommended)  -->
     <style>
         .async-hide {
             opacity: 0 !important
@@ -39,7 +36,7 @@
                                
                                 
                                 <div class="card-body">
-                                    <form role="form" action="/api/login" method="post">
+                                    <form role="form" action="/login" method="post">
                                         <% if (error === 'missing') { %>
                                             <p class="text-danger">Please provide both username and password.</p>
                                         <% } else if (error === 'user-not-found') { %>
