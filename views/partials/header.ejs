@@ -1,0 +1,55 @@
+<main class="main-content position-relative max-height-vh-100 h-100  mt-1 border-radius-lg bg-white">
+    
+    <!-- Navbar -->
+    <nav class="navbar navbar-main navbar-expand-lg px-0 bg-white " id="navbarBlur"
+        navbar-scroll="true">
+        <div class="container-fluid py-1 px-3">
+            <nav aria-label="breadcrumb">
+                <ol class="breadcrumb bg-transparent mb-0 pb-0 pt-1 px-0 me-sm-6 me-5">
+                    <li class="breadcrumb-item text-sm">
+                        <a class="opacity-5 text-red" href="javascript:;">Section</a>
+                    </li>
+                    <li class="breadcrumb-item text-sm text-red active" aria-current="page">
+                        <%= sectionName %>
+                    </li>
+                </ol>
+                <h6 class="font-weight-bolder text-red mb-0">
+                    <%= pageName %>
+                </h6>
+            </nav>
+       
+            <div class="collapse navbar-collapse mt-sm-0 mt-2 me-md-0 me-sm-4" id="navbar">
+                <ul class="navbar-nav ms-md-auto justify-content-end">
+                   
+                    <!-- signIn -->
+                    <li class="nav-item d-flex dropdown align-items-center me-4">
+                        <a href="javascript:;" class="nav-link text-bod font-weight-bold px-0 dropdown-toggle"
+                            data-bs-toggle="dropdown" id="navbarDropdownMenuLink2">
+                            <i class="fa fa-user text-red me-sm-1"></i>
+                            <span class="d-sm-inline d-none">
+                                <%= user["nom"] %> <%= user["prenom"] %>
+                            </span>
+                        </a>
+                        <ul class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink2">
+                            <li>
+                                <a class="dropdown-item" href="/api/logout"> Logout </a>
+                            </li>
+                        </ul>
+                    </li>
+
+                    <li class="nav-item d-xl-none ps-3 d-flex align-items-center">
+                        <a href="javascript:;" class="nav-link text-body p-0" id="iconNavbarSidenav">
+                            <div class="sidenav-toggler-inner">
+                                <i class="sidenav-toggler-line"></i>
+                                <i class="sidenav-toggler-line"></i>
+                                <i class="sidenav-toggler-line"></i>
+                            </div>
+                        </a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+    
+    <!-- End Navbar -->
+

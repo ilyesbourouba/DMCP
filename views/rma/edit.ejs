@@ -1,0 +1,351 @@
+
+<form  hx-encoding="multipart/form-data" class="multi-form" hx-put="/api/rma/<%= rma.id %>" hx-target="this" hx-swap="none">
+    <div id="error-message" class="d-none text-danger fw-bold">
+        
+    </div>
+    <div class="row">
+        <div class="col-md-6 col-sm-12 mb-3" >
+            <label for="zone">Zone<span class="text-danger">*</span></label>
+            <div class="input-group col-sm-6 mb-3">
+                <select class="form-select" name="zone" id="zone" required>
+                    <option value="" disabled selected>Select Zone</option>
+                    <% zones.forEach(zone => { %>
+                        <option value="<%=zone.id%>" <%= rma.zone_id === zone.id ? 'selected' : '' %>><%=zone.name%></option>
+                    <% }); %>
+                </select>
+            </div>
+        </div>
+        
+        <div class="col-md-6 col-sm-12 mb-3">
+            <div class="row">
+                <label for="workshop">Workshop<span class="text-danger">*</span></label>
+                <div class="input-group col-sm-6 mb-3">
+                    <select class="form-select" name="workshop" id="workshop" required>
+                        <option value="" disabled selected>Select Workshop</option>
+                        <!-- filter workshops by selected zone -->
+                        <% workshops.forEach(workshop => { %>
+                            <option value="<%=workshop.id%>" data-zone-id="<%=workshop.zone_id%>" <%= rma.workshop_id === workshop.id ? 'selected' : '' %>><%=workshop.name%></option>
+                        <% }); %>
+                    </select>
+                </div>
+            </div>
+        </div>
+    </div>
+        
+    <div class="row">
+        <div class="col-md-6 col-sm-12 mb-3">
+            <label for="product">Category</label>
+            <div class="input-group col-sm-6 mb-3">
+                <select class="form-select" name="category" id="category">
+                    <option value="" disabled selected>Select Category</option>
+                    <% categories.forEach(category => { %>
+                        <option value="<%=category.id%>" <%= rma.category_id === category.id ? 'selected' : '' %>><%=category.name%> - <%=category.product_type%></option>
+                    <% }); %>
+                </select>
+            </div>
+        </div>
+        
+        <div class="col-md-6 col-sm-12 mb-3">
+            <label for="product">Product<span class="text-danger">*</span></label>
+            <div class="input-group col-sm-6 mb-3">
+                <select class="form-select" name="product" id="product" required>
+                    <option value="" disabled selected>Select Product</option>
+                    <% products.forEach(product => { %>
+                        <option value="<%=product.id%>" data-category-id="<%=product.category_id%>" <%= product.id == rma.product_id ? 'selected' : '' %>><%=product.name%></option>
+                    <% }); %>
+                </select>
+            </div>
+        </div>
+    </div>
+        
+    <div class="row">
+        <label for="process">Process<span class="text-danger">*</span></label>
+        <div class="input-group col-sm-6 mb-3">
+            <select class="form-select" name="process" id="process" required>
+                <option value="" disabled selected>Select Process</option>
+                <% processes.forEach(process => { %>
+                    <option value="<%=process.id%>" <%= rma.process_id === process.id ? 'selected' : '' %>><%=process.name%></option>
+                <% }); %>
+            </select>
+        </div>
+    </div>
+        
+    <div class="row">
+        <div class="col-md-4 col-sm-12">
+            <label for="odf">ODF/w/O</label>
+            <div class="input-group col-sm-6 mb-3">
+                <input type="text" name="odf" id="odf" class="form-control" placeholder="Fabrication order" value="<%= rma.odf %>">
+            </div>
+        </div>
+        
+        <div class="col-md-4 col-sm-12">
+            <label for="Brand">O/C Brand<span class="text-danger">*</span></label>
+            <div class="input-group col-sm-6 mb-3">
+                <select class="form-select" name="brand" id="brand" required>
+                    <option value="" disabled selected>Select O/C Brand</option>
+                    <% brands.forEach(brand => { %>
+                        <option value="<%= brand.id %>" <%= rma.brand_id === brand.id ? 'selected' : '' %>><%=brand.name%></option>
+                    <% }); %>
+                </select>
+            </div>
+        </div>
+
+        <div class="col-md-4 col-sm-12">
+            <label for="supplier">C/SKD Supplier<span class="text-danger">*</span></label>
+            <div class="input-group col-sm-6 mb-3">
+                <select class="form-select" name="supplier" id="supplier" required>
+                    <option value="" disabled selected>Select C/SKD Supplier</option>
+                    <% suppliers.forEach(supplier => { %>
+                        <option value="<%=supplier.id%>" <%= rma.supplier_id === supplier.id ? 'selected' : '' %>><%=supplier.name%></option>
+                    <% }); %>
+                </select>
+            </div>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-md-6 col-sm-12">
+            <label for="oc_ref">OC Reference<span class="text-danger">*</span></label>
+            <div class="input-group col-sm-6 mb-3">
+                <input type="text" name="oc_ref" id="oc_ref" class="form-control" placeholder="OC Reference" value="<%= rma.oc_ref %>" required>
+            </div>
+        </div>
+        
+        <div class="col-md-6 col-sm-12">
+            <label for="oc_sn">OC Serial Number<span class="text-danger">*</span></label>
+            <div class="input-group col-sm-6 mb-3">
+                <input type="text" name="oc_sn" id="oc_sn" class="form-control" placeholder="OC Serial Number" value="<%=rma.oc_sn %>" required>
+            </div>
+        </div>
+    </div>
+
+    <div class="row">
+
+        <div class="col-md-12 col-sm-12">
+            <label for="Defect">Defect<span class="text-danger">*</span></label>
+            <div class="input-group mb-3">
+                <select class="form-select" name="defect" id="defect" required>
+                    <option value="" disabled selected>Select Defect</option>
+                    <% defects.forEach(defect => { %>
+                        <option value="<%=defect.id%>" <%= rma.defect_id === defect.id ? 'selected' : '' %>><%=defect.name%></option>
+                    <% }); %>
+                </select>
+            </div>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-md-4 col-sm-12 mb-3 d-flex flex-column">
+            <div class="row">
+                <div class="col-11 py-0">
+                    <span class='text-info text-xs fw-bold'> 
+                        *Only JPEG and PNG images are allowed 
+                    </span> 
+                    <br> 
+                    <span  class='fw-bold text-xs text-info'>
+                        *File size must be less than 5MB 
+                    </span>
+                </div>
+                <div class="col-1">
+                    <button class="btn text_main_color p-0" type="button" >
+                        <i class="fas fa-question-circle fa-lg"></i>
+                    </button>
+                </div>
+            </div>
+            <label for="pic_defective_symptom" class="d-flex justify-content-between mt-2">
+                <div class="align-self-center">Picture of Defective Symptom<span class="text-danger">*</span></div>
+            </label>
+            <input type="file" id="pic_defective_symptom" name="pic_defective_symptom" class="form-control">
+            <img height="100" class="my-2" src="/uploads/<%= rma.picture_of_defect %>" alt="">
+            <small class="text-danger text-xs">*The current image will be kept if you do not upload a new one..</small>
+        </div>
+        
+        <div class="col-md-4 col-sm-12 mb-3 d-flex flex-column">
+            <div class="row">
+                <div class="col-11 py-0">
+                    <span class='text-info text-xs fw-bold'> 
+                        *Only JPEG and PNG images are allowed 
+                    </span> 
+                    <br> 
+                    <span  class='fw-bold text-xs text-info'>
+                        *File size must be less than 5MB 
+                    </span>
+                </div>
+                <div class="col-1">
+                    <button class="btn text_main_color p-0" type="button" >
+                        <i class="fas fa-question-circle fa-lg"></i>
+                    </button>
+                </div>
+            </div>
+            <label for="pic_oc_sn" class="d-flex justify-content-between mt-2">
+                <div class="align-self-center">Picture of OC Serial Number<span class="text-danger">*</span></div>
+            </label>
+            <input type="file" id="pic_oc_sn" name="pic_oc_sn" class="form-control">
+            <img height="100" class="my-2" src="/uploads/<%= rma.oc_sn_picture %>" alt="">
+            <small class="text-danger text-xs">*The current image will be kept if you do not upload a new one..</small>
+        </div>
+
+        <div class="col-md-4 col-sm-12  d-flex flex-column" >
+            <div class="row">
+                <div class="col-11 py-0">
+                    <span class='text-info text-xs fw-bold'> 
+                        *Only JPEG and PNG images are allowed 
+                    </span> 
+                    <br> 
+                    <span  class='fw-bold text-xs text-info'>
+                        *File size must be less than 5MB 
+                    </span>
+                </div>
+                <div class="col-1">
+                    <button class="btn text_main_color p-0" type="button" >
+                        <i class="fas fa-question-circle fa-lg"></i>
+                    </button>
+                </div>
+            </div>
+            <label for="pic_panel_sn" class="d-flex justify-content-between mt-2">
+                <div class="align-self-center">
+                    Picture of Panel Serial Number<span class="text-danger" id="label_panel_sn"></span>
+                </div>
+            </label>
+            <input type="file" id="pic_panel_sn" name="pic_panel_sn" class="form-control">
+            <img height="100" class="my-2" src="/uploads/<%=rma.picture_of_panel_sn %>" alt="">
+            <small class="text-danger text-xs"><%= rma.process_id == skd_process.id ? '*The current image will be kept if you do not upload a new one..' : '' %></small>
+        </div>
+
+    </div>
+
+    <div class="row">
+        <div class="col-md-6 col-sm-12">
+            <label for="lot_number">Lot Number</label>
+            <input type="text" id="lot_number" name="lot_number" value="<%= rma.lot_number %>" class="form-control" placeholder="Lot Number">
+        </div>
+
+        <div class="col-md-6 col-sm-12">
+            <label for="remark">Remark</label>
+            <div class="input-group col-sm-6 mb-3">
+                <input type="text" name="remark" id="remark" value="<%= rma.remark %>" class="form-control" placeholder="Remark" value="">
+            </div>
+        </div>
+    </div>
+
+    <div class="buttons text-end">
+        <button type="submit" class="submit_btn btn btn-md bg_color text-white submit">Submit</button>
+    </div>
+
+</form>
+
+  
+<script>
+
+    htmx.on('htmx:beforeRequest', function () {
+        // Disable the submit button to prevent multiple clicks
+        $('.submit_btn').disabled = true;
+    });
+
+    htmx.on('htmx:afterRequest', (e) => {
+        
+        $('.submit_btn').disabled = false; // Enable the submit button
+
+        if(e.detail.xhr.responseURL.includes("/api/rma") && e.detail.xhr.status === 201) {
+            $("#error-message").addClass("d-none");
+            $("#error-message").html("");
+
+            $("#dialog").modal('hide');
+            $(".toast-success-body").text("RMA edited successfully");
+            $(".toast-success").show();
+            
+            setTimeout(() => {
+                $(".toast-success-body").text("");
+                $(".toast-success").hide();
+                location.reload();
+            }, 1000);
+
+        }
+
+    });
+
+    htmx.on('htmx:responseError', (e) => {
+        const url = e.detail.xhr.responseURL;
+        const status = e.detail.xhr.status;
+        if (url.includes("/api/rma")) {
+
+            if (status === 400) {
+                console.log("true");
+                console.log("message => ",e.detail.xhr.responseText);
+                // Edit form error handling
+                $("#error-message").removeClass("d-none");
+                let message = JSON.parse(e.detail.xhr.responseText).error;
+                console.log("message => ", message);
+                $("#error-message").html(message);
+
+                setTimeout(() => {
+                    $("#error-message").addClass("d-none");
+                    $("#error-message").html("");
+                }, 5000);
+            }
+            else
+            {
+                console.log("false");
+            }
+
+        }
+    });
+</script>
+<script>
+    $(".modal-title").text("<%=form_title%>");
+    $(document).ready(function(){
+        $('[data-bs-toggle="popover"]').popover();  
+    });
+</script>
+
+<script> 
+ 
+    // Add an event listener to the zone select element
+     $('#zone').on('change', function() {
+    // Get the selected zone ID
+        const selectedZoneId = parseInt($(this).val());
+
+        // Filter the workshops by the selected zone
+        let workshops = JSON.parse(`<%- JSON.stringify(workshops) %>`);
+
+        const filteredWorkshops = workshops.filter(function(workshop) {
+            return workshop.zone_id === selectedZoneId;
+        });
+
+        // Update the workshop select element with the filtered workshops
+        $('#workshop').empty();
+        $('#workshop').append('<option value="" disabled selected>Select Workshop</option>');
+        $.each(filteredWorkshops, function(index, workshop) {
+            $('#workshop').append('<option value="' + workshop.id + '" data-zone-id="' + workshop.zone_id + '">' + workshop.name + '</option>');
+        });
+    });
+    $('#category').on('change', function() {
+    // Get the selected category ID
+        const selectedCategoryId = parseInt($(this).val());
+
+        // Filter the products by the selected category
+        let products = JSON.parse(`<%- JSON.stringify(products) %>`);
+
+        const filteredProducts = products.filter(function(product) {
+            return product.category_id === selectedCategoryId;
+        });
+
+        // Update the product select element with the filtered products
+        $('#product').empty();
+        $('#product').append('<option value="" disabled selected>Select Product</option>');
+        $.each(filteredProducts, function(index, product) {
+            $('#product').append('<option value="' + product.id + '" data-category-id="' + product.category_id + '" data-zone-id="' + product.zone_id + '">' + product.name + '</option>');
+        });
+    });
+    
+    $("#workshop").on("change", function(){
+        let zone_id = $(this).find("option:selected").data("zone-id");
+        c
+        $("#zone").val(zone_id);
+    });
+    $("#product").on("change", function(){
+        let category_id = $(this).find("option:selected").data("category-id");
+        $("#category").val(category_id);
+    });
+</script>
+

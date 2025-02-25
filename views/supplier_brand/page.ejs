@@ -1,0 +1,380 @@
+<%- include('../partials/sidebar'); %>
+    <%- include('../partials/header'); %>
+    <link href="https://cdn.datatables.net/v/bs5/jszip-3.10.1/dt-2.0.8/b-3.0.2/b-html5-3.0.2/sb-1.7.1/sp-2.3.1/rr-1.5.0/datatables.min.css" rel="stylesheet">
+    <script src="https://cdn.datatables.net/v/bs5/dt-2.0.8/sb-1.7.1/sp-2.3.1/rr-1.5.0/datatables.min.js"></script>
+  
+    <style>
+        .btn-close {
+            font-size: 24px; 
+            padding: 10px 20px; 
+        }
+    </style>
+    <nav id="navbar-example" class="navbar bg_color  sticky-top px-3 mb-3">
+        <a class="navbar-brand text-white" href="#">Section</a>
+        <ul class="nav nav-pills">
+            <li class="nav-item">
+                <a class="nav-link active" href="#suppliers_div">C/SKD Supplier</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="#brands_div">O/C Brands</a>
+            </li>
+        </ul>
+    </nav>
+
+    <div data-bs-spy="scroll" data-bs-target="#navbar-example" data-bs-root-margin="0px 0px -40%" data-bs-smooth-scroll="true" class="scrollspy-example bg-body-tertiary p-3 rounded-2" tabindex="0">
+        <div class="row m-5 mx-3" id="suppliers_div">
+
+            <div class="col-md-9 align-self-center"> 
+                <h5>C/SKD Suppliers List</h5>
+            </div>
+            <div class="col-md-3 d-flex justify-content-end">
+    
+                <div  class="form-group">
+                    <div class="input-group input-group-alternative ">
+                        <button class="btn btn-xs bg_color px-3 text-white" 
+                        data-bs-toggle="modal" data-bs-target="#dialog"  data-original-title="ADD"
+                        hx-get="/api/supplier/create" 
+                        hx-target="#dialog-body"
+                        hx-swap="innerHTML"
+                        hx-indicator="#supplier-loading-spinner"
+                        >
+                            <i class="fa fa-plus me-2"></i>
+                            ADD C/SKD Supplier
+                        </button>
+                    </div>
+                </div>
+            </div>
+            <br><br>
+            <% if (success && success.length > 0) { %>
+                <div class="col-12" id="success-toast">
+                    <div class="alert bg-success text-white font-weight-bold alert-dismissible fade show">
+                        <%= success %>
+                    </div>
+                </div>
+            <% } %>
+    
+            <div class="col-12" id="danger-toast" style="display: none;">
+                <div class="alert bg-danger text-white font-weight-bold alert-dismissible fade show error_message">
+                    
+                </div>
+            </div>
+            <div class="row d-flex justify-content-center">
+    
+                <div class="col-12 card">
+                    <div class="table-responsive p-4">
+                        <table class="Table table align-items-center mb-0" id="supplier-table">
+                            <thead>
+                                <tr>
+                                    <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 align-middle text-center">
+                                        C/SKD Supplier
+                                    </th>
+<!--     
+                                    <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 align-middle text-center">
+                                        RMA Request Number
+                                    </th> -->
+    
+                                    <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder align-middle text-center opacity-7">
+                                        Operation
+                                    </th>
+                                </tr>
+                            </thead>
+                            <tbody id="program-table-body" hx-target="closest tr" hx-swap="outerHTML">
+                                
+                                <% suppliers.map(supplier => { %>
+                                    <tr class="py-2">
+                                        
+                                        <td class="align-middle text-center text-sm">
+                                            <h5 class="mb-0 text-sm text-uppercase">
+                                                <%= supplier.name %>
+                                            </h5>
+                                        </td>
+                                        <!-- <td class="align-middle text-center text-sm">
+                                            <h5 class="mb-0 text-sm text-uppercase text-secondary">
+                                                <%= supplier.nb_rma %>
+                                            </h5>
+                                        </td> -->
+                                        
+                                        <td class="align-end  text-end text-end">
+                                            <div class="row flex-nowrap">
+                                                <div class="col align-middle opacity-8">
+                                                    <a  href="javascript:;"  data-bs-toggle="modal" 
+                                                        data-bs-target="#dialog"  data-original-title="Edit"
+                                                        class="text_main_color font-weight-bold text-sm" 
+                                                        hx-get="/api/supplier/edit"
+                                                        hx-vals="js:{'id':'<%=supplier.id%>'}"
+                                                        hx-target="#dialog-body"
+                                                        hx-swap="innerHTML"
+                                                        hx-indicator="#supplier-loading-spinner">
+                                                        <i class="fas fa-pencil-alt "></i>
+                                                        <!-- Edit -->
+                                                    </a>
+                                                    </div>
+                                                    
+                                                    <div class=" col align-middle opacity-8">
+                                                    <a  href="javascript:;" class="text-red font-weight-bold text-sm"
+                                                        data-bs-toggle="modal" 
+                                                        data-bs-target="#dialog"  data-original-title="Edit"
+                                                        hx-get="/api/supplier/delete" 
+                                                        hx-vals="js:{'id':'<%= supplier.id %>'}"
+                                                        hx-target="#dialog-body"
+                                                        hx-swap="innerHTML"
+                                                        hx-indicator="#supplier-loading-spinner">
+                                                        <i class="fas fa-trash text-danger"></i>
+                                                        <!-- Delete -->
+                                                    </a>
+                                                    </div>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                <% }) %>
+                                
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div> 
+            
+        </div>
+        <%- include('../toasts/success-toast'); %>
+        <div class="row m-5 mx-3" id="brands_div">
+        
+            <div class="col-md-9 align-self-center"> 
+                <h5>O/C Brands List</h5>
+            </div>
+            <div class="col-md-3 d-flex justify-content-end">
+    
+                <div  class="form-group">
+                    <div class="input-group input-group-alternative ">
+                        <button class="btn btn-xs bg_color px-3 text-white" 
+                        data-bs-toggle="modal" data-bs-target="#brand_dialog"  data-original-title="ADD"
+                        hx-get="/api/brand/create" 
+                        hx-target="#brand-dialog-body"
+                        hx-swap="innerHTML"
+                        hx-indicator="#loading-spinner"
+                        >
+                            <i class="fa fa-plus me-2"></i>
+                            ADD O/C Brand
+                        </button>
+                    </div>
+                </div>
+            </div>
+            <br><br>
+            <% if (success && success.length > 0) { %>
+                <div class="col-12" id="success-toast">
+                    <div class="alert bg-success text-white font-weight-bold alert-dismissible fade show">
+                        <%= success %>
+                    </div>
+                </div>
+            <% } %>
+    
+            <div class="col-12" id="danger-toast" style="display: none;">
+                <div class="alert bg-danger text-white font-weight-bold alert-dismissible fade show error_message">
+                    
+                </div>
+            </div>
+            <div class="row d-flex justify-content-center">
+               
+                <div class="col-12 card">
+                    <div class="table-responsive p-4">
+                        <table class="Table table align-items-center mb-0" id="brand-table">
+                            <thead>
+                                <tr>
+                                    <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 align-middle text-center">
+                                        O/C Brand
+                                    </th>
+    
+                                    <!-- <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 align-middle text-center">
+                                        RMA Request Number
+                                    </th> -->
+    
+                                    <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder align-middle text-center opacity-7">
+                                        Operation
+                                    </th>
+                                </tr>
+                            </thead>
+                            <tbody id="program-table-body" hx-target="closest tr" hx-swap="outerHTML">
+                                
+                                <% brands.map(brand => { %>
+                                    <tr class="py-2">
+                                        
+                                        <td class="align-middle text-center text-sm">
+                                            <h5 class="mb-0 text-sm text-uppercase">
+                                                <%= brand.name %>
+                                            </h5>
+                                        </td>
+                                        <!-- <td class="align-middle text-center text-sm">
+                                            <h5 class="mb-0 text-sm text-uppercase text-secondary">
+                                                <%= brand.nb_rma %>
+                                            </h5>
+                                        </td> -->
+                                        
+                                        <td class="align-end  text-end text-end">
+                                            <div class="row flex-nowrap">
+                                                <div class="col align-middle opacity-8">
+                                                    <a  href="javascript:;"  data-bs-toggle="modal" 
+                                                        data-bs-target="#brand_dialog"  data-original-title="Edit"
+                                                        class="text_main_color font-weight-bold text-sm" 
+                                                        hx-get="/api/brand/edit"
+                                                        hx-vals="js:{'id':'<%=brand.id%>'}"
+                                                        hx-target="#brand-dialog-body"
+                                                        hx-swap="innerHTML"
+                                                        hx-indicator="#loading-spinner">
+                                                        <i class="fas fa-pencil-alt "></i>
+                                                        <!-- Edit -->
+                                                    </a>
+                                                    </div>
+                                                    
+                                                    <div class=" col align-middle opacity-8">
+                                                    <a  href="javascript:;" class="text-red font-weight-bold text-sm"
+                                                        data-bs-toggle="modal" 
+                                                        data-bs-target="#brand_dialog"  data-original-title="Edit"
+                                                        hx-get="/api/brand/delete" 
+                                                        hx-vals="js:{'id':'<%= brand.id %>'}"
+                                                        hx-target="#brand-dialog-body"
+                                                        hx-swap="innerHTML"
+                                                        hx-indicator="#loading-spinner">
+                                                        <i class="fas fa-trash text-danger"></i>
+                                                        <!-- Delete -->
+                                                    </a>
+                                                    </div>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                <% }) %>
+                                
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div> 
+            
+        </div>
+    </div>
+
+
+    <!-- Supplier Modal -->
+    <div class="modal fade" data-bs-backdrop="static" id="dialog" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel">
+        <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
+            <div class="modal-content">
+                
+                <div class="modal-header d-flex align-items-center flex-column  border-0 ">
+                    <button type="button" class="btn-close text-black text-xxl" data-bs-dismiss="modal" aria-label="Close">&times;</button>
+                    <img src="https://img.icons8.com/pulsar-line/100/supplier.png" alt="supplier"/>
+                    <h4 class="nav-link-text font-weight-bold modal-title text-black text-uppercase " id="modal-title"></h4>
+                    
+                </div>
+               
+                <!-- Loading spinner -->
+                <div id="supplier-loading-spinner" class="loading-spinner text-center py-3" style="display: none;">
+                    <div class="spinner-border text-dark" role="status">
+                        <span class="sr-only">Loading...</span>
+                    </div>
+                    <p>Loading...</p>
+                </div>
+
+                <div class="modal-body" id="dialog-body" >
+                    
+                 </div>
+                 
+            </div>
+            
+        </div>
+    </div>
+
+    <!-- Brand Modal -->
+    <div class="modal fade" data-bs-backdrop="static" id="brand_dialog" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel">
+        <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
+            <div class="modal-content">
+                
+                <div class="modal-header d-flex align-items-center flex-column  border-0 ">
+                    <button type="button" class="btn-close text-black text-xxl" data-bs-dismiss="modal" aria-label="Close">&times;</button>
+                    <img src="https://img.icons8.com/pulsar-line/100/tag.png" alt="tag"/>
+                    <h4 class="nav-link-text font-weight-bold modal-title text-black text-uppercase " id="brand-modal-title"></h4>
+                    
+                </div>
+
+                <!-- Loading spinner -->
+                <div id="loading-spinner" class="loading-spinner text-center py-3" style="display: none;">
+                    <div class="spinner-border text-dark" role="status">
+                        <span class="sr-only">Loading...</span>
+                    </div>
+                    <p>Loading...</p>
+                </div>
+               
+                <div class="modal-body" id="brand-dialog-body">
+                    
+                 </div>
+                 
+            </div>
+            
+        </div>
+    </div>
+
+    
+    <%- include('../partials/footer'); %>
+    <%- include('../partials/columnFilter'); %>
+
+    <script>
+        $(document).ready(function() {
+            initializeDataTable('supplier-table');
+            initializeDataTable('brand-table');
+            setTimeout(()=>{
+                
+                $('#success-toast').addClass("d-none");
+
+            }, 3000)
+        });
+    </script>
+
+<script>
+    $(document).on('click', '.btn-close', function () {
+        $(".modal-title").text("");
+    });
+
+    htmx.on('htmx:beforeRequest', (e) => {
+        const url = e.detail.elt.getAttribute('hx-get');
+
+        // Handle Supplier Modal
+        if (url.includes("/supplier")) {
+            document.querySelector('#supplier-loading-spinner').style.display = 'block';
+            document.getElementById('dialog-body').innerHTML = '';
+        }
+
+        // Handle Brand Modal
+        if (url.includes("/brand")) {
+            document.querySelector('#loading-spinner').style.display = 'block';
+            document.getElementById('brand-dialog-body').innerHTML = '';
+        }
+    });
+
+    // Event listener for when the request completes (hide the spinner)
+    htmx.on('htmx:afterRequest', function (e) {
+        const url = e.detail.elt.getAttribute('hx-get');
+
+        // Hide Supplier Spinner
+        if (url.includes("/supplier")) {
+            document.querySelector('#supplier-loading-spinner').style.display = 'none';
+        }
+
+        // Hide Brand Spinner
+        if (url.includes("/brand")) {
+            document.querySelector('#loading-spinner').style.display = 'none';
+        }
+    });
+
+    // Event listener for handling request errors
+    htmx.on('htmx:responseError', function (e) {
+        const url = e.detail.elt.getAttribute('hx-get');
+
+        // Hide Supplier Spinner on Error
+        if (url.includes("/supplier")) {
+            document.querySelector('#supplier-loading-spinner').style.display = 'none';
+        }
+
+        // Hide Brand Spinner on Error
+        if (url.includes("/brand")) {
+            document.querySelector('#loading-spinner').style.display = 'none';
+        }
+    });
+
+</script>

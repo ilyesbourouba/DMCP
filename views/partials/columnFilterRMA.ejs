@@ -1,0 +1,148 @@
+<script src="https://cdn.datatables.net/v/bs5/dt-2.1.8/b-3.2.0/b-colvis-3.2.0/sb-1.7.1/sp-2.3.1/rr-1.5.0/datatables.min.js"></script>
+
+<style>
+    .dataTables_wrapper {
+        overflow: visible !important;
+    }
+
+    .dataTables_scrollBody {
+        overflow-y: scroll !important; 
+        overflow-x: scroll !important;
+    }
+
+	.pagination .page-item.active .page-link {
+		color: #fff !important;  
+	}
+
+	.buttons-colvis {
+		background-color: #000d41;  
+		color: white;               
+	}
+
+	.buttons-colvis:hover {
+		background-color: #0e1114;  
+		color: #fff;           
+	}
+	.buttons-colvis {
+		margin-right: 10px; 
+	}
+
+	.dt-button-collection {
+		position: absolute !important;  
+		z-index: 9999 !important;       
+		margin-top: 10px !important;    
+		max-height: none !important;    
+	}
+
+	.dt-button-collection {
+		box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); 
+		border: 1px solid #ccc;                   
+	}
+
+	.dataTables_wrapper {
+		overflow: visible !important;  
+	}
+
+
+	
+</style>
+	
+<script>
+    function initializeDataTableRMA(tableId) {
+    console.log("tableId => ", tableId);
+    var $table = $('#' + tableId);
+    
+    
+    $('#' + tableId).find('thead tr').clone(true).addClass('filters').appendTo('#' + tableId + ' thead');
+    
+    // Initialize DataTable
+    var table = $table.DataTable({
+        orderCellsTop: true,
+        fixedHeader: true,
+        paging: true,  
+        pageLength: 3, 
+        pagingType: 'simple_numbers',
+        buttons: [
+            {
+                extend: 'colvis',
+                text: 'Columns'
+            }
+        ],
+        dom: '<"row"<"col-md-6"B><"col-md-6 d-flex justify-content-end"f>>rt<"row"<"col-md-6"i><"col-md-6 d-flex justify-content-end"p>>',
+        initComplete: function () {
+            var api = this.api();
+
+            // For each column
+            api.columns().eq(0).each(function (colIdx) {
+                var cell = $table.find('.filters th').eq($(api.column(colIdx).header()).index());
+                var title = $(cell).text().trim();
+
+                if (colIdx < api.columns().indexes().length - 1) {
+                    $(cell).html('<div class="input-group"><input type="text" class="form-control form-control-xs" placeholder="' + title + '" /></div>');
+
+                    // On every keypress in this input
+                    $('input', $table.find('.filters th').eq($(api.column(colIdx).header()).index()))
+                        .off('keyup change')
+                        .on('keyup change', function (e) {
+                            e.stopPropagation();
+                            $(this).attr('title', $(this).val());
+                            var regexr = '({search})';
+                            var cursorPosition = this.selectionStart;
+                            api.column(colIdx)
+                                .search(this.value !== "" ? regexr.replace('{search}', '(((' + this.value + ')))') : "", this.value !== "", this.value === "")
+                                .draw();
+                            $(this).focus()[0].setSelectionRange(cursorPosition, cursorPosition);
+                        });
+                } else {
+                    $(cell).html('');
+                }
+            });
+
+            createFilterDropdown( api, 0);
+        },
+        drawCallback: function () {
+            // Optional: Add any callback logic here after table redraw
+        }
+    });
+}
+
+function createFilterDropdown(api, columnIdx) {
+    var $filterDropdown = $('<div class="btn-group"><button class="btn btn-dark dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">Filter by Validation State</button><ul class="dropdown-menu"></ul></div>');
+
+    api.buttons().container().append($filterDropdown);
+
+    // Add a "Clear Filter" option
+    var $clearItem = $('<li><a class="dropdown-item" href="#">Clear Filter <i class="fa fa-times"></i></a></li>');
+    $clearItem.on('click', function (e) {
+        e.preventDefault();
+
+        // Clear the filter
+        api.column(columnIdx).search('').draw();
+    });
+    $filterDropdown.find('.dropdown-menu').append($clearItem);
+
+    var statusOptions = [
+        { value: '0', label: 'Pending' },
+        { value: '1', label: 'Refused' }
+    ];
+
+    statusOptions.forEach(function(option) {
+        let text_color = option.value == '0' ? 'bg-warning' : 'bg-danger';
+        var $dropdownItem = $('<li><a class="dropdown-item fw-bold text-white ' + text_color + '" href="#">' + option.label + '</a></li>');
+
+        $dropdownItem.on('click', function (e) {
+            e.preventDefault();
+
+            api.column(columnIdx)
+                .search(option.value)
+                .draw();
+        });
+
+        $filterDropdown.find('.dropdown-menu').append($dropdownItem);
+    });
+
+    
+}
+
+</script>
+

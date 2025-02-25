@@ -1,0 +1,81 @@
+<form hx-post="/api/workshop" hx-target="this" hx-swap="none">
+    <div class="row">
+        
+        <label for="name">Workshop Name</label>
+        <div class="input-group col-sm-6 mb-3">
+            <input type="text" name="name" id="name" class="form-control" placeholder="Workshop name" value="" required>
+        </div>
+
+        <label for="zone">Zone </label>
+        <div class="input-group col-sm-6 mb-3">
+            <select class="form-select" name="zone" id="zone" required>
+                <option value="" disabled selected>Select Zone</option>
+                <% zones.forEach(zone => { %>
+                    <option value="<%=zone.id%>"><%=zone.name%></option>
+                <% }); %>
+            </select>
+        </div>
+
+        <!-- Error message area -->
+        <div id="add-error-message" class="d-none text-danger fw-bold">
+            
+        </div>
+
+        <div class="text-center ">
+            <button type="submit" class="submit_btn btn btn-md bg_black text-white  mb-0 ">Submit</button>
+        </div>
+    </div>
+</form>
+
+<script>
+    $("#workshop-modal-title").text("<%=form_title%>");
+
+    htmx.on('htmx:beforeRequest', function () {
+        // Disable the submit button to prevent multiple clicks
+        $('.submit_btn').disabled = true;
+    });
+
+    htmx.on('htmx:afterRequest', (e) => {
+
+        $('.submit_btn').disabled = false; // Enable the submit button
+
+        if(e.detail.xhr.responseURL.includes("/api/workshop") && e.detail.xhr.status === 201) {
+            $("#add-error-message").addClass("d-none");
+            $("#add-error-message").html("");
+
+            $(".toast-success-body").text("workshop added successfully");
+            $(".toast-success").show();
+            $("#workshop_dialog").modal('hide');
+            
+            setTimeout(() => {
+
+                location.reload();
+                $(".toast-success-body").text("");
+                $(".toast-success").hide();
+            }, 1000);
+
+        }
+
+    });
+
+    htmx.on('htmx:responseError', (e) => {
+        const url = e.detail.xhr.responseURL;
+        const status = e.detail.xhr.status;
+
+        if (url.includes("/api/workshop")) {
+            if (status === 400) {
+                // Edit form error handling
+                $("#add-error-message").removeClass("d-none");
+                let message = JSON.parse(e.detail.xhr.responseText).error;
+                $("#add-error-message").html(message);
+
+                setTimeout(() => {
+                    $("#add-error-message").addClass("d-none");
+                    $("#add-error-message").html("");
+                }, 5000);
+            }
+
+        }
+    });
+
+</script>

@@ -1,0 +1,25 @@
+<%- include('./partials/sidebar'); %>
+    <%- include('./partials/header'); %>
+  
+     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+    <div class=" my-5">
+    
+       
+        <% if (success && success.length > 0) { %>
+            <div class="col-12" id="success-toast">
+                <div class="alert bg-success text-white font-weight-bold alert-dismissible fade show">
+                    <%= success %>
+                </div>
+            </div>
+        <% } %>
+
+          DASHBOARD
+          
+    </div>
+
+    <%- include('./partials/footer'); %>
+    <%- include('./partials/columnFilter'); %>
+
+
+      

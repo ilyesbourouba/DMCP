@@ -1,0 +1,88 @@
+    <footer class="footer pt-3  bg-gradient-white">
+        <div class="container-fluid">
+            <div class="row align-items-center justify-content-lg-between">
+                <div class="col-lg-6 mb-lg-0 mb-4">
+                    <div class="copyright text-center text-sm text-muted text-lg-start">
+                        © <%= new Date().getFullYear() %>, made by
+                        <a href="#" class="font-weight-bold" target="_blank">NTIC dev Team</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </footer>
+    </div>
+    
+    </main>
+
+    <script src="../../assets/js/core/popper.min.js"></script>
+    <script src="../../assets/js/core/bootstrap.min.js"></script>
+    <script src="../../assets/js/plugins/perfect-scrollbar.min.js"></script>
+    <script src="../../assets/js/plugins/smooth-scrollbar.min.js"></script>
+
+    <script src="../../assets/js/plugins/chartjs.min.js"></script>
+    <!--   Core JS Files   -->
+    <script>
+        var win = navigator.platform.indexOf('Win') > -1;
+        if (win && document.querySelector('#sidenav-scrollbar')) {
+            var options = {
+                damping: '0.5'
+            }
+            Scrollbar.init(document.querySelector('#sidenav-scrollbar'), options);
+        }
+    </script>
+    <% if(pageName=="Evaluation"  || pageName==""){ %>
+        <script src="../../assets/js/soft-ui-dashboard.min.js?v=1.0.3"></script>
+
+    <% }else{ %>
+        <script src="../../assets/js/soft-ui-dashboard.min.js?v=1.0.3"></script>
+    <% } %>
+
+        <script>
+            var pageName = "<%- pageName %>";
+            console.log("pageName: ", pageName);
+            switch (pageName) {
+                case "Dashboard":
+                    $('ul li .nav-link').removeClass("active");
+                    $('#dashboard').addClass("active");
+                    break;
+                case "Users":
+                    $('ul li .nav-link').removeClass("active");
+                    $('#users').addClass("active");
+                    break;
+                case "Brand":
+                    $('ul li .nav-link').removeClass("active");
+                    $('#brand').addClass("active");
+                    break;
+                case "C/SKD Suppliers And O/C Brands":
+                    $('ul li .nav-link').removeClass("active");
+                    $('#supplier').addClass("active");
+                    break;
+                case "Products And Categories":
+                    $('ul li .nav-link').removeClass("active");
+                    $('#product_item').addClass("active");
+                    break;
+                case "Defects":
+                    $('ul li .nav-link').removeClass("active");
+                    $('#defects').addClass("active");
+                    break;
+                case "Zones And Workshops":
+                    $('ul li .nav-link').removeClass("active");
+                    $('#zones').addClass("active");
+                    break;
+                case "RMA Requests":
+                    $('ul li .nav-link').removeClass("active");
+                    $('#rma').addClass("active");
+                    break;
+                case "Invalid RMA Requests":
+                    $("ul li .nav-link").removeClass("active");
+                    $('#invalid_rma').addClass("active");
+                    break;
+                default:
+                    break;
+            }
+        </script>
+
+
+    </body>
+    
+</html>

@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <title>
+        RMA Platform
+    </title>
+    <!--     Fonts and icons     -->
+    <link href="https://fonts.googleapis.com/css?family=Open+Sans:300,400,600,700" rel="stylesheet" />
+    <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+    <% if(pageName==""  || pageName=="" || pageName ==""){ %>
+
+        <link rel="apple-touch-icon" sizes="76x76" href="../../assets/img/Favicon_Stream2.ico">
+        <link rel="icon" type="image/png" href="../../assets/img/Favicon_Stream2.ico">
+        <!-- Nucleo Icons -->
+        <link href="../../assets/css/nucleo-icons.css" rel="stylesheet" />
+        <link href="../../assets/css/nucleo-svg.css" rel="stylesheet" />
+        <!-- Font Awesome Icons -->
+        <link href="../../assets/css/nucleo-svg.css" rel="stylesheet" />
+        <!-- CSS Files -->
+        <link id="pagestyle" href="../../assets/css/soft-ui-dashboard.css?v=1.0.3" rel="stylesheet" />
+        <link rel="stylesheet" href="../../assets/css/style.css" rel="stylesheet">
+
+    <% }else{ %>
+
+        <link rel="apple-touch-icon" sizes="76x76" href="../../assets/img/Favicon_Stream2.ico">
+        <link rel="icon" type="image/png" href="../../assets/img/Favicon_Stream2.ico">
+        <!-- Nucleo Icons -->
+        <link href="../../assets/css/nucleo-icons.css" rel="stylesheet" />
+        <link href="../../assets/css/nucleo-svg.css" rel="stylesheet" />
+        <!-- Font Awesome Icons -->
+        <link href="../../assets/css/nucleo-svg.css" rel="stylesheet" />
+        <!-- CSS Files -->
+        <link id="pagestyle" href="../../assets/css/soft-ui-dashboard.css?v=1.0.3" rel="stylesheet" />
+        <link rel="stylesheet" href="../../assets/css/style.css" rel="stylesheet">
+    <% } %>
+
+    <script src="https://kit.fontawesome.com/df6bc26015.js" crossorigin="anonymous"></script>
+    <script type="text/javascript" charset="utf8" src="https://code.jquery.com/jquery-3.7.1.js"></script>
+    <script src="../../assets/js/htmx.min.js"></script>
+
+</head>
+
+<body class="g-sidenav-show  bg-gray-100">
+    
+
+    <!-- sideBar -->
+    <aside class="sidenav navbar navbar-vertical navbar-expand-xs border-0 fixed-start bg_color" id="sidenav-main">
+        
+        <div class="sidenav-header">
+            <i class="fas fa-times p-3 cursor-pointer text-secondary opacity-5 position-absolute end-0 top-0 d-none d-xl-none" aria-hidden="true" id="iconSidenav"></i>
+            <a class="navbar-brand m-0" href="#" target="_blank">
+                <% if(pageName=="Evaluation"  || pageName=="" || pageName==""){ %>
+                    <img src="../../assets/img/logo-ct.png" class="navbar-brand-img h-100" alt="main_logo"/>
+
+                    <% }else{ %>
+                        <img src="https://img.icons8.com/ios/28/ffffff/powerschool.png" alt="powerschool"/>
+                        <% } %>
+                            <span class="ms-1 font-weight-bold text-white">RMA Platform</span>
+            </a>
+        </div>
+        <hr class="bg-white text-white mt-0 mb-1">
+        <div class="collapse navbar-collapse w-auto overflow-auto h-100" id="sidenav-collapse-main" style="max-height: 80vh;">
+            <ul class="navbar-nav">
+                <li class="nav-item">
+                    <a class="nav-link" id="profile" href="#">
+                        <div class="icon border-radius-md  text-center me-3 d-flex align-items-center justify-content-center">
+                            <img  src="https://img.icons8.com/pulsar-line/34/ffffff/guest-male.png" alt="guest-male"/>         
+                        </div>
+                        <span class="nav-link-text ms-2 font-weight-bold text-white"><%= user.username%></span>
+                    </a>
+                </li>
+                <hr class="bg-white  text-white mt-1">
+                  
+                    <!-- Dashboard -->
+                    <!-- RMA -->
+                    <% if(user && user.role &&  (user.role === "admin" || user.role === "agent" || user.role === "supply_chain")  ) { %>
+                        <li class="nav-item">
+                            <a class="nav-link " id="rma" href="/api/rma">
+                                <div class="icon icon-shape icon-sm shadow border-radius-md  text-center me-2 d-flex align-items-center justify-content-center">
+                                    <img src="https://img.icons8.com/fluency-systems-regular/40/ffffff/return-merchandise-authorization.png" alt="return-merchandise-authorization"/>       
+                                </div>
+                                <span class="nav-link-text ms-1 text-white">RMA</span>
+                            </a>
+                        </li>
+                    <% } %>
+                    <% if(user && user.role &&  (user.role === "admin" || user.role === "agent")) { %>
+                        <li class="nav-item">
+                            <a class="nav-link " id="invalid_rma" href="/api/rma/invalid">
+                                <div class="icon icon-shape icon-sm shadow border-radius-md  text-center me-2 d-flex align-items-center justify-content-center">
+                                    <img src="https://img.icons8.com/fluency-systems-regular/40/ffffff/return-merchandise-authorization.png" alt="return-merchandise-authorization"/>       
+                                </div>
+                                <span class="nav-link-text ms-1 text-white">Invalid RMA</span>
+                            </a>
+                        </li>
+                    <% } %>
+                    <% if(user && user.role && user.role === "admin" ) { %>
+                        <!-- Products and categories -->
+                        <li class="nav-item">
+                            <a class="nav-link " id="product_item" href="/api/product">
+                                <div class="icon icon-shape icon-sm shadow border-radius-md  text-center me-2 d-flex align-items-center justify-content-center">
+                                    <img src="https://img.icons8.com/pastel-glyph/24/ffffff/box.png" alt="box"/>         
+                                </div>
+                                <span class="nav-link-text ms-1 text-white">Products & Categories</span>
+                            </a>
+                        </li>
+
+                        <!-- Defects -->
+                        <li class="nav-item">
+                            <a class="nav-link" id="defects" href="/api/defect">
+                                <div class="icon icon-shape icon-sm shadow border-radius-md  text-center me-2 d-flex align-items-center justify-content-center">
+                                    <img src="https://img.icons8.com/pastel-glyph/24/ffffff/folder-invoices-3--v1.png" alt="folder-invoices-3--v1"/>         
+                                </div>
+                                <span class="nav-link-text ms-1 text-white">Defects</span>
+                            </a>
+                        </li>
+
+                        <!-- Supplier and brand -->
+                        <li class="nav-item">
+                            <a class="nav-link " id="supplier" href="/api/supplier">
+                                <div class="icon icon-shape icon-sm shadow border-radius-md  text-center me-2 d-flex align-items-center justify-content-center">
+                                    <img src="https://img.icons8.com/external-xnimrodx-lineal-xnimrodx/33/ffffff/external-supplier-delivery-and-drop-ship-xnimrodx-lineal-xnimrodx.png" alt="external-supplier-delivery-and-drop-ship-xnimrodx-lineal-xnimrodx"/>      
+                                </div>
+                                <span class="nav-link-text ms-1 text-white">Suppliers & Brands</span>
+                            </a>
+                        </li>
+
+
+                        <!-- Zones and workshop -->
+                        <li class="nav-item">
+                            <a class="nav-link " id="zones" href="/api/zone">
+                                <div class="icon icon-shape icon-sm shadow border-radius-md  text-center me-2 d-flex align-items-center justify-content-center">
+                                    <img src="https://img.icons8.com/ios-glyphs/24/ffffff/warehouse.png" alt="warehouse"/>         
+                                </div>
+                                <span class="nav-link-text ms-1 text-white">Zones & Workshops</span>
+                            </a>
+                        </li>
+                          <!-- Users -->
+                        <li class="nav-item">
+                            <a class="nav-link " id="users" href="/api/users">
+                                <div class="icon icon-shape icon-sm shadow border-radius-md  text-center me-2 d-flex align-items-center justify-content-center">
+                                    <img src="https://img.icons8.com/ios-glyphs/24/ffffff/group-foreground-selected.png" alt="group-foreground-selected"/>         
+                                </div>
+                                <span class="nav-link-text ms-1 text-white">Users</span>
+                            </a>
+                        </li>
+                    <% } %>
+                    
+            </ul>
+        </div>
+    </aside>
+
+    
+</body>

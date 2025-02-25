@@ -1,0 +1,65 @@
+<form hx-delete="/api/defect/<%= defect.id %>" hx-target="this" hx-swap="none">
+    <div class="modal-body">
+        <p class="text-black">
+           Are you sure you want to delete <b id="delete_defect" class="text-uppercase"><%= defect.name %></b> ?
+        </p>
+    </div>
+    <!-- Error message area -->
+    <div id="delete-error-message" class="d-none text-danger px-3 fw-bold">
+            
+    </div>
+    <div class="modal-footer">
+        <button type="submit" class="submit_btn btn bg_color text-white">Yes</button>
+        <button type="button" class="btn bg-secondary text-white" data-bs-dismiss="modal">Cancel</button>
+    </div>
+</form>
+
+<script>
+    $(".modal-title").text("<%=form_title%>");
+
+    htmx.on('htmx:beforeRequest', function () {
+        // Disable the submit button to prevent multiple clicks
+        $('.submit_btn').disabled = true;
+    });
+
+    htmx.on('htmx:afterRequest', (e) => {
+        
+        $('.submit_btn').disabled = false; // Enable the submit butto
+
+        if(e.detail.xhr.responseURL.includes("/api/defect/<%= defect.id %>") && e.detail.xhr.status === 204) {
+            $("#delete-error-message").addClass("d-none");
+            $("#delete-error-message").html("");
+
+            $("#dialog").modal('hide');
+            $(".toast-success-body").text("defect deleted successfully");
+            $(".toast-success").show();
+            
+            setTimeout(() => {
+                location.reload();
+                $(".toast-success-body").text("");
+                $(".toast-success").hide();
+            }, 1000);
+        }
+    })
+
+    htmx.on('htmx:responseError', (e) => {
+        const url = e.detail.xhr.responseURL;
+        const status = e.detail.xhr.status;
+
+        if (url.includes("/api/defect/<%= defect.id %>")) {
+            
+            if (status === 404) {
+                // Delete form error handling
+                $("#delete-error-message").removeClass("d-none");
+                let message = JSON.parse(e.detail.xhr.responseText).error;
+                $("#delete-error-message").html(message);
+
+                setTimeout(() => {
+                    $("#delete-error-message").addClass("d-none");
+                    $("#delete-error-message").html("");
+                }, 5000);
+            }
+        }
+    });
+
+</script>

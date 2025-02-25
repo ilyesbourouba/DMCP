@@ -1,0 +1,70 @@
+<form hx-post="/api/brand" hx-target="this" hx-swap="none">
+    <div class="row">
+        
+        <label for="name">Brand</label>
+        <div class="input-group col-sm-6 mb-3">
+            <input type="text" name="name" id="name" class="form-control" placeholder="Brand name" value="" required>
+        </div>
+
+        <!-- Error message area -->
+        <div id="add-error-message" class="d-none text-danger fw-bold">
+            
+        </div>
+
+        <div class="text-center ">
+            <button type="submit" class="submit_btn btn btn-md bg_black text-white  mb-0 ">Submit</button>
+        </div>
+    </div>
+</form>
+
+<script>
+    $("#brand-modal-title").text("<%=form_title%>");
+
+    htmx.on('htmx:beforeRequest', function () {
+        // Disable the submit button to prevent multiple clicks
+        $('.submit_btn').disabled = true;
+    });
+
+    htmx.on('htmx:afterRequest', (e) => {
+        
+        $('.submit_btn').disabled = false; // Enable the submit button
+
+        if(e.detail.xhr.responseURL.includes("/api/brand") && e.detail.xhr.status === 201) {
+            $("#add-error-message").addClass("d-none");
+            $("#add-error-message").html("");
+
+            $("#dialog").modal('hide');
+            $(".toast-success-body").text("brand added successfully");
+            $(".toast-success").show();
+            
+            setTimeout(() => {
+                location.reload();
+                $(".toast-success-body").text("");
+                $(".toast-success").hide();
+            }, 1000);
+
+        }
+
+    });
+
+    htmx.on('htmx:responseError', (e) => {
+        const url = e.detail.xhr.responseURL;
+        const status = e.detail.xhr.status;
+
+        if (url.includes("/api/brand")) {
+            if (status === 400) {
+                // Edit form error handling
+                $("#add-error-message").removeClass("d-none");
+                let message = JSON.parse(e.detail.xhr.responseText).error;
+                $("#add-error-message").html(message);
+
+                setTimeout(() => {
+                    $("#add-error-message").addClass("d-none");
+                    $("#add-error-message").html("");
+                }, 5000);
+            }
+
+        }
+    });
+
+</script>

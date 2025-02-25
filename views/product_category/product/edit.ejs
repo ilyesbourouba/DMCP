@@ -1,0 +1,87 @@
+<form hx-put="/api/product/<%= product.id %>" hx-target="this" hx-swap="none">
+    <div class="row">
+        <input type="hidden" id="product_id" name="product_id" value="<%= product.id %>">
+        
+        <label for="name">Product Name</label>
+        <div class="input-group col-sm-6 mb-3">
+            <input type="text" name="name" id="name" class="form-control" placeholder="Product name" value="<%= product.name %>" required>
+        </div>
+
+        <label for="category">Category</label>
+        <div class="input-group col-sm-6 mb-3">
+            <select class="form-select" name="category" id="category" required>
+                <option value="" >Select Category</option>
+                <% categories.forEach(category => { %>
+                    <option value="<%=category.id%>" <%= product.category_id === category.id ? 'selected' : '' %>><%=category.name%> - <%=category.product_type%></option>
+                <% }); %>
+            </select>
+        </div>
+
+        <label for="size">Size</label>
+        <div class="input-group col-sm-6 mb-3">
+            <input type="text" name="size" id="size" class="form-control" placeholder="Size" value="<%= product.size %>" required>
+        </div>
+
+
+
+        <!-- Error message area -->
+        <div id="error-message" class="d-none text-danger fw-bold">
+            
+        </div>
+
+        <div class="text-center ">
+            <button type="submit" class="submit_btn btn btn-md bg_black text-white  mb-0 ">Submit</button>
+        </div>
+    </div>
+</form>
+
+<script>
+    $(".modal-title").text("<%=form_title%>");
+
+    htmx.on('htmx:beforeRequest', function () {
+        // Disable the submit button to prevent multiple clicks
+        $('.submit_btn').disabled = true;
+    });
+
+    htmx.on('htmx:afterRequest', (e) => {
+        
+        $('.submit_btn').disabled = false; // Enable the submit button
+
+        if(e.detail.xhr.responseURL.includes("/api/product/<%= product.id %>") && e.detail.xhr.status === 200) {
+            $("#error-message").addClass("d-none");
+            $("#error-message").html("");
+
+            $("#dialog").modal('hide');
+            $(".toast-success-body").text("product updated successfully");
+            $(".toast-success").show();
+            
+            setTimeout(() => {
+                location.reload();
+                $(".toast-success-body").text("");
+                $(".toast-success").hide();
+            }, 1000);
+        }
+       
+    });
+
+    htmx.on('htmx:responseError', (e) => {
+        const url = e.detail.xhr.responseURL;
+        const status = e.detail.xhr.status;
+
+        if (url.includes("/api/product/<%= product.id %>")) {
+            if (status === 400) {
+                // Edit form error handling
+                $("#error-message").removeClass("d-none");
+                let message = JSON.parse(e.detail.xhr.responseText).error;
+                $("#error-message").html(message);
+
+                setTimeout(() => {
+                    $("#error-message").addClass("d-none");
+                    $("#error-message").html("");
+                }, 5000);
+            }
+
+        }
+    });
+
+</script>
