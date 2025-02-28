@@ -43,10 +43,10 @@ app.use('/uploads', express.static(path.join(__dirname, '/uploads')));
 
 // Routes
 const loginRoutes = require("./routes/login");
-const dashBoardRoutes = require("./routes/dashboard");
+const productsRoutes = require("./routes/products");
 
 app.use("/", loginRoutes);
-app.use("/dashboard", dashBoardRoutes);
+app.use("/products", productsRoutes);
 
 // Start Server
 const PORT = process.env.PORT || 3000;
