@@ -2,6 +2,8 @@
 // Vertical navbar + Sidenav
 //
 
+@use "sass:math";
+
 .navbar-vertical {
   .navbar-brand > img,
   .navbar-brand-img {
@@ -10,12 +12,13 @@
   }
   // Navbar navigaton
   .navbar-nav {
+    flex-direction: column !important;
     // Navbar link
     .nav-link {
       padding-left: $navbar-padding-x;
       padding-right: $navbar-padding-x;
       font-weight: $navbar-nav-link-font-weight;
-      color: $font-color;
+      // color: $font-color;
       // Icon
       > i {
         min-width: $navbar-icon-min-width;
@@ -27,7 +30,7 @@
         border: none;
 
         .dropdown-menu {
-          margin-left: $dropdown-item-padding-x / 2;
+          margin-left: $dropdown-item-padding-x * 0.5;
         }
       }
     }
@@ -116,6 +119,7 @@
             .icon {
               .ni {
                 top: 0;
+                font-size: 0.75rem;
               }
             }
 
@@ -146,8 +150,8 @@
           }
           // Second level
           .navbar-nav .nav .nav-link {
-            padding-top: $navbar-vertical-nav-link-padding-y / 1.5;
-            padding-bottom: $navbar-vertical-nav-link-padding-y / 1.5;
+            padding-top: 0.417rem;
+            padding-bottom: 0.417rem;
             padding-left: 15px;
 
             > span.sidenav-normal {
@@ -181,8 +185,8 @@
 //
 
 .sidenav {
-  z-index: 990;
-
+  z-index: $zindex-fixed;
+  
   .navbar-brand,
   .navbar-heading {
     display: block;
@@ -196,11 +200,11 @@
       padding: 1.5rem;
     }
 
-    &.fixed-start + .main-content {
+    &.fixed-start ~ .main-content {
       margin-left: $navbar-vertical-open-width + 1.5;
     }
 
-    &.fixed-end + .main-content {
+    &.fixed-end ~ .main-content {
       margin-right: $navbar-vertical-open-width + 1.5;
     }
   }
@@ -262,7 +266,7 @@
     }
 
     .sidenav {
-      &.fixed-start+.main-content {
+      &.fixed-start~.main-content {
         margin-left: 0 !important;
       }
     }
@@ -294,8 +298,8 @@
 
   .navbar-nav .nav-link.active {
     font-weight: $font-weight-bold;
-    box-shadow: $card-box-shadow;
-    border-radius: $border-radius-md;
+    box-shadow: $box-shadow-sm;
+    border-radius: $border-radius-lg;
   }
 
   .navbar-nav > .nav-item .nav-link.active {
@@ -304,6 +308,7 @@
 
     .icon {
       @include gradient-directional(nth($primary, 1) 0%, nth($primary, -1) 100%, $deg: 310deg);
+      color: $white;  
 
       svg {
         .color-background,
@@ -341,6 +346,7 @@
       margin-left: auto;
       color: rgba($dark-gradient-state,0.5);
       @include transition($transition-base);
+      margin-right: 0.75rem;
     }
     // Expanded
     &[aria-expanded="true"] {
@@ -364,7 +370,6 @@
               background-color: transparent;
               box-shadow: none;
               color: rgba($dark-gradient-state,0.5);
-              margin-left: $navbar-vertical-collapse-margin-left;
 
               &:before {
                 content: "";
@@ -382,8 +387,6 @@
                 color: $dark-gradient-state;
 
                 &:before {
-                  height: $navbar-vertical-collapse-dot-size-active;
-                  width: $navbar-vertical-collapse-dot-size-active;
                   background: $dark-gradient-state;
                 }
               }
@@ -394,8 +397,6 @@
                 color: $dark-gradient-state;
 
                 &:before {
-                  height: $navbar-vertical-collapse-dot-size-active;
-                  width: $navbar-vertical-collapse-dot-size-active;
                   background: $dark-gradient-state;
                 }
               }
@@ -459,18 +460,6 @@
   }
 }
 @include media-breakpoint-up(xl) {
-  .navbar-vertical {
-    .navbar-nav {
-      .nav-item {
-        .nav-link {
-          .icon {
-            padding: 10px;
-          }
-        }
-      }
-    }
-  }
-
   .g-sidenav-hidden {
     &.rtl .main-content {
       margin-right: $navbar-vertical-hidden-width !important;
@@ -493,7 +482,7 @@
     .navbar-vertical {
       max-width: $navbar-vertical-hidden-width !important;
 
-      &.fixed-start + .main-content {
+      &.fixed-start ~ .main-content {
         margin-left: $navbar-vertical-hidden-width + 1.5;
       }
 
@@ -567,7 +556,7 @@
       &:hover {
         max-width: $navbar-vertical-open-width !important;
 
-        &.fixed-start + .main-content {
+        &.fixed-start ~ .main-content {
           margin-left: $navbar-vertical-open-width + 1.5;
         }
 
@@ -645,3 +634,7 @@
     }
   }
 }
+
+// sidebar icons color
+
+
