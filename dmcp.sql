@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Hôte : 127.0.0.1
--- Généré le : mer. 26 fév. 2025 à 10:58
+-- Généré le : sam. 01 mars 2025 à 22:49
 -- Version du serveur : 10.4.27-MariaDB
 -- Version de PHP : 8.1.12
 
@@ -32,6 +32,17 @@ CREATE TABLE `category` (
   `name` varchar(255) NOT NULL,
   `description` text DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
+
+--
+-- Déchargement des données de la table `category`
+--
+
+INSERT INTO `category` (`id`, `name`, `description`) VALUES
+(1, 'category 121', 'RAS...'),
+(3, 'llyes', 'Lorem ipsum is a dummy or placeholder text commonly used in graphic design, publishing, and web development to fill empty spaces in a layout that does not yet have content.'),
+(4, 'dino', 'Lorem ipsum is a dummy .'),
+(8, 'arcane', 'arcane arcane'),
+(11, 'Deadpool', 'Deadpool & Wolverine');
 
 -- --------------------------------------------------------
 
@@ -148,6 +159,14 @@ CREATE TABLE `product` (
   `best_selling` tinyint(1) DEFAULT 0
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
 
+--
+-- Déchargement des données de la table `product`
+--
+
+INSERT INTO `product` (`id`, `name`, `description`, `price`, `stock`, `category_id`, `best_selling`) VALUES
+(1, 'mask', 'Lorem ipsum is a dummy or placeholder text commonly used in graphic design', 120, 1000, 3, 1),
+(2, 'arcane 2', 'arcane  arcane ', 120, 45, 11, 0);
+
 -- --------------------------------------------------------
 
 --
@@ -160,17 +179,32 @@ CREATE TABLE `product_images` (
   `image_url` varchar(255) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
 
+--
+-- Déchargement des données de la table `product_images`
+--
+
+INSERT INTO `product_images` (`id`, `product_id`, `image_url`) VALUES
+(1, 2, '2025-03-01T21-40-01.130Z_arcane_2_3c4e709d-3983-4637-8371-86ad199b255b.png'),
+(2, 2, '2025-03-01T21-40-01.131Z_arcane_2_SystÃ¨me E-commerce _ Une Solution Digitale pour la Vente en Ligne - visual selection (4).png');
+
 -- --------------------------------------------------------
 
 --
--- Structure de la table `users`
+-- Structure de la table `user`
 --
 
-CREATE TABLE `users` (
+CREATE TABLE `user` (
   `id` int(11) NOT NULL,
   `username` varchar(255) NOT NULL,
   `password` varchar(255) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
+
+--
+-- Déchargement des données de la table `user`
+--
+
+INSERT INTO `user` (`id`, `username`, `password`) VALUES
+(1, 'bourouba ilyes', '$2a$12$os8.EBX.TseflHwwgpszjuTD/oMnnB9yh42EfVrriToRBku8JR0j6');
 
 --
 -- Index pour les tables déchargées
@@ -252,9 +286,9 @@ ALTER TABLE `product_images`
   ADD KEY `product_id` (`product_id`);
 
 --
--- Index pour la table `users`
+-- Index pour la table `user`
 --
-ALTER TABLE `users`
+ALTER TABLE `user`
   ADD PRIMARY KEY (`id`),
   ADD UNIQUE KEY `username` (`username`);
 
@@ -266,7 +300,7 @@ ALTER TABLE `users`
 -- AUTO_INCREMENT pour la table `category`
 --
 ALTER TABLE `category`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=12;
 
 --
 -- AUTO_INCREMENT pour la table `client`
@@ -296,19 +330,19 @@ ALTER TABLE `panier`
 -- AUTO_INCREMENT pour la table `product`
 --
 ALTER TABLE `product`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
 
 --
 -- AUTO_INCREMENT pour la table `product_images`
 --
 ALTER TABLE `product_images`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
 
 --
--- AUTO_INCREMENT pour la table `users`
+-- AUTO_INCREMENT pour la table `user`
 --
-ALTER TABLE `users`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+ALTER TABLE `user`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
 
 --
 -- Contraintes pour les tables déchargées
