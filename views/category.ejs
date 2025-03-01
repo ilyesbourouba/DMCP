@@ -32,29 +32,28 @@
                                                 </tr>
                                             </thead>
                                             <tbody>
-                                                <% category.map(vehicule=>{ %>
+                                                <% category.map(cat=>{ %>
                                                     <tr>
                                                         <td>
                                                             <div class="d-flex px-2 py-1">
                                                                 <div class="d-flex flex-column justify-content-center">
                                                                     <h6 class="mb-0 text-sm">
-                                                                        <%= vehicule.name %>
+                                                                        <%= cat.name %>
                                                                     </h6>
                                                                 </div>
                                                             </div>
                                                         </td>
                                                         <td>
                                                             <p class="text-xs font-weight-bold mb-0">
-                                                                <%= vehicule.description%>
+                                                                <%= cat.description%>
                                                             </p>
                                                         </td>
                                                         <td class="align-middle">
                                                             <center>
-                                                                <a data-id="<%= vehicule.id %>" data-nom='<%= vehicule.name %>' class="text-secondary font-weight-bold text-xs" id="delete_btn" data-bs-target="#delete" href="" data-bs-toggle="modal" data-toggle="tooltip" data-original-title="delete category">
+                                                                <a data-id="<%= cat.id %>" data-nom='<%= cat.name %>' class="text-secondary font-weight-bold text-xs" id="delete_btn" data-bs-target="#delete" href="" data-bs-toggle="modal" data-toggle="tooltip" data-original-title="delete category">
                                                                     <i class="fas fa-trash-alt" style="font-size: large; color: rgb(187, 18, 18);" class="pe-2 btn-tooltip" data-bs-toggle="tooltip" data-bs-placement="top" data-container="body" title="delete" data-animation="true"></i>
                                                                 </a>
-                                                                <a data-id="<%= vehicule.id %>" data-nom='<%= vehicule.name %>' data-description='<%= vehicule.description %>' id="edit_btn" href="" data-bs-toggle="modal" data-bs-target="#edit" class="ms-3 text-secondary font-weight-bold text-xs" data-toggle="tooltip"
-                                                                    data-original-title="Edit category">
+                                                                <a data-id="<%= cat.id %>" data-nom='<%= cat.name %>' data-description='<%= cat.description %>' id="edit_btn" href="" data-bs-toggle="modal" data-bs-target="#edit" class="ms-3 text-secondary font-weight-bold text-xs" data-toggle="tooltip" data-original-title="Edit category">
                                                                     <i class="fas fa-edit" style="font-size: large; color: rgb(23, 23, 177);" data-bs-toggle="tooltip" data-bs-placement="top" title="edit" data-container="body" data-animation="true"></i>
                                                                 </a>
 
