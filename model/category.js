@@ -6,7 +6,7 @@ module.exports = class CategoryModel {
 
     static async getCategories() {
         try {
-            const [res] = await db.execute(`SELECT * FROM category`);
+            const [res] = await db.execute(`SELECT * FROM category ORDER BY id DESC;`);
             return {
                 success: true,
                 data: res

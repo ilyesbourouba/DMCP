@@ -1,10 +1,18 @@
 const CategoryModel = require('../model/category');
 
-exports.categoryPage = (req, res, next) => {
+exports.categoryPage = async(req, res, next) => {
+
+    const { success, data } = await CategoryModel.getCategories();
+    let category = [];
+    if (success) {
+        category = data;
+    }
+
     return res.render('category', {
         user: req.user,
         sectionName: "Category",
-        pageName: "Category"
+        pageName: "Category",
+        category
     });
 }
 
@@ -36,9 +44,9 @@ exports.addCategory = async(req, res, next) => {
     if (!name || !description) return res.status(400).json({ message: "Please fill in all fields" });
 
 
-    // const { data } = await CategoryModel.getCategories();
-    // const categoryExists = data.find(category => category.name.toUpperCase() === name.toUpperCase());
-    // if (categoryExists) return res.status(400).json({ message: "Category already exists" });
+    const { data } = await CategoryModel.getCategories();
+    const categoryExists = data.find(category => category.name.toUpperCase() === name.toUpperCase());
+    if (categoryExists) return res.status(400).json({ message: "Category already exists" });
 
     const { success } = await CategoryModel.addCategory(name, description);
     if (success) {
