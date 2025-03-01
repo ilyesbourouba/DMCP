@@ -34,39 +34,50 @@
                                                     <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Stock</th>
                                                     <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Best selling</th>
                                                     <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Operations</th>
-                                                    <th class="text-secondary opacity-7"></th>
                                                 </tr>
                                             </thead>
                                             <tbody>
-                                                <tr>
-                                                    <td>
-                                                        <div class="d-flex px-2 py-1">
-                                                            <div class="d-flex flex-column justify-content-center">
-                                                                <h6 class="mb-0 text-sm">mask</h6>
+                                                <% products.map(product=>{ %>
+                                                    <tr>
+                                                        <td>
+                                                            <div class="d-flex px-2 py-1">
+                                                                <div class="d-flex flex-column justify-content-center">
+                                                                    <h6 class="mb-0 text-sm">
+                                                                        <%= product.name %>
+                                                                    </h6>
+                                                                </div>
                                                             </div>
-                                                        </div>
-                                                    </td>
-                                                    <td>
-                                                        <p class="text-xs font-weight-bold mb-0">Manager</p>
-                                                    </td>
-                                                    <td class="align-middle text-center text-sm">
-                                                        <span class="badge badge-sm ">20 000 DA</span>
-                                                    </td>
-                                                    <td class="align-middle text-center">
-                                                        <span class="text-secondary text-xs font-weight-bold">1000</span>
-                                                    </td>
-                                                    <td class="align-middle text-center text-sm">
-                                                        <span class="badge badge-sm bg-gradient-success">&nbsp;&nbsp;</span>
-                                                    </td>
-                                                    <td class="align-middle">
-                                                        <a href="javascript:;" class="text-secondary font-weight-bold text-xs" data-toggle="tooltip" data-original-title="Edit user">
-                                                            <i class="fas fa-edit"></i>
-                                                        </a>
-                                                        <a href="javascript:;" class="text-secondary font-weight-bold text-xs" data-toggle="tooltip" data-original-title="Edit user">
-                                                            <i class="fas fa-trash    "></i>
-                                                        </a>
-                                                    </td>
-                                                </tr>
+                                                        </td>
+                                                        <td>
+                                                            <p class="text-xs font-weight-bold mb-0">
+                                                                <%= product.category_name  %>
+                                                            </p>
+                                                        </td>
+                                                        <td class="align-middle text-center text-sm">
+                                                            <span class="text-secondary text-xs font-weight-bold"><%= product.price%> DA</span>
+                                                        </td>
+                                                        <td class="align-middle text-center">
+                                                            <span class="text-secondary text-xs font-weight-bold"><%= product.stock %> piece</span>
+                                                        </td>
+                                                        <td class="align-middle text-center text-sm">
+                                                            <% let color=""; if(product.best_selling) {color="success"} else {color="danger"}  %>
+                                                                <span class="badge badge-sm bg-gradient-<%= color %>">&nbsp;&nbsp;</span>
+                                                        </td>
+                                                        <td class="align-middle">
+                                                            <center>
+                                                                <a data-id="<%= product.id %>" data-nom='<%= product.name %>' class="text-secondary font-weight-bold text-xs" id="delete_btn" data-bs-target="#delete" href="" data-bs-toggle="modal" data-toggle="tooltip" data-original-title="delete product">
+                                                                    <i class="fas fa-trash-alt" style="font-size: large; color: rgb(187, 18, 18);" class="pe-2 btn-tooltip" data-bs-toggle="tooltip" data-bs-placement="top" data-container="body" title="delete" data-animation="true"></i>
+                                                                </a>
+                                                                <a data-id="<%= product.id %>" data-nom='<%= product.name %>' data-description='<%= product.description %>' data-price='<%= product.price %>' data-stock='<%= product.stock %>' data-best_selling='<%= product.best_selling %>' data-category_id='<%= product.category_id %>'
+                                                                    data-category_name='<%= product.category_name %>' id="edit_btn" href="" data-bs-toggle="modal" data-bs-target="#edit" class="ms-3 text-secondary font-weight-bold text-xs" data-toggle="tooltip"
+                                                                    data-original-title="Edit product">
+                                                                    <i class="fas fa-edit" style="font-size: large; color: rgb(23, 23, 177);" data-bs-toggle="tooltip" data-bs-placement="top" title="edit" data-container="body" data-animation="true"></i>
+                                                                </a>
+
+                                                            </center>
+                                                        </td>
+                                                    </tr>
+                                                    <% }) %>
                                             </tbody>
                                         </table>
                                     </div>
@@ -101,11 +112,9 @@
                                 <label for="Category">Category</label>
                                 <div class="input-group mb-3">
                                     <select class="form-control" id="Category" name="Category">
-                                        <option value="1">1</option>
-                                        <option value="2">2</option>
-                                        <option value="3">3</option>
-                                        <option value="4">4</option>
-                                        <option value="5">5</option>
+                                        <% category.map(cat=>{ %>
+                                            <option value="<%= cat.id %>"><%= cat.name %></option>
+                                        <% }) %>
                                     </select>
                                 </div>
                             </div>
@@ -164,33 +173,45 @@
         </script>
         <script>
             //use jQuery to create the product from the modal content
-            $(document).ready(function() {
-                $('#add_Prod').click(function() {
-                    var name = $('#name').val();
-                    var category = $('#Category').val();
-                    var description = $('#description').val();
-                    var price = $('#price').val();
-                    var stock = $('#stock').val();
-                    var best_selling = $('#best_selling').is(':checked');
-                    var images = myDropzone.files;
-                    console.log(name, category, description, price, stock, best_selling, images);
+            $('#add_Prod').click(function() {
+                var formData = new FormData();
 
-                    // now i want to send the data to the server via axios
-                    axios.post('products/addproduct', {
-                            name: name,
-                            category: category,
-                            description: description,
-                            price: price,
-                            stock: stock,
-                            best_selling: best_selling,
-                            images: images
-                        })
-                        .then(function(response) {
-                            console.log(response);
-                        })
-                        .catch(function(error) {
-                            console.log(error);
+                formData.append("name", $('#name').val());
+                formData.append("category", $('#Category').val());
+                formData.append("description", $('#description').val());
+                formData.append("price", $('#price').val());
+                formData.append("stock", $('#stock').val());
+                formData.append("best_selling", $('#best_selling').is(':checked'));
+
+                var images = myDropzone.files;
+                images.forEach(image => {
+                    formData.append("images", image);
+                });
+
+                $.ajax({
+                    url: "/products/add",
+                    method: "POST",
+                    data: formData,
+                    processData: false, // Obligatoire pour envoyer des fichiers
+                    contentType: false, // Empêche jQuery de définir un content-type incorrect
+                    success: function(response) {
+                        Swal.fire({
+                            icon: "success",
+                            title: "Product Added!",
+                            text: "The Product has been added successfully.",
+                            confirmButtonText: "OK"
+                        }).then(() => {
+                            location.reload();
                         });
+                    },
+                    error: function(response) {
+                        Swal.fire({
+                            icon: "error",
+                            title: "Error",
+                            text: "Something went wrong. Please try again.",
+                            confirmButtonText: "OK"
+                        });
+                    }
                 });
             });
         </script>

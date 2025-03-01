@@ -1,39 +1,40 @@
-exports.productsPage = (req, res, next) => {
+const ProductModel = require('../model/product');
+const CategoryModel = require('../model/category');
+
+exports.productsPage = async(req, res, next) => {
+
+    let products = [];
+    let category = [];
+
+    const { success, data } = await ProductModel.getProducts();
+    const Categories = await CategoryModel.getCategories();
+
+    if (Categories.success) category = Categories.data;
+    if (success) products = data;
+
     return res.render('products', {
         user: req.user,
         sectionName: "products",
-        pageName: "Products"
+        pageName: "Products",
+        products,
+        category
     });
 }
 
-exports.addProduct = (req, res, next) => {
+exports.addProduct = async(req, res) => {
     const { name, category, description, price, stock, best_selling } = req.body;
-    console.log(name, category, description, price, stock, best_selling)
-        // check if all fields are filled
-    if (!name || !category || !description || !price || !stock || !best_selling) {
-        console.log('Please fill in all fields')
-        req.flash('error_msg', 'Please fill in all fields');
-        return res.redirect('/products');
-    }
-    // check if price is a number
-    if (isNaN(price)) {
-        console.log('Price must be a number')
-        req.flash('error_msg', 'Price must be a number');
-        return res.redirect('/products');
-    }
-    // check if stock is a number
-    if (isNaN(stock)) {
-        console.log('Stock must be a number')
-        req.flash('error_msg', 'Stock must be a number');
-        return res.redirect('/products');
-    }
-    // check if best_selling is a boolean value
-    if (best_selling !== 'true' && best_selling !== 'false') {
-        console.log('Best Selling must be a boolean value')
-        req.flash('error_msg', 'Best Selling must be a boolean value');
-        return res.redirect('/products');
-    }
-    // if all fields are filled, price is a number, stock is a number, and best_selling is a boolean value
-    console.log('Product added successfully')
 
-}
+    if (!name || !category || !description || !price || !stock || best_selling === undefined) {
+        return res.status(400).json({ message: "Please fill in all fields" });
+    }
+
+    // Récupérer les noms des fichiers uploadés
+    const image_names = req.files.map(file => file.filename);
+
+    const result = await ProductModel.addProduct(name, category, description, price, stock, best_selling, image_names);
+
+    if (result.success) {
+        return res.status(200).json({ message: "Product added successfully!", images: image_names });
+    }
+    return res.status(500).json({ message: "Error adding product", error: result.error });
+};
