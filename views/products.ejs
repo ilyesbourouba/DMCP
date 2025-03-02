@@ -90,7 +90,7 @@
 
         </div>
 
-
+        <!-- Modal ADD -->
         <div class="modal fade" id="import" tabindex="-1" aria-hidden="true">
             <div class="modal-dialog mt-lg-10 modal-lg">
                 <div class="modal-content">
@@ -161,6 +161,29 @@
                 </div>
             </div>
         </div>
+
+        <!-- Modal delete -->
+        <div class="modal fade" id="delete" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="exampleModalLabel">Product</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        <input type="hidden" id="delete_id" name="delete_id" value=""> voulez vous
+                        <code>supprimer</code> <b id="delete_nom">...</b> de la liste des produits ?!
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" id="modal_delete" class="btn bg-gradient-danger">oui</button>
+                        <button type="button" class="btn bg-gradient-secondary" data-bs-dismiss="modal">annuler</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
         <script src="../assets/js/plugins/dropzone.min.js"></script>
         <script type="text/javascript">
             Dropzone.autoDiscover = false;
@@ -192,8 +215,8 @@
                     url: "/products/add",
                     method: "POST",
                     data: formData,
-                    processData: false, // Obligatoire pour envoyer des fichiers
-                    contentType: false, // Empêche jQuery de définir un content-type incorrect
+                    processData: false, 
+                    contentType: false,
                     success: function(response) {
                         Swal.fire({
                             icon: "success",
@@ -205,6 +228,7 @@
                         });
                     },
                     error: function(response) {
+                        console.log(response)
                         Swal.fire({
                             icon: "error",
                             title: "Error",
@@ -215,5 +239,45 @@
                 });
             });
         </script>
+        <script>
+            $("a[id='delete_btn']").click(function() {
 
+                let id_delete = $(this).attr('data-id');
+                let nom = $(this).attr("data-nom");
+
+                $("#delete_nom").html(nom);
+                $("#delete_id").val(id_delete);
+
+            });
+
+            $("button[id='modal_delete']").click(function() {
+                let id = $("#delete_id").val();
+
+                $.ajax({
+                    url: '/products/delete/',
+                    data: {
+                        id
+                    },
+                    method: 'DELETE',
+                    success: function(response) {
+                        Swal.fire({
+                            icon: 'success',
+                            title: 'Product Deleted!',
+                            text: 'The Product has been deleted successfully.',
+                            confirmButtonText: 'OK'
+                        }).then(() => {
+                            location.reload();
+                        });
+                    },
+                    error: function() {
+                        Swal.fire({
+                            icon: 'error',
+                            title: 'Error',
+                            text: 'Something went wrong. Please try again.',
+                            confirmButtonText: 'OK'
+                        });
+                    }
+                });
+            });
+        </script>
         <%- include('./partials/footer'); %>

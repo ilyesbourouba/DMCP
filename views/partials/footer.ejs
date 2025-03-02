@@ -29,28 +29,37 @@
 <script>
     var pageName = "<%- pageName %>";
     console.log("pageName: ", pageName);
+
+    // Réinitialiser les liens
+    $('ul li .nav-link').removeClass("active bg-gradient-dark");
+    $('ul li .nav-link .nav-link-text').removeClass("text-white");
+
+    // Définir l'ID correspondant à la page
+    var activeLinkId;
     switch (pageName) {
         case "Dashboard":
-            $('ul li .nav-link').removeClass("active bg-gradient-success");
-            $('#dashboard').addClass("active bg-gradient-success");
+            activeLinkId = "#dashboard";
             break;
         case "Products":
-            $('ul li .nav-link').removeClass("active bg-gradient-success");
-            $('#products').addClass("active bg-gradient-success");
+            activeLinkId = "#products";
             break;
         case "Category":
-            $('ul li .nav-link').removeClass("active bg-gradient-success");
-            $('#category').addClass("active bg-gradient-success");
+            activeLinkId = "#category";
             break;
         case "Packs":
-            $('ul li .nav-link').removeClass("active bg-gradient-success");
-            $('#packs').addClass("active bg-gradient-success");
+            activeLinkId = "#packs";
             break;
         default:
-            break;
+            activeLinkId = null;
+    }
+
+    // Appliquer les styles si une correspondance est trouvée
+    if (activeLinkId) {
+        $(activeLinkId).addClass("active bg-gradient-dark");
+        $(activeLinkId).find(".nav-link-text").addClass("text-white");
+        $(activeLinkId).find(".fa-solid").css("color", "white");
     }
 </script>
-
 
 </body>
 

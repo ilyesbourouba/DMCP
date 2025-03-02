@@ -27,8 +27,8 @@ exports.addProduct = async(req, res) => {
     if (!name || !category || !description || !price || !stock || best_selling === undefined) {
         return res.status(400).json({ message: "Please fill in all fields" });
     }
+    console.log("addProduct => ", name, category, description, price, stock, best_selling);
 
-    // Récupérer les noms des fichiers uploadés
     const image_names = req.files.map(file => file.filename);
 
     const result = await ProductModel.addProduct(name, category, description, price, stock, best_selling, image_names);
@@ -37,4 +37,21 @@ exports.addProduct = async(req, res) => {
         return res.status(200).json({ message: "Product added successfully!", images: image_names });
     }
     return res.status(500).json({ message: "Error adding product", error: result.error });
+};
+
+// delete product
+exports.deleteProduct = async (req, res) => {
+    const { id } = req.body;
+
+    if (!id) return res.status(400).json({ message: "Please provide a product id" });
+
+    const { data } = await ProductModel.getProductById(id);
+    if (data.length == 0) return res.status(400).json({ message: "Product not found" });
+
+    const result = await ProductModel.deleteProduct(id);
+
+    if (result.success) {
+        return res.status(200).json({ message: "Product deleted successfully!" });
+    }
+    return res.status(500).json({ message: "Error deleting product", error: result.error });
 };
