@@ -12,6 +12,7 @@ exports.productsPage = async(req, res, next) => {
     if (Categories.success) category = Categories.data;
     if (success) products = data;
 
+    console.log(products)
     return res.render('products', {
         user: req.user,
         sectionName: "products",
