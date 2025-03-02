@@ -241,17 +241,6 @@
                             </div>
                             <div class="col-lg-12 mt-2 mb-2">
                                 <div class="row" id="image_viewer">
-                                    <div class="col-md-4">
-                                        <div class="card card-profile card-plain">
-                                          <div class="card-body text-center bg-white shadow border-radius-lg p-3">
-                                            <a href="javascript:;">
-                                              <img class="w-100 border-radius-md" src="link">
-                                            </a>
-                                            <h5 class="mt-3 mb-1 d-md-block d-none">image name</h5>
-                                            <a href="#" class="mb-0 text-xs font-weight-bolder text-danger text-gradient text-uppercase">delete</a>
-                                          </div>
-                                        </div>
-                                      </div>
                                 </div>
                             </div>
                             <div class="col-lg-12">
@@ -394,7 +383,28 @@
                 $("#edit_category_id").val(category_id);
                 $("#edit_category_name").val(category_name);
                 $("#edit_best_selling").prop("checked", best_selling === "1" || best_selling === "true");
-                $("#edit_images").val(images);
+                
+                if (images) {
+                    let imagesArray = images.split(","); // Suppose que les images sont stockées sous forme de chaîne séparée par des virgules
+
+                    imagesArray.forEach(image => {
+                        let imageHtml = `
+                            <div class="col-md-4">
+                                <div class="card card-profile card-plain">
+                                    <div class="card-body text-center bg-white shadow border-radius-lg p-3">
+                                        <a href="javascript:;">
+                                            <img class="w-100 border-radius-md" src="uploads/${image.trim()}" alt="Product Image">
+                                        </a>
+                                        <h5 class="mt-3 mb-1 d-md-block d-none">${image.split('/').pop()}</h5>
+                                        <a href="#" class="mb-0 text-xs font-weight-bolder text-danger text-gradient text-uppercase delete-image" data-image="${image.trim()}">delete</a>
+                                    </div>
+                                </div>
+                            </div>
+                        `;
+
+                        $("#image_viewer").append(imageHtml);
+                    });
+                }
             });
         </script>
         <%- include('./partials/footer'); %>
