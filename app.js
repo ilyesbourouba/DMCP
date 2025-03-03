@@ -45,10 +45,12 @@ app.use('/uploads', express.static(path.join(__dirname, '/uploads')));
 const loginRoutes = require("./routes/login");
 const productsRoutes = require("./routes/products");
 const categoryRoutes = require("./routes/category");
+const packsRoutes = require("./routes/packs");
 
 app.use("/", loginRoutes);
 app.use("/products", productsRoutes);
 app.use("/category", categoryRoutes);
+app.use("/packs", packsRoutes);
 
 // Start Server
 const PORT = process.env.PORT || 3000;

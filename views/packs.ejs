@@ -1,0 +1,288 @@
+<%- include('./partials/sidebar'); %>
+    <%- include('./partials/header'); %>
+
+        <div class="container-fluid py-4">
+            <div class="row">
+                <div class="col-12">
+                    <div class="card">
+                        <!-- Card header -->
+                        <div class="card-header pb-0">
+                            <div class="d-lg-flex">
+                                <div>
+                                    <h5 class="mb-0">All Packs</h5>
+                                </div>
+                                <div class="ms-auto my-auto mt-lg-0 mt-4">
+                                    <div class="ms-auto my-auto">
+                                        <a href="#" class="btn btn-primary btn-sm mb-0" data-bs-toggle="modal" data-bs-target="#import">+&nbsp; New Pack</a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="card-body px-0 pb-0">
+                            <div class="table-responsive">
+                                <div class="dataTable-wrapper dataTable-loading no-footer sortable searchable fixed-columns">
+
+                                    <div class="dataTable-container">
+                                        <table class="table align-items-center mb-0">
+                                            <thead>
+                                                <tr>
+                                                    <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Name</th>
+                                                    <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2">Description</th>
+                                                    <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Operations</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                <% packs.map(cat=>{ %>
+                                                    <tr>
+                                                        <td>
+                                                            <div class="d-flex px-2 py-1">
+                                                                <div class="d-flex flex-column justify-content-center">
+                                                                    <h6 class="mb-0 text-sm">
+                                                                        <%= cat.name %>
+                                                                    </h6>
+                                                                </div>
+                                                            </div>
+                                                        </td>
+                                                        <td>
+                                                            <p class="text-xs font-weight-bold mb-0">
+                                                                <%= cat.description%>
+                                                            </p>
+                                                        </td>
+                                                        <td class="align-middle">
+                                                            <center>
+                                                                <a data-id="<%= cat.id %>" data-nom='<%= cat.name %>' class="text-secondary font-weight-bold text-xs" id="delete_btn" data-bs-target="#delete" href="" data-bs-toggle="modal" data-toggle="tooltip" data-original-title="delete pack">
+                                                                    <i class="fas fa-trash-alt" style="font-size: large; color: rgb(187, 18, 18);" class="pe-2 btn-tooltip" data-bs-toggle="tooltip" data-bs-placement="top" data-container="body" title="delete" data-animation="true"></i>
+                                                                </a>
+                                                                <a data-id="<%= cat.id %>" data-nom='<%= cat.name %>' data-description='<%= cat.description %>' id="edit_btn" href="" data-bs-toggle="modal" data-bs-target="#edit" class="ms-3 text-secondary font-weight-bold text-xs" data-toggle="tooltip" data-original-title="Edit pack">
+                                                                    <i class="fas fa-edit" style="font-size: large; color: rgb(23, 23, 177);" data-bs-toggle="tooltip" data-bs-placement="top" title="edit" data-container="body" data-animation="true"></i>
+                                                                </a>
+
+                                                            </center>
+                                                        </td>
+                                                    </tr>
+                                                    <% }) %>
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+
+        <!-- Modal ADD -->
+        <div class="modal fade" id="import" tabindex="-1" aria-hidden="true">
+            <div class="modal-dialog mt-lg-10 modal-lg">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="ModalLabel">ADD pack</h5>
+                        <i class="fas fa-upload ms-3"></i>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        <div class="row">
+                            <div class="col-lg-5">
+                                <label for="name">Name</label>
+                                <div class="input-group mb-3">
+                                    <input id="name" name="name" type="text" class="form-control" placeholder="name..." aria-label="name" aria-describedby="name-addon">
+                                </div>
+                            </div>
+
+                            <div class="col-lg-12">
+                                <label for="description">description</label>
+                                <div class="input-group mb-3">
+                                    <textarea name="description" id="description" rows="4" class="form-control" placeholder="description of the product..."></textarea>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn bg-gradient-secondary btn-sm" data-bs-dismiss="modal">Close</button>
+                        <button type="button" id="add" class="btn btn-primary btn-sm">ADD</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- Modal delete -->
+        <div class="modal fade" id="delete" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="exampleModalLabel">pack</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        <input type="hidden" id="delete_id" name="delete_id" value=""> voulez vous
+                        <code>supprimer</code> <b id="delete_nom">...</b> de la liste des Categories ?!
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" id="modal_delete" class="btn bg-gradient-danger">oui</button>
+                        <button type="button" class="btn bg-gradient-secondary" data-bs-dismiss="modal">annuler</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Modal edit -->
+        <div class="modal fade" id="edit" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="exampleModalLabel">Edit pack</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        <div class="row">
+
+                            <input type="hidden" id="edit_id" name="edit_id" value="">
+
+                            <label for="edit_name">name</label>
+                            <div class="input-group col-sm-6 mb-3">
+                                <input type="text" id='edit_name' name='edit_name' class="form-control" placeholder="name" required>
+                            </div>
+                            <div class="col-lg-12">
+                                <label for="description">description</label>
+                                <div class="input-group mb-3">
+                                    <textarea name="edit_description" id="edit_description" rows="4" class="form-control" placeholder="description of the product..."></textarea>
+                                </div>
+                            </div>
+
+                        </div>
+
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" id="modal_edit" class="btn bg-gradient-success">mise a jour</button>
+                        <button type="button" class="btn bg-gradient-secondary" data-bs-dismiss="modal">annuler</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <script>
+            $('#add').click(function() {
+                var name = $('#name').val();
+                var description = $('#description').val();
+                $.ajax({
+                    url: '/pack/add',
+                    method: 'POST',
+                    data: {
+                        name: name,
+                        description: description
+                    },
+                    success: function(response) {
+                        console.log(response);
+                        Swal.fire({
+                            icon: 'success',
+                            title: 'pack Added!',
+                            text: 'The pack has been added successfully.',
+                            confirmButtonText: 'OK'
+                        }).then(() => {
+                            location.reload();
+                        });
+                    },
+                    error: function() {
+                        Swal.fire({
+                            icon: 'error',
+                            title: 'Error',
+                            text: 'Something went wrong. Please try again.',
+                            confirmButtonText: 'OK'
+                        });
+                    }
+                });
+            });
+        </script>
+        <script>
+            $("a[id='delete_btn']").click(function() {
+
+                let id_delete = $(this).attr('data-id');
+                let nom = $(this).attr("data-nom");
+
+                $("#delete_nom").html(nom);
+                $("#delete_id").val(id_delete);
+
+            });
+
+            $("button[id='modal_delete']").click(function() {
+                let id = $("#delete_id").val();
+                $.ajax({
+                    url: '/pack/delete/',
+                    data: {
+                        id
+                    },
+                    method: 'DELETE',
+                    success: function(response) {
+                        Swal.fire({
+                            icon: 'success',
+                            title: 'pack Deleted!',
+                            text: 'The pack has been deleted successfully.',
+                            confirmButtonText: 'OK'
+                        }).then(() => {
+                            location.reload();
+                        });
+                    },
+                    error: function() {
+                        Swal.fire({
+                            icon: 'error',
+                            title: 'Error',
+                            text: 'Something went wrong. Please try again.',
+                            confirmButtonText: 'OK'
+                        });
+                    }
+                });
+            });
+        </script>
+        <script>
+            $("a[id='edit_btn']").click(function() {
+
+                let id_edit = $(this).attr('data-id');
+                let nom = $(this).attr("data-nom");
+                let description = $(this).attr("data-description");
+
+                $("#edit_id").val(id_edit);
+                $("#edit_name").val(nom);
+                $("#edit_description").val(description);
+            });
+            // udpate the pack 
+            $("button[id='modal_edit']").click(function() {
+                let id = $("#edit_id").val();
+                let name = $("#edit_name").val();
+                let description = $("#edit_description").val();
+
+                $.ajax({
+                    url: '/pack/update/',
+                    data: {
+                        id,
+                        name,
+                        description
+                    },
+                    method: 'PUT',
+                    success: function(response) {
+                        Swal.fire({
+                            icon: 'success',
+                            title: 'pack Updated!',
+                            text: 'The pack has been updated successfully.',
+                            confirmButtonText: 'OK'
+                        }).then(() => {
+                            location.reload();
+                        });
+                    },
+                    error: function() {
+                        Swal.fire({
+                            icon: 'error',
+                            title: 'Error',
+                            text: 'Something went wrong. Please try again.',
+                            confirmButtonText: 'OK'
+                        });
+                    }
+                });
+            });
+        </script>
+
+        <%- include('./partials/footer'); %>
