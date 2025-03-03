@@ -84,24 +84,69 @@ module.exports = class ProductModel {
 
     // delete product
     static async deleteProduct(id) {
-    try {
-        
-        const [images] = await db.execute(`SELECT image_url FROM product_images WHERE product_id = ?`, [id]);
-        
-        images.forEach(img => {
-            const imagePath = path.join(__dirname, '../uploads', img.image_url);
-            if (fs.existsSync(imagePath)) {
-                fs.unlinkSync(imagePath); 
-            }
-        });
-        
-        await db.execute(`DELETE FROM product_images WHERE product_id = ?`, [id]);
+        try {
+            
+            const [images] = await db.execute(`SELECT image_url FROM product_images WHERE product_id = ?`, [id]);
+            
+            images.forEach(img => {
+                const imagePath = path.join(__dirname, '../uploads', img.image_url);
+                if (fs.existsSync(imagePath)) {
+                    fs.unlinkSync(imagePath); 
+                }
+            });
+            
+            await db.execute(`DELETE FROM product_images WHERE product_id = ?`, [id]);
 
-        await db.execute(`DELETE FROM product WHERE id = ?`, [id]);
+            await db.execute(`DELETE FROM product WHERE id = ?`, [id]);
 
-        return { success: true };
-    } catch (error) {
-        return { success: false, error: error.message };
+            return { success: true };
+        } catch (error) {
+            return { success: false, error: error.message };
+        }
     }
-}
+    // delete product image
+    static async deleteProductIMAGE(id, image) {
+        try {
+            const imagePath = path.join(__dirname, "../uploads/", image);
+            console.log("imagePath => ", imagePath);
+
+            if (fs.existsSync(imagePath)) {
+                fs.unlinkSync(imagePath);
+            }
+
+            const [res] = await db.execute(`DELETE FROM product_images WHERE product_id = ? AND image_url = ?`, [id, image]);
+            if (res.affectedRows === 0) return { success: false, error: "Image not found" };
+            return { success: true };
+
+        } catch (error) {
+            return { success: false, error: error.message };
+        }
+    }
+    // update product
+    static async updateProduct(id, name, category, description, price, stock, best_selling, image_names) {
+        const connection = await db.getConnection();
+        try {
+            await connection.beginTransaction();
+
+            await connection.execute(`
+                UPDATE product SET name = ?, category_id = ?, description = ?, price = ?, stock = ?, best_selling = ?
+                WHERE id = ?`, [name, category, description, price, stock, best_selling, id]);
+
+            if (image_names.length > 0) {
+                
+                const imageValues = image_names.map(img => [id, img]);
+                await connection.query(`
+                    INSERT INTO product_images (product_id, image_url) VALUES ?`, [imageValues]);
+            }
+
+            await connection.commit();
+            connection.release();
+
+            return { success: true };
+        } catch (error) {
+            await connection.rollback();
+            connection.release();
+            return { success: false, error: error.message };
+        }
+    }
 }
