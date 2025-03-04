@@ -6,22 +6,26 @@ module.exports = class PackModel {
     // Get all packs
     static async getPacks() {
         try {
-            // Fetch all packs
+
             const [packs] = await db.execute(`SELECT * FROM pack ORDER BY id DESC;`);
-    
-            // Fetch all products associated with packs
+
+
             const [packProducts] = await db.execute(`
                 SELECT pp.pack_id, p.id AS product_id, p.name AS product_name, p.price 
                 FROM pack_product pp
                 JOIN product p ON pp.product_id = p.id
             `);
-    
-            // Organize products under their respective packs
+
             const packMap = {};
+
             packs.forEach(pack => {
-                packMap[pack.id] = { ...pack, products: [] };
+                packMap[pack.id] = {
+                    ...pack,
+                    products: [],
+                    total_price: 0
+                };
             });
-    
+
             packProducts.forEach(product => {
                 if (packMap[product.pack_id]) {
                     packMap[product.pack_id].products.push({
@@ -29,14 +33,17 @@ module.exports = class PackModel {
                         name: product.product_name,
                         price: product.price
                     });
+
+                    packMap[product.pack_id].total_price += product.price;
                 }
             });
-    
+
             return { success: true, data: Object.values(packMap) };
         } catch (error) {
             console.log("error => ", error);
             return { success: false, error: error.message };
         }
+
     }
 
     // Add a new pack with products
@@ -45,17 +52,16 @@ module.exports = class PackModel {
         try {
             await connection.beginTransaction();
 
+            console.log("model", name, description, productIds)
             const [packRes] = await connection.execute(
-                `INSERT INTO pack (name, description) VALUES (?, ?)`,
-                [name, description]
+                `INSERT INTO pack (name, description) VALUES (?, ?)`, [name, description]
             );
 
             const packId = packRes.insertId;
 
             for (let productId of productIds) {
                 await connection.execute(
-                    `INSERT INTO pack_product (pack_id, product_id) VALUES (?, ?)`,
-                    [packId, productId]
+                    `INSERT INTO pack_product (pack_id, product_id) VALUES (?, ?)`, [packId, productId]
                 );
             }
 
@@ -78,13 +84,12 @@ module.exports = class PackModel {
             const [productsRes] = await db.execute(
                 `SELECT p.id AS product_id, p.name AS product_name, p.price FROM product p 
                  JOIN pack_product pp ON p.id = pp.product_id 
-                 WHERE pp.pack_id = ?`, 
-                [id]
+                 WHERE pp.pack_id = ?`, [id]
             );
 
             return {
                 success: true,
-                data: { ...packRes[0], products: productsRes }
+                data: {...packRes[0], products: productsRes }
             };
         } catch (error) {
             console.log("error => ", error);
@@ -99,16 +104,14 @@ module.exports = class PackModel {
             await connection.beginTransaction();
 
             await connection.execute(
-                `UPDATE pack SET name = ?, description = ? WHERE id = ?`,
-                [name, description, id]
+                `UPDATE pack SET name = ?, description = ? WHERE id = ?`, [name, description, id]
             );
-            
+
             await connection.execute(`DELETE FROM pack_product WHERE pack_id = ?`, [id]);
 
             for (let productId of productIds) {
                 await connection.execute(
-                    `INSERT INTO pack_product (pack_id, product_id) VALUES (?, ?)`,
-                    [id, productId]
+                    `INSERT INTO pack_product (pack_id, product_id) VALUES (?, ?)`, [id, productId]
                 );
             }
 

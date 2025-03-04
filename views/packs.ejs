@@ -28,6 +28,7 @@
                                                 <tr>
                                                     <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Name</th>
                                                     <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2">Description</th>
+                                                    <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2">total price</th>
                                                     <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Operations</th>
                                                 </tr>
                                             </thead>
@@ -46,6 +47,11 @@
                                                         <td>
                                                             <p class="text-xs font-weight-bold mb-0">
                                                                 <%= cat.description%>
+                                                            </p>
+                                                        </td>
+                                                        <td>
+                                                            <p class="text-xs font-weight-bold mb-0">
+                                                                <%= cat.total_price%> DA
                                                             </p>
                                                         </td>
                                                         <td class="align-middle">
@@ -96,6 +102,27 @@
                                 <div class="input-group mb-3">
                                     <textarea name="description" id="description" rows="4" class="form-control" placeholder="description of the product..."></textarea>
                                 </div>
+                            </div>
+                            <div class="col-lg-3 offset-9">
+                                <button type="button" id="add_product" class="btn btn-primary btn-sm">ADD product</button>
+                            </div>
+
+                            <div class="col-lg-12">
+                                <div>Products</div>
+                                <div class="row" id="product_list">
+                                    <!-- <div class="col-lg-2">
+                                        <div class="input-group mb-3">
+                                            <select class="form-control" id="products" name="products">
+                                                <% products.map(prod=>{ %>
+                                                    <option value="<%= prod.id %>" data-price="<%= prod.price %>"><%= prod.name %></option>
+                                                <% }) %>
+                                            </select>
+                                        </div>
+                                    </div> -->
+                                </div>
+                            </div>
+                            <div class="col-lg-4 offset-8">
+                                <p class="mb-0">Total Price : <span class="badge bg-gradient-success" id="show_total_price">0 DA</span></p>
                             </div>
                         </div>
                     </div>
@@ -166,16 +193,78 @@
         </div>
 
         <script>
+            document.addEventListener("DOMContentLoaded", function() {
+                const addProductBtn = document.getElementById("add_product");
+                const productList = document.getElementById("product_list");
+                const totalPriceElement = document.getElementById("show_total_price");
+
+
+                function updateTotalPrice() {
+                    let total = 0;
+                    document.querySelectorAll("#product_list select").forEach(select => {
+                        const selectedOption = select.options[select.selectedIndex];
+                        total += parseFloat(selectedOption.getAttribute("data-price")) || 0;
+                    });
+                    totalPriceElement.textContent = total.toFixed(2) + " DA";
+                }
+
+                addProductBtn.addEventListener("click", function() {
+                    const productItem = document.createElement("div");
+                    productItem.classList.add("col-lg-3", "product-item");
+
+                    productItem.innerHTML = `
+                        <div class="input-group mb-3">
+                            <select class="form-control" name="products[]">
+                                <% products.forEach(prod => { %>
+                                    <option value="<%= prod.id %>" data-price="<%= prod.price %>"><%= prod.name %></option>
+                                <% }) %>
+                            </select>
+                            <button type="button" class="badge bg-gradient-danger remove_product" style="border-color:#ef4444">X</button>
+                        </div>
+                    `;
+
+                    productList.appendChild(productItem);
+                    updateTotalPrice();
+
+                    // Ajouter un écouteur d'événement pour recalculer le prix lors du changement de produit
+                    productItem.querySelector("select").addEventListener("change", updateTotalPrice);
+                });
+
+                productList.addEventListener("click", function(event) {
+                    if (event.target.classList.contains("remove_product")) {
+                        event.target.closest(".product-item").remove();
+                        updateTotalPrice();
+                    }
+                });
+
+                // Ajouter un écouteur global pour les changements de sélection
+                productList.addEventListener("change", function(event) {
+                    if (event.target.tagName === "SELECT") {
+                        updateTotalPrice();
+                    }
+                });
+            });
+        </script>
+
+        <script>
             $('#add').click(function() {
                 var name = $('#name').val();
                 var description = $('#description').val();
+
+                var products = [];
+                $('#product_list select').each(function() {
+                    products.push($(this).val());
+                });
+                console.log(products)
                 $.ajax({
-                    url: '/pack/add',
-                    method: 'POST',
-                    data: {
-                        name: name,
-                        description: description
-                    },
+                    url: '/packs/add',
+                    method: 'post',
+                    contentType: "application/json",
+                    data: JSON.stringify({
+                        name,
+                        description,
+                        products
+                    }),
                     success: function(response) {
                         console.log(response);
                         Swal.fire({
@@ -187,7 +276,8 @@
                             location.reload();
                         });
                     },
-                    error: function() {
+                    error: function(error) {
+                        console.log(error)
                         Swal.fire({
                             icon: 'error',
                             title: 'Error',
@@ -212,7 +302,7 @@
             $("button[id='modal_delete']").click(function() {
                 let id = $("#delete_id").val();
                 $.ajax({
-                    url: '/pack/delete/',
+                    url: '/packs/delete/',
                     data: {
                         id
                     },
@@ -256,7 +346,7 @@
                 let description = $("#edit_description").val();
 
                 $.ajax({
-                    url: '/pack/update/',
+                    url: '/packs/update/',
                     data: {
                         id,
                         name,
