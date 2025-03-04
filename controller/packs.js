@@ -12,7 +12,7 @@ exports.packsPage = async(req, res, next) => {
     if (success) {
         packs = data;
     }
-
+    console.log(packs)
     return res.render('packs', {
         user: req.user,
         sectionName: "Packs",
@@ -65,4 +65,20 @@ exports.deletePack = async(req, res, next) => {
     }
 
     return res.status(500).json({ message: "Error deleting pack", error: result.error });
+}
+
+exports.updatePack = async(req, res, next) => {
+    const { id, name, description, products } = req.body;
+
+    if (!id || !name || !description || products.length === 0) {
+        return res.status(400).json({ message: "Please fill in all fields" });
+    }
+
+    const result = await PacksModel.updatePack(id, name, description, products);
+
+    if (result.success) {
+        return res.status(200).json({ message: "Pack updated successfully!" });
+    }
+
+    return res.status(500).json({ message: "Error updating pack", error: result.error });
 }

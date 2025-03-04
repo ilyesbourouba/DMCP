@@ -51,7 +51,7 @@
                                                         </td>
                                                         <td>
                                                             <p class="text-xs font-weight-bold mb-0">
-                                                                <%= cat.total_price%> DA
+                                                                <%= cat.total_price%>.00 DA
                                                             </p>
                                                         </td>
                                                         <td class="align-middle">
@@ -59,7 +59,7 @@
                                                                 <a data-id="<%= cat.id %>" data-nom='<%= cat.name %>' class="text-secondary font-weight-bold text-xs" id="delete_btn" data-bs-target="#delete" href="" data-bs-toggle="modal" data-toggle="tooltip" data-original-title="delete pack">
                                                                     <i class="fas fa-trash-alt" style="font-size: large; color: rgb(187, 18, 18);" class="pe-2 btn-tooltip" data-bs-toggle="tooltip" data-bs-placement="top" data-container="body" title="delete" data-animation="true"></i>
                                                                 </a>
-                                                                <a data-id="<%= cat.id %>" data-nom='<%= cat.name %>' data-description='<%= cat.description %>' id="edit_btn" href="" data-bs-toggle="modal" data-bs-target="#edit" class="ms-3 text-secondary font-weight-bold text-xs" data-toggle="tooltip" data-original-title="Edit pack">
+                                                                <a data-id="<%= cat.id %>" data-nom='<%= cat.name %>' data-description='<%= cat.description %>' data-tota_price="<%= cat.total_price %>" data-products="<%= JSON.stringify(cat.products) %>" id="edit_btn" href="" data-bs-toggle="modal" data-bs-target="#edit" class="ms-3 text-secondary font-weight-bold text-xs" data-toggle="tooltip" data-original-title="Edit pack">
                                                                     <i class="fas fa-edit" style="font-size: large; color: rgb(23, 23, 177);" data-bs-toggle="tooltip" data-bs-placement="top" title="edit" data-container="body" data-animation="true"></i>
                                                                 </a>
 
@@ -179,6 +179,26 @@
                                 <div class="input-group mb-3">
                                     <textarea name="edit_description" id="edit_description" rows="4" class="form-control" placeholder="description of the product..."></textarea>
                                 </div>
+                            </div>
+                            <div class="col-lg-3 offset-9">
+                                <button type="button" id="add_product_edit" class="btn btn-primary btn-sm">ADD product</button>
+                            </div>
+                            <div class="col-lg-12">
+                                <div>Products</div>
+                                <div class="row" id="edit_product_list">
+                                    <!-- <div class="col-lg-2">
+                                        <div class="input-group mb-3">
+                                            <select class="form-control" id="products" name="products">
+                                                <% products.map(prod=>{ %>
+                                                    <option value="<%= prod.id %>" data-price="<%= prod.price %>"><%= prod.name %></option>
+                                                <% }) %>
+                                            </select>
+                                        </div>
+                                    </div> -->
+                                </div>
+                            </div>
+                            <div class="col-lg-4 offset-8">
+                                <p class="mb-0">Total Price : <span class="badge bg-gradient-success" id="edit_price">0 DA</span></p>
                             </div>
 
                         </div>
@@ -329,30 +349,104 @@
             });
         </script>
         <script>
-            $("a[id='edit_btn']").click(function() {
+            // UPDATE THE PRODUCT
+            $(document).on("click", "a[id='edit_btn']", function() {
+                var products = `<%- JSON.stringify(products) %>`;
+                products = JSON.parse(products);
 
-                let id_edit = $(this).attr('data-id');
-                let nom = $(this).attr("data-nom");
+                let id = $(this).attr("data-id");
+                let name = $(this).attr("data-nom");
                 let description = $(this).attr("data-description");
+                let total_price = $(this).attr("data-tota_price");
+                let selected_products = JSON.parse($(this).attr("data-products"));
 
-                $("#edit_id").val(id_edit);
-                $("#edit_name").val(nom);
+                $("#edit_id").val(id);
+                $("#edit_name").val(name);
                 $("#edit_description").val(description);
+                $("#edit_price").text(total_price + " DA");
+
+                console.log(id, name, description, total_price);
+                console.log("selected_products:", selected_products);
+
+                // Create the product list
+                let product_list = $("#edit_product_list");
+                product_list.html("");
+
+                selected_products.forEach(product => {
+                    let selected = selected_products.find(p => p.id == product.id);
+                    let productItem = `
+                        <div class="col-lg-3 product-item">
+                            <div class="input-group mb-3">
+                                <select class="form-control product-select" name="products[]">
+                                    <option value="${product.id}" data-price="${product.price}" ${selected ? "selected" : ""}>${product.name}</option>
+                                </select>
+                                <button type="button" class="badge bg-gradient-danger remove_product" style="border-color:#ef4444">X</button>
+                            </div>
+                        </div>
+                    `;
+                    product_list.append(productItem);
+                });
+
+                updateTotalPriceEdit();
+
+                // Remove previously bound event handlers before adding new ones
+                $("#add_product_edit").off("click").on("click", function() {
+                    let productItem = `
+                        <div class="col-lg-3 product-item">
+                            <div class="input-group mb-3">
+                                <select class="form-control product-select" name="products[]">
+                                    <% products.forEach(product => { %>
+                                        <option value="<%= product.id %>" data-price="<%= product.price %>"><%= product.name %></option>
+                                    <% }) %>
+                                </select>
+                                <button type="button" class="badge bg-gradient-danger remove_product" style="border-color:#ef4444">X</button>
+                            </div>
+                        </div>
+                    `;
+                    product_list.append(productItem);
+                    updateTotalPriceEdit();
+                });
+
+                // Use delegated event handling to avoid multiple bindings
+                product_list.off("click", ".remove_product").on("click", ".remove_product", function() {
+                    $(this).closest(".product-item").remove();
+                    updateTotalPriceEdit();
+                });
+
+                // Update price when changing the selected product
+                product_list.off("change", ".product-select").on("change", ".product-select", updateTotalPriceEdit);
+
+                function updateTotalPriceEdit() {
+                    let total = 0;
+                    $("#edit_product_list select").each(function() {
+                        const selectedOption = $(this).find("option:selected");
+                        total += parseFloat(selectedOption.attr("data-price")) || 0;
+                    });
+                    $("#edit_price").text(total.toFixed(2) + " DA");
+                }
             });
-            // udpate the pack 
-            $("button[id='modal_edit']").click(function() {
+            // UPDATE THE PRODUCT
+            $(document).on("click", "button[id='modal_edit']", function() {
+
                 let id = $("#edit_id").val();
                 let name = $("#edit_name").val();
                 let description = $("#edit_description").val();
 
+                let products = [];
+                $("#edit_product_list select").each(function() {
+                    products.push($(this).val());
+                });
+
                 $.ajax({
-                    url: '/packs/update/',
-                    data: {
+                    url: '/packs/update',
+                    method: 'PUT',
+                    contentType: "application/json",
+                    data: JSON.stringify({
                         id,
                         name,
-                        description
-                    },
-                    method: 'PUT',
+                        description,
+                        products
+                    }),
                     success: function(response) {
                         Swal.fire({
                             icon: 'success',
@@ -363,7 +457,8 @@
                             location.reload();
                         });
                     },
-                    error: function() {
+                    error: function(error) {
+                        console.log(error)
                         Swal.fire({
                             icon: 'error',
                             title: 'Error',
@@ -373,6 +468,7 @@
                     }
                 });
             });
+
         </script>
 
         <%- include('./partials/footer'); %>
