@@ -43,7 +43,7 @@ app.use('/uploads', express.static(path.join(__dirname, '/uploads')));
 
 // Routes
 const loginRoutes = require("./routes/login");
-const userRoutes = require("./routes/user");
+const clientRoutes = require("./routes/client");
 const productsRoutes = require("./routes/products");
 const categoryRoutes = require("./routes/category");
 const packsRoutes = require("./routes/packs");
@@ -54,7 +54,7 @@ app.use("/products", productsRoutes);
 app.use("/category", categoryRoutes);
 app.use("/packs", packsRoutes);
 app.use("/dashboard", dahsboardRoutes);
-app.use("/user", userRoutes);
+app.use("/client", clientRoutes);
 
 // Start Server
 const PORT = process.env.PORT || 3000;
