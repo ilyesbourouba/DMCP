@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Hôte : 127.0.0.1
--- Généré le : mer. 23 avr. 2025 à 23:36
+-- Généré le : jeu. 24 avr. 2025 à 00:58
 -- Version du serveur : 10.4.27-MariaDB
 -- Version de PHP : 8.1.12
 
@@ -52,12 +52,20 @@ INSERT INTO `category` (`id`, `name`, `description`, `image`) VALUES
 
 CREATE TABLE `client` (
   `id` int(11) NOT NULL,
-  `nom` varchar(255) NOT NULL,
-  `prenom` varchar(255) NOT NULL,
+  `name` varchar(255) NOT NULL,
+  `phone` varchar(255) NOT NULL,
   `email` varchar(255) NOT NULL,
   `password` varchar(255) NOT NULL,
-  `adresse` text DEFAULT NULL
+  `token` varchar(255) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
+
+--
+-- Déchargement des données de la table `client`
+--
+
+INSERT INTO `client` (`id`, `name`, `phone`, `email`, `password`, `token`) VALUES
+(1, 'ilyes', '0551316015', 'ilyes@gmail.com', '$2a$12$jFthR95e3SulaVDIOTY4dumqNJM.gUP1HoyZR/rIbimsXGDKRmvoG', '$2a$12$jFthR95e3SulaVDIOTY4dumqNJM.gUP1HoyZR/rIbimsXGDKRmvoG'),
+(3, 'maroua', '0551316018', 'maroua@gmail.com', '$2a$10$i9GUBUqbvh7z63JXgC9go.KVKf6uHJamYD1Y12xA.vQ6QeJmJGnnW', '');
 
 -- --------------------------------------------------------
 
@@ -328,7 +336,7 @@ ALTER TABLE `category`
 -- AUTO_INCREMENT pour la table `client`
 --
 ALTER TABLE `client`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
 
 --
 -- AUTO_INCREMENT pour la table `commande`
