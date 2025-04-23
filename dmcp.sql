@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Hôte : 127.0.0.1
--- Généré le : sam. 01 mars 2025 à 22:49
+-- Généré le : mer. 23 avr. 2025 à 23:36
 -- Version du serveur : 10.4.27-MariaDB
 -- Version de PHP : 8.1.12
 
@@ -29,20 +29,20 @@ SET time_zone = "+00:00";
 
 CREATE TABLE `category` (
   `id` int(11) NOT NULL,
-  `name` varchar(255) NOT NULL,
-  `description` text DEFAULT NULL
+  `name` varchar(1000) NOT NULL,
+  `description` text DEFAULT NULL,
+  `image` varchar(1000) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
 
 --
 -- Déchargement des données de la table `category`
 --
 
-INSERT INTO `category` (`id`, `name`, `description`) VALUES
-(1, 'category 121', 'RAS...'),
-(3, 'llyes', 'Lorem ipsum is a dummy or placeholder text commonly used in graphic design, publishing, and web development to fill empty spaces in a layout that does not yet have content.'),
-(4, 'dino', 'Lorem ipsum is a dummy .'),
-(8, 'arcane', 'arcane arcane'),
-(11, 'Deadpool', 'Deadpool & Wolverine');
+INSERT INTO `category` (`id`, `name`, `description`, `image`) VALUES
+(3, 'llyes', 'Lorem ipsum is a dummy or placeholder text commonly used in graphic design, publishing, and web development to fill empty spaces in a layout that does not yet have content.', NULL),
+(4, 'dino', 'Lorem ipsum is a dummy .', NULL),
+(8, 'arcane', 'arcane arcane', NULL),
+(11, 'Deadpool', 'Deadpool & Wolverine', NULL);
 
 -- --------------------------------------------------------
 
@@ -106,8 +106,17 @@ CREATE TABLE `pack` (
   `id` int(11) NOT NULL,
   `name` varchar(255) NOT NULL,
   `description` text DEFAULT NULL,
-  `total_price` int(11) DEFAULT NULL
+  `total_price` int(11) DEFAULT NULL,
+  `image` varchar(255) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
+
+--
+-- Déchargement des données de la table `pack`
+--
+
+INSERT INTO `pack` (`id`, `name`, `description`, `total_price`, `image`) VALUES
+(4, 'bourouba ilyes', '2', NULL, NULL),
+(5, 'deadpool', 'ds', NULL, NULL);
 
 -- --------------------------------------------------------
 
@@ -119,6 +128,14 @@ CREATE TABLE `pack_product` (
   `pack_id` int(11) NOT NULL,
   `product_id` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
+
+--
+-- Déchargement des données de la table `pack_product`
+--
+
+INSERT INTO `pack_product` (`pack_id`, `product_id`) VALUES
+(4, 1),
+(4, 2);
 
 -- --------------------------------------------------------
 
@@ -151,21 +168,27 @@ CREATE TABLE `panier_product` (
 
 CREATE TABLE `product` (
   `id` int(11) NOT NULL,
-  `name` varchar(255) NOT NULL,
-  `description` text DEFAULT NULL,
+  `name_fr` varchar(1000) NOT NULL,
+  `name_en` varchar(1000) NOT NULL,
+  `name_ar` varchar(1000) NOT NULL,
+  `desc_fr` text DEFAULT NULL,
+  `desc_en` text NOT NULL,
+  `desc_ar` text NOT NULL,
   `price` int(11) NOT NULL,
   `stock` int(11) DEFAULT NULL,
   `category_id` int(11) DEFAULT NULL,
-  `best_selling` tinyint(1) DEFAULT 0
+  `best_selling` tinyint(1) DEFAULT 0,
+  `new_product` tinyint(1) DEFAULT 0,
+  `top_rating` tinyint(1) DEFAULT 0
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
 
 --
 -- Déchargement des données de la table `product`
 --
 
-INSERT INTO `product` (`id`, `name`, `description`, `price`, `stock`, `category_id`, `best_selling`) VALUES
-(1, 'mask', 'Lorem ipsum is a dummy or placeholder text commonly used in graphic design', 120, 1000, 3, 1),
-(2, 'arcane 2', 'arcane  arcane ', 120, 45, 11, 0);
+INSERT INTO `product` (`id`, `name_fr`, `name_en`, `name_ar`, `desc_fr`, `desc_en`, `desc_ar`, `price`, `stock`, `category_id`, `best_selling`, `new_product`, `top_rating`) VALUES
+(1, 'masque', 'mask', 'قناع', 'Lorem ipsum est un texte factice ou de substitution couramment utilisé dans la conception graphique', 'Lorem ipsum is a dummy or placeholder text commonly used in graphic design', 'لوريم إيبسوم هو نص وهمي أو نص بديل يستخدم عادة في التصميم الجرافيكي', 120, 1000, 11, 1, 1, 1),
+(2, 'verre', 'glass', 'زجاج', 'Alors que David affronte Kevin, un groupe d\'hommes armés intervient.', 'While David confronts Kevin, a group of armed men intervene.', 'بينما يواجه ديفيد كيفن، تتدخل مجموعة من الرجال المسلحين.', 120, 45, 11, 0, 0, 0);
 
 -- --------------------------------------------------------
 
@@ -184,8 +207,7 @@ CREATE TABLE `product_images` (
 --
 
 INSERT INTO `product_images` (`id`, `product_id`, `image_url`) VALUES
-(1, 2, '2025-03-01T21-40-01.130Z_arcane_2_3c4e709d-3983-4637-8371-86ad199b255b.png'),
-(2, 2, '2025-03-01T21-40-01.131Z_arcane_2_SystÃ¨me E-commerce _ Une Solution Digitale pour la Vente en Ligne - visual selection (4).png');
+(3, 1, '1744463441220_mask.jpg');
 
 -- --------------------------------------------------------
 
@@ -318,7 +340,7 @@ ALTER TABLE `commande`
 -- AUTO_INCREMENT pour la table `pack`
 --
 ALTER TABLE `pack`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
 
 --
 -- AUTO_INCREMENT pour la table `panier`
@@ -330,13 +352,13 @@ ALTER TABLE `panier`
 -- AUTO_INCREMENT pour la table `product`
 --
 ALTER TABLE `product`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
 
 --
 -- AUTO_INCREMENT pour la table `product_images`
 --
 ALTER TABLE `product_images`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
 
 --
 -- AUTO_INCREMENT pour la table `user`

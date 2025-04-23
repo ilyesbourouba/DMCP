@@ -11,7 +11,7 @@ module.exports = class PackModel {
 
 
             const [packProducts] = await db.execute(`
-                SELECT pp.pack_id, p.id AS product_id, p.name AS product_name, p.price 
+                SELECT pp.pack_id, p.id AS product_id, p.name_fr AS product_name, p.price 
                 FROM pack_product pp
                 JOIN product p ON pp.product_id = p.id
             `);
@@ -82,7 +82,7 @@ module.exports = class PackModel {
         try {
             const [packRes] = await db.execute(`SELECT * FROM pack WHERE id = ?`, [id]);
             const [productsRes] = await db.execute(
-                `SELECT p.id AS product_id, p.name AS product_name, p.price FROM product p 
+                `SELECT p.id AS product_id, p.name_fr AS product_name, p.price FROM product p 
                  JOIN pack_product pp ON p.id = pp.product_id 
                  WHERE pp.pack_id = ?`, [id]
             );
