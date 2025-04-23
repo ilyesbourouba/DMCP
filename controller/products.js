@@ -20,7 +20,18 @@ exports.productsPage = async(req, res, next) => {
         category
     });
 }
+exports.productsList = async(req, res, next) => {
+    let products = [];
+    let category = [];
 
+    const { success, data } = await ProductModel.getProducts();
+    const Categories = await CategoryModel.getCategories();
+
+    if (Categories.success) category = Categories.data;
+    if (success) products = data;
+    console.log("called from mobile")
+    return res.status(200).json(products);
+}
 exports.addProduct = async(req, res) => {
     const { name, category, description, price, stock, best_selling } = req.body;
 
