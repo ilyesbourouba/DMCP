@@ -20,7 +20,18 @@ exports.productsPage = async(req, res, next) => {
         category
     });
 }
+exports.productsList = async(req, res, next) => {
+    let products = [];
+    let category = [];
 
+    const { success, data } = await ProductModel.getProducts();
+    const Categories = await CategoryModel.getCategories();
+
+    if (Categories.success) category = Categories.data;
+    if (success) products = data;
+    console.log("called from mobile")
+    return res.status(200).json(products);
+}
 exports.addProduct = async(req, res) => {
     const { name, category, description, price, stock, best_selling } = req.body;
 
@@ -40,7 +51,7 @@ exports.addProduct = async(req, res) => {
 };
 
 // delete product
-exports.deleteProduct = async (req, res) => {
+exports.deleteProduct = async(req, res) => {
     const { id } = req.body;
 
     if (!id) return res.status(400).json({ message: "Please provide a product id" });
@@ -57,7 +68,7 @@ exports.deleteProduct = async (req, res) => {
 };
 
 // delete product image
-exports.deleteProductIMAGE = async (req, res) => {
+exports.deleteProductIMAGE = async(req, res) => {
     const { id, image } = req.body;
 
     if (!id || !image) return res.status(400).json({ message: "Please provide a product id and image" });
@@ -71,7 +82,7 @@ exports.deleteProductIMAGE = async (req, res) => {
 };
 
 // update product
-exports.updateProduct = async (req, res) => {
+exports.updateProduct = async(req, res) => {
     const { id, name, category, description, price, stock, best_selling } = req.body;
 
     if (!id || !name || !category || !description || !price || !stock || best_selling === undefined) {
