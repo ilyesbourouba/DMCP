@@ -19,10 +19,10 @@ module.exports = class CategoryModel {
             };
         }
     }
-    static async addCategory(name, description) {
+    static async addCategory(name) {
         try {
-            const [res] = await db.execute(`INSERT INTO category (name, description)
-                                            VALUES (?, ?)`, [name, description]);
+            const [res] = await db.execute(`INSERT INTO category (name)
+                                            VALUES (?)`, [name]);
             console.log('Category added successfully:', res);
             return {
                 success: true,
@@ -51,9 +51,9 @@ module.exports = class CategoryModel {
             };
         }
     }
-    static async updateCategory(id, name, description) {
+    static async updateCategory(id, name) {
         try {
-            const [res] = await db.execute(`UPDATE category SET name = ?, description = ? WHERE id = ?`, [name, description, id]);
+            const [res] = await db.execute(`UPDATE category SET name = ? WHERE id = ?`, [name, id]);
             console.log('Category updated successfully:', res);
             return {
                 success: true,

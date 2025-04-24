@@ -39,16 +39,16 @@ exports.getCategoryById = async(req, res, next) => {
     return res.status(400).json({ message: "something went wrong" });
 }
 exports.addCategory = async(req, res, next) => {
-    const { name, description } = req.body;
+    const { name } = req.body;
 
-    if (!name || !description) return res.status(400).json({ message: "Please fill in all fields" });
+    if (!name) return res.status(400).json({ message: "Please fill in all fields" });
 
 
     const { data } = await CategoryModel.getCategories();
     const categoryExists = data.find(category => category.name.toUpperCase() === name.toUpperCase());
     if (categoryExists) return res.status(400).json({ message: "Category already exists" });
 
-    const { success } = await CategoryModel.addCategory(name, description);
+    const { success } = await CategoryModel.addCategory(name);
     if (success) {
         console.table(success);
         return res.status(200).json(success);
@@ -57,15 +57,15 @@ exports.addCategory = async(req, res, next) => {
 }
 
 exports.updateCategory = async(req, res, next) => {
-    const { id, name, description } = req.body;
+    const { id, name } = req.body;
 
-    if (!id || !name || !description) return res.status(400).json({ message: "Please provide all fields" });
+    if (!id || !name) return res.status(400).json({ message: "Please provide all fields" });
     // check if the id exists
     const { data } = await CategoryModel.getCategoryById(id);
     console.log(data)
     if (data.length == 0) return res.status(400).json({ message: "Category not found" });
 
-    const { success } = await CategoryModel.updateCategory(id, name, description);
+    const { success } = await CategoryModel.updateCategory(id, name);
     if (success) {
         console.table(success);
         return res.status(200).json(success);
