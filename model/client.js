@@ -85,6 +85,17 @@ module.exports = class ClientModel {
             return error;
         }
     }
+    static async getClientByPhone(phone) {
+        try {
+            const sql = `SELECT * FROM client WHERE phone = ? `;
+
+            const [res] = await db.execute(sql, [phone]);
+            if (res.length > 0) return [res][0];
+            return false;
+        } catch (error) {
+            return error;
+        }
+    }
     static async createClient(name, phone, email, password) {
         try {
             const sql = `INSERT INTO client (name, phone, email, password) VALUES (?, ?, ?, ?)`;

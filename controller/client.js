@@ -10,16 +10,16 @@ exports.loginPage = (req, res, next) => {
 
 exports.checkLogin = async(req, res, next) => {
 
-    const { username, password } = req.body;
+    const { phone, password } = req.body;
 
     try {
-        console.log(username, password);
+        console.log(phone, password);
 
-        if (!username || !password) {
+        if (!phone || !password) {
             return res.status(400).json({ message: "empty_fields" });
         }
 
-        const client = await ClientModel.getClientByName(username.trim());
+        const [client] = await ClientModel.getClientByPhone(phone.trim());
         console.log(client)
 
         if (client == null)
