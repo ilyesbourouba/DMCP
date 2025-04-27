@@ -96,10 +96,10 @@ module.exports = class ClientModel {
             return error;
         }
     }
-    static async createClient(name, phone, email, password) {
+    static async createClient(name, phone, email, adr, password) {
         try {
-            const sql = `INSERT INTO client (name, phone, email, password) VALUES (?, ?, ?, ?)`;
-            const [res] = await db.execute(sql, [name, phone, email, password]);
+            const sql = `INSERT INTO client (name, phone, email, adr, password) VALUES (?, ?, ?, ?, ?)`;
+            const [res] = await db.execute(sql, [name, phone, email, adr, password]);
             if (res.affectedRows > 0) return {
                 success: true,
             };

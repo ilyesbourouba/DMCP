@@ -38,9 +38,9 @@ exports.checkLogin = async(req, res, next) => {
 }
 
 exports.registerClient = async(req, res, next) => {
-    const { username, phone, email, password } = req.body;
+    const { username, phone, email, adr, password } = req.body;
     try {
-        if (!username || !phone || !email || !password) {
+        if (!username || !phone || !email || !adr || !password) {
             return res.status(400).json({ message: "empty_fields" });
         }
 
@@ -53,11 +53,11 @@ exports.registerClient = async(req, res, next) => {
         const hashedPassword = await bcrypt.hashSync(password.trim(), 10);
 
 
-        const data = await ClientModel.createClient(username.trim(), phone.trim(), email.trim(), hashedPassword);
+        const data = await ClientModel.createClient(username.trim(), phone.trim(), email.trim(), adr.trim(), hashedPassword);
 
         console.log(data)
 
-        return res.status(200).json("client registred successfully! Please login to continue.");
+        return res.status(201).json("registred");
 
     } catch (error) {
         return res.status(500).json({ message: "server_error" });

@@ -9,7 +9,7 @@ module.exports = class ProductModel {
     static async getProducts() {
         try {
             const [products] = await db.execute(`
-                SELECT product.*, category.name AS category_name 
+                SELECT product.*, category.name_fr AS category_name_fr, category.name_en AS category_name_en, category.name_ar AS category_name_ar
                 FROM product 
                 JOIN category ON product.category_id = category.id ORDER BY id DESC
             `);
@@ -32,7 +32,7 @@ module.exports = class ProductModel {
     static async getProductById(id) {
         try {
             const [products] = await db.execute(`
-                SELECT product.*, category.name AS category_name 
+                SELECT product.*, category.name_fr AS category_name 
                 FROM product 
                 JOIN category ON product.category_id = category.id
                 WHERE product.id = ?
