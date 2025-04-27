@@ -29,11 +29,11 @@ module.exports = class PanierModel {
                 const [images] = await db.execute(`
                                 SELECT image_url FROM product_images WHERE product_id = ? LIMIT 1
                             `, [panier.id]);
-                console.log(images[0]["image_url"]);
+
                 panier.discountTag = "";
                 panier.imageUrl = images[0]["image_url"];
             }
-            return { success: true, data: paniers };
+            return paniers;
 
         } catch (error) {
             return {
@@ -47,9 +47,7 @@ module.exports = class PanierModel {
         try {
             const sql = `INSERT INTO panier (client_id, product_id, quantity) VALUES (?, ?, ?)`;
             const [res] = await db.execute(sql, [clientId, productId, quantity]);
-            if (res.affectedRows > 0) return {
-                success: true,
-            };
+            if (res.affectedRows > 0) return PanierModel.getByClientId(clientId);
             return {
                 success: false,
                 message: "Failed to add to panier."
@@ -66,9 +64,7 @@ module.exports = class PanierModel {
         try {
             const sql = `UPDATE panier SET quantity = ? WHERE client_id = ? AND product_id = ?`;
             const [res] = await db.execute(sql, [quantity, clientId, productId]);
-            if (res.affectedRows > 0) return {
-                success: true,
-            };
+            if (res.affectedRows > 0) return PanierModel.getByClientId(clientId);
             return {
                 success: false,
                 message: "No panier entry updated."
@@ -85,9 +81,7 @@ module.exports = class PanierModel {
         try {
             const sql = `DELETE FROM panier WHERE client_id = ? AND product_id = ?`;
             const [res] = await db.execute(sql, [clientId, productId]);
-            if (res.affectedRows > 0) return {
-                success: true,
-            };
+            if (res.affectedRows > 0) return PanierModel.getByClientId(clientId);
             return {
                 success: false,
                 message: "No panier entry deleted."
