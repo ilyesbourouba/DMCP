@@ -30,6 +30,7 @@ module.exports = class PanierModel {
                                 SELECT image_url FROM product_images WHERE product_id = ? LIMIT 1
                             `, [panier.id]);
                 console.log(images[0]["image_url"]);
+                panier.discountTag = "";
                 panier.imageUrl = images[0]["image_url"];
             }
             return { success: true, data: paniers };
