@@ -13,7 +13,7 @@ exports.getPanier = async(req, res) => {
     if (result.length > 0) {
         return res.status(200).json(result);
     }
-    return res.status(500).json({ message: "Error getting panier : " + result.error });
+    return res.status(200).json([]);
 };
 
 exports.addToPanier = async(req, res) => {
@@ -31,8 +31,8 @@ exports.addToPanier = async(req, res) => {
     if (checkPanier == null) {
         result = await PanierModel.addToPanier(client_id, product_id, quantity);
     } else {
-        var sum = quantity + checkPanier["quantity"];
-        result = await PanierModel.updatePanier(client_id, product_id, sum);
+        // var sum = quantity + checkPanier["quantity"];
+        result = await PanierModel.updatePanier(client_id, product_id, quantity);
     }
 
     console.log("result =>", result);
@@ -49,11 +49,11 @@ exports.deleteFromPanier = async(req, res) => {
     if (!product_id || !client_id) {
         return res.status(400).json({ message: "Please fill in all fields" });
     }
-
+    console.log(product_id, client_id)
     result = await PanierModel.deleteFromPanier(client_id, product_id);
 
     if (result.length > 0) {
         return res.status(200).json(result);
     }
-    return res.status(500).json({ message: "Error deleting panier : " + result.error });
+    return res.status(200).json([]);
 };
