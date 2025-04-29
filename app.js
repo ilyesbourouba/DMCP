@@ -50,6 +50,7 @@ const packsRoutes = require("./routes/packs");
 const dahsboardRoutes = require("./routes/dashboard");
 const panierRoutes = require("./routes/panier");
 const livraisonRoutes = require("./routes/livraison");
+const commandeRoutes = require("./routes/commande");
 
 app.use("/", loginRoutes);
 app.use("/products", productsRoutes);
@@ -59,6 +60,7 @@ app.use("/dashboard", dahsboardRoutes);
 app.use("/client", clientRoutes);
 app.use("/panier", panierRoutes);
 app.use("/livraison", livraisonRoutes);
+app.use("/commande", commandeRoutes);
 
 // Start Server
 const PORT = process.env.PORT || 3000;
