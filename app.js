@@ -49,6 +49,7 @@ const categoryRoutes = require("./routes/category");
 const packsRoutes = require("./routes/packs");
 const dahsboardRoutes = require("./routes/dashboard");
 const panierRoutes = require("./routes/panier");
+const livraisonRoutes = require("./routes/livraison");
 
 app.use("/", loginRoutes);
 app.use("/products", productsRoutes);
@@ -57,6 +58,7 @@ app.use("/packs", packsRoutes);
 app.use("/dashboard", dahsboardRoutes);
 app.use("/client", clientRoutes);
 app.use("/panier", panierRoutes);
+app.use("/livraison", livraisonRoutes);
 
 // Start Server
 const PORT = process.env.PORT || 3000;
