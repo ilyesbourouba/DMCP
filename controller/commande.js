@@ -20,3 +20,24 @@ exports.createCMD = async(req, res, next) => {
         return res.status(500).json({ message: "Internal server error" });
     }
 }
+
+exports.getCMDByClient = async(req, res, next) => {
+    const { client_id } = req.body;
+
+    if (!client_id) {
+        return res.status(400).json({ message: "Please provide a client id" });
+    }
+    try {
+
+        const result = await CommandeModel.getCMDByClient(client_id);
+        console.log("result are", result)
+        if (result) {
+            return res.status(200).json(result);
+        } else {
+            return res.status(404).json([]);
+        }
+    } catch (error) {
+        console.error(error);
+        return res.status(500).json({ message: "Internal server error" });
+    }
+}
