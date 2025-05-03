@@ -1,0 +1,266 @@
+<%- include('./partials/sidebar'); %>
+    <%- include('./partials/header'); %>
+
+        <div class="container-fluid py-4">
+            <div class="row">
+                <div class="col-12">
+                    <div class="card">
+                        <!-- Card header -->
+                        <div class="card-header pb-0">
+                            <div class="d-lg-flex">
+                                <div>
+                                    <h5 class="mb-0">All Commandes</h5>
+                                </div>
+
+                            </div>
+                        </div>
+                        <div class="card-body px-0 pb-0">
+                            <div class="table-responsive">
+                                <div class="dataTable-wrapper dataTable-loading no-footer sortable searchable fixed-columns">
+
+                                    <div class="dataTable-container">
+                                        <table class="table align-items-center mb-0" id="datatable">
+                                            <thead>
+                                                <tr>
+                                                    <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">numero</th>
+                                                    <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Date</th>
+                                                    <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Client name</th>
+                                                    <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Client telephone</th>
+                                                    <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Prix</th>
+                                                    <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Status</th>
+                                                    <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Operations</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                <% commandes.map(commande=>{ 
+                                                    const formattedDate = `${commande.date_commande.getDate()} ${commande.date_commande.toLocaleString('default', { month: 'short' })} ${commande.date_commande.getFullYear()} at ${String(commande.date_commande.getHours()).padStart(2, '0')}:${String(commande.date_commande.getMinutes()).padStart(2, '0')}`;
+                                                    let color = "dark";
+                                                    if (commande.status_fr === 'en attente') {
+                                                        color = 'warning';
+                                                    } else if (commande.status_fr === 'en cours de livraison') {
+                                                        color = 'info';
+                                                    } else if (commande.status_fr === 'livré') {
+                                                        color = 'success';
+                                                    } else if (commande.status_fr === 'payé') {
+                                                        color = 'success';
+                                                    } else if (commande.status_fr === 'annulé') {
+                                                        color = 'danger';
+                                                    }
+                                                    %>
+                                                    <tr>
+                                                        <td>
+                                                            <div class="d-flex px-2 py-1">
+                                                                <div class="d-flex flex-column justify-content-center">
+                                                                    <button class="btn btn-icon-only btn-rounded btn-outline-success mb-0 me-3 p-3 btn-sm d-flex align-items-center justify-content-center"><%= commande.id %></button>
+                                                                </div>
+                                                            </div>
+                                                        </td>
+                                                        <td>
+                                                            <div class="d-flex px-2 py-1">
+                                                                <div class="d-flex flex-column justify-content-center">
+                                                                    <h6 class="mb-0 text-sm">
+                                                                        <%= formattedDate %>
+                                                                    </h6>
+                                                                </div>
+                                                            </div>
+                                                        </td>
+                                                        <td>
+                                                            <div class="d-flex px-2 py-1">
+                                                                <div class="d-flex flex-column justify-content-center">
+                                                                    <h6 class="mb-0 text-sm">
+                                                                        <%= commande.client_name %>
+                                                                    </h6>
+                                                                </div>
+                                                            </div>
+                                                        </td>
+                                                        <td>
+                                                            <div class="d-flex px-2 py-1">
+                                                                <div class="d-flex flex-column justify-content-center">
+                                                                    <h6 class="mb-0 text-sm">
+                                                                        <%= commande.client_phone %>
+                                                                    </h6>
+                                                                </div>
+                                                            </div>
+                                                        </td>
+                                                        <td>
+                                                            <div class="d-flex px-2 py-1">
+                                                                <div class="d-flex flex-column justify-content-center">
+                                                                    <h6 class="mb-0 text-sm">
+                                                                        <%= commande.total_amount %>.00 DA
+                                                                    </h6>
+                                                                </div>
+                                                            </div>
+                                                        </td>
+
+                                                        <td>
+                                                            <div class="d-flex px-2 py-1">
+                                                                <div class="d-flex flex-column justify-content-center">
+                                                                    <h6 class="mb-0 text-sm">
+                                                                        <span class="badge bg-gradient-<%= color %> badge-sm my-auto ms-auto me-3"><%= commande.status_fr %></span>
+
+                                                                    </h6>
+                                                                </div>
+                                                            </div>
+                                                        </td>
+                                                        <td class="align-middle">
+                                                            <center>
+                                                                <a data-products="<%= JSON.stringify(commande.products) %>" id="show_btn" href="" data-bs-toggle="modal" data-bs-target="#show" class="ms-3 text-secondary font-weight-bold text-xs" data-toggle="tooltip" data-original-title="show products">
+                                                                    <i class="fas fa-list" style="font-size: large; color: rgb(23, 177, 36);" data-bs-toggle="tooltip" data-bs-placement="top" title="edit" data-container="body" data-animation="true"></i>
+                                                                </a>
+                                                                <a data-id="<%= commande.id %>" data-status_id="<%= commande.status_id %>" data-status="<%= commande.status_fr %>" id="edit_btn" href="" data-bs-toggle="modal" data-bs-target="#edit" class="ms-3 text-secondary font-weight-bold text-xs" data-toggle="tooltip"
+                                                                    data-original-title="Edit category">
+                                                                    <i class="fas fa-edit" style="font-size: large; color: rgb(23, 23, 177);" data-bs-toggle="tooltip" data-bs-placement="top" title="edit" data-container="body" data-animation="true"></i>
+                                                                </a>
+                                                            </center>
+                                                        </td>
+                                                    </tr>
+                                                    <% }) %>
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+
+        <!-- Modal edit -->
+        <div class="modal fade" id="edit" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered modal-md" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="exampleModalLabel">Edit Commande</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        <div class="row">
+
+                            <input type="hidden" id="edit_id" name="edit_id" value="">
+                            <center>
+                                <div class="col-lg-5">
+                                    <label for="status">Status</label>
+                                    <div class="input-group mb-3">
+                                        <select class="form-control" id="edit_status" name="edit_status">
+                                        <% status.map(statu=>{ %>
+                                            <option value="<%= statu.id %>"><%= statu.status_fr %></option>
+                                        <% }) %>
+                                    </select>
+                                    </div>
+                                </div>
+                            </center>
+
+                        </div>
+
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" id="modal_edit" class="btn bg-gradient-success">mise a jour</button>
+                        <button type="button" class="btn bg-gradient-secondary" data-bs-dismiss="modal">annuler</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Modal SHOW -->
+        <div class="modal fade" id="show" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="exampleModalLabel">Show products</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        <div class="row">
+
+
+                            <div class="table-responsive">
+                                <table class="table align-items-center mb-0">
+                                    <thead>
+                                        <tr>
+                                            <th class="text-left text-sm p-0 pb-2 ps-3">Product</th>
+                                            <th class="text-left text-sm p-0 pb-2 ps-1">Quantity</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="show_prods">
+                                    </tbody>
+                                </table>
+                            </div>
+
+                        </div>
+
+                    </div>
+                    <div class="modal-footer">
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
+        <script>
+            $("a[id='edit_btn']").click(function() {
+
+                let id_edit = $(this).attr('data-id');
+                let status = $(this).attr("data-status");
+                let status_id = $(this).attr("data-status_id");
+                $('#edit_id').val(id_edit);
+                // $(`#edit_status option[value="${status_id}"]`).remove();
+                // $('#edit_status').prepend(`<option value="${status_id}" selected>${status}</option>`);
+            });
+
+            // udpate the Commande 
+            $("button[id='modal_edit']").click(function() {
+                var id = $('#edit_id').val();
+                var status = $('#edit_status').val();
+
+                $.ajax({
+                    url: '/commande/updatestatus/',
+                    method: 'PUT',
+                    data: {
+                        id: id,
+                        status: status
+                    },
+                    success: function(response) {
+                        Swal.fire({
+                            icon: 'success',
+                            title: 'Commande Updated!',
+                            text: 'The Commande has been updated successfully.',
+                            confirmButtonText: 'OK'
+                        }).then(() => {
+                            location.reload();
+                        });
+                    },
+                    error: function() {
+                        Swal.fire({
+                            icon: 'error',
+                            title: 'Error',
+                            text: 'Something went wrong. Please try again.',
+                            confirmButtonText: 'OK'
+                        });
+                    }
+                });
+            });
+        </script>
+        <script>
+            $("a[id='show_btn']").click(function(e) {
+                let products = JSON.parse($(this).attr('data-products'));
+                console.log(products);
+                let html = '';
+                products.forEach(product => {
+                    html += `<tr>
+                                <td class="text-left text-sm "><h6 class="text-sm mb-0">${product.name_fr}</h6></td>
+                                <td class="text-left text-sm"><h6 class="text-sm mb-0">${product.quantity}</h6></td>
+                            </tr>`;
+                });
+
+                $('#show_prods').html(html);
+
+            });
+        </script>
+
+        <%- include('./partials/footer'); %>
