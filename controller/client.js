@@ -64,3 +64,31 @@ exports.registerClient = async(req, res, next) => {
     }
 
 }
+
+// update client 
+exports.updateClient = async(req, res, next) => {
+    const { id, username, phone, email, adr } = req.body;
+    try {
+        console.log(id, username, phone, email, adr);
+        if (!id || !username || !phone || !email || !adr) {
+            return res.status(400).json("empty_fields");
+        }
+        // check if the new phone or email don"t exist
+        const clientNew = await ClientModel.getClientByPhoneEmailNotID(phone, email, id);
+        console.log("clientNew => ", clientNew);
+
+        if (clientNew)
+            return res.status(400).json({ message: "user_exists" });
+
+        const data = await ClientModel.updateClient(id, username.trim(), phone.trim(), email.trim(), adr.trim());
+
+        console.log(data);
+
+        return res.status(200).json({ message: "client_updated", data });
+
+    } catch (error) {
+        console.error(error);
+
+        return res.status(500).json({ message: "server_error" });
+    }
+}
