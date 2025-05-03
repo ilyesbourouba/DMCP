@@ -2,9 +2,19 @@ const bcrypt = require('bcryptjs/dist/bcrypt');
 const ClientModel = require('../model/client');
 
 
-exports.loginPage = (req, res, next) => {
-    return res.render('login', {
-        error: req.query.error
+exports.clientPage = async(req, res, next) => {
+    const { user } = req;
+    // get client list
+    const { success, data } = await ClientModel.getAll();
+    let clients = [];
+    if (success) {
+        clients = data;
+    }
+    return res.render('client', {
+        user,
+        sectionName: "Client",
+        pageName: "Client",
+        clients
     });
 }
 

@@ -1,0 +1,240 @@
+<%- include('./partials/sidebar'); %>
+    <%- include('./partials/header'); %>
+
+        <div class="container-fluid py-4">
+            <div class="row">
+                <div class="col-12">
+                    <div class="card">
+                        <!-- Card header -->
+                        <div class="card-header pb-0">
+                            <div class="d-lg-flex">
+                                <div>
+                                    <h5 class="mb-0">All Clients</h5>
+                                </div>
+                                <!-- <div class="ms-auto my-auto mt-lg-0 mt-4">
+                                    <div class="ms-auto my-auto">
+                                        <a href="#" class="btn btn-primary btn-sm mb-0" data-bs-toggle="modal" data-bs-target="#import">+&nbsp; New Category</a>
+                                    </div>
+                                </div> -->
+                            </div>
+                        </div>
+                        <div class="card-body px-0 pb-0">
+                            <div class="table-responsive">
+                                <div class="dataTable-wrapper dataTable-loading no-footer sortable searchable fixed-columns">
+
+                                    <div class="dataTable-container">
+                                        <table class="table align-items-center mb-0" id="datatable">
+                                            <thead>
+                                                <tr>
+                                                    <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">ID</th>
+                                                    <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Nom</th>
+                                                    <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Telephone</th>
+                                                    <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">E-mail</th>
+                                                    <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Adresse</th>
+                                                    <!-- <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Operations</th> -->
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                <% clients.map(client=>{ %>
+                                                    <tr>
+                                                        <td>
+                                                            <div class="d-flex px-2 py-1">
+                                                                <div class="d-flex flex-column justify-content-center">
+                                                                    <h6 class="mb-0 text-sm">
+                                                                        #
+                                                                        <%= client.id %>
+                                                                    </h6>
+                                                                </div>
+                                                            </div>
+                                                        </td>
+                                                        <td>
+                                                            <div class="d-flex px-2 py-1">
+                                                                <div class="d-flex flex-column justify-content-center">
+                                                                    <h6 class="mb-0 text-sm">
+                                                                        <%= client.name %>
+                                                                    </h6>
+                                                                </div>
+                                                            </div>
+                                                        </td>
+                                                        <td>
+                                                            <div class="d-flex px-2 py-1">
+                                                                <div class="d-flex flex-column justify-content-center">
+                                                                    <h6 class="mb-0 text-sm">
+                                                                        <%= client.phone %>
+                                                                    </h6>
+                                                                </div>
+                                                            </div>
+                                                        </td>
+                                                        <td>
+                                                            <div class="d-flex px-2 py-1">
+                                                                <div class="d-flex flex-column justify-content-center">
+                                                                    <h6 class="mb-0 text-sm">
+                                                                        <%= client.email %>
+                                                                    </h6>
+                                                                </div>
+                                                            </div>
+                                                        </td>
+                                                        <td>
+                                                            <div class="d-flex px-2 py-1">
+                                                                <div class="d-flex flex-column justify-content-center">
+                                                                    <h6 class="mb-0 text-sm">
+                                                                        <%= client.adr %>
+                                                                    </h6>
+                                                                </div>
+                                                            </div>
+                                                        </td>
+
+                                                    </tr>
+                                                    <% }) %>
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+
+        <!-- Modal delete -->
+        <div class="modal fade" id="delete" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="exampleModalLabel">Clients</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        <input type="hidden" id="delete_id" name="delete_id" value=""> voulez vous
+                        <code>supprimer</code> <b id="delete_nom">...</b> de la liste des Clients ?!
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" id="modal_delete" class="btn bg-gradient-danger">oui</button>
+                        <button type="button" class="btn bg-gradient-secondary" data-bs-dismiss="modal">annuler</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Modal edit -->
+        <div class="modal fade" id="edit" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="exampleModalLabel">Edit Client</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        <div class="row">
+
+                            <input type="hidden" id="edit_id" name="edit_id" value="">
+                            <div class="col-lg-4">
+                                <label for="edit_name">Nom francais</label>
+                                <div class="input-group col-sm-6 mb-3">
+                                    <input type="text" id='edit_name_fr' name='edit_name_fr' class="form-control" placeholder="name" required>
+                                </div>
+                            </div>
+
+                        </div>
+
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" id="modal_edit" class="btn bg-gradient-success">mise a jour</button>
+                        <button type="button" class="btn bg-gradient-secondary" data-bs-dismiss="modal">annuler</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
+        <script>
+            $("a[id='delete_btn']").click(function() {
+
+                let id_delete = $(this).attr('data-id');
+                let nom = $(this).attr("data-nom");
+
+                $("#delete_nom").html(nom);
+                $("#delete_id").val(id_delete);
+
+            });
+
+            $("button[id='modal_delete']").click(function() {
+                let id = $("#delete_id").val();
+                $.ajax({
+                    url: '/client/delete/',
+                    data: {
+                        id
+                    },
+                    method: 'DELETE',
+                    success: function(response) {
+                        Swal.fire({
+                            icon: 'success',
+                            title: 'Client Deleted!',
+                            text: 'The Client has been deleted successfully.',
+                            confirmButtonText: 'OK'
+                        }).then(() => {
+                            location.reload();
+                        });
+                    },
+                    error: function() {
+                        Swal.fire({
+                            icon: 'error',
+                            title: 'Error',
+                            text: 'Something went wrong. Please try again.',
+                            confirmButtonText: 'OK'
+                        });
+                    }
+                });
+            });
+        </script>
+        <script>
+            $("a[id='edit_btn']").click(function() {
+
+                let id_edit = $(this).attr('data-id');
+                let nom_en = $(this).attr("data-nom_en");
+
+                $("#edit_id").val(id_edit);
+                $("#edit_name_en").val(nom_en);
+            });
+
+            // udpate the category 
+            $("button[id='modal_edit']").click(function() {
+                var formData = new FormData();
+                formData.append("id", $('#edit_id').val());
+                formData.append("name_ar", $('#edit_name_ar').val());
+
+
+
+                $.ajax({
+                    url: '/client/update/',
+                    method: 'PUT',
+                    data: formData,
+                    success: function(response) {
+                        Swal.fire({
+                            icon: 'success',
+                            title: 'Client Updated!',
+                            text: 'The client has been updated successfully.',
+                            confirmButtonText: 'OK'
+                        }).then(() => {
+                            location.reload();
+                        });
+                    },
+                    error: function() {
+                        Swal.fire({
+                            icon: 'error',
+                            title: 'Error',
+                            text: 'Something went wrong. Please try again.',
+                            confirmButtonText: 'OK'
+                        });
+                    }
+                });
+            });
+        </script>
+
+        <%- include('./partials/footer'); %>
