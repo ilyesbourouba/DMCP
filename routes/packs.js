@@ -1,16 +1,21 @@
 const express = require('express');
-const router = express.Router();
+const upload = require("../middleware/multer");
 const { isAuthenticated } = require("../config/authcheck");
-const { packsPage, getpacks, addPack, deletePack, updatePack } = require("../controller/packs");
+const router = express.Router();
+const { packsPage, getpacks, addPack, deletePack, updatePack, addToPanier, deletePacksIMAGE } = require("../controller/packs");
 
 router.get("/", isAuthenticated, packsPage);
 
 router.get("/getall", getpacks);
 
-router.post("/add", addPack);
+router.post("/add", upload.array('images', 10), addPack);
 
 router.delete("/delete", deletePack);
 
-router.put("/update", updatePack);
+router.put("/update", upload.array('images', 10), updatePack);
+
+router.post("/buy", addToPanier);
+
+router.delete("/deleteimage", deletePacksIMAGE);
 
 module.exports = router;

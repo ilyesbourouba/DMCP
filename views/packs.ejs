@@ -23,7 +23,7 @@
                                 <div class="dataTable-wrapper dataTable-loading no-footer sortable searchable fixed-columns">
 
                                     <div class="dataTable-container">
-                                        <table class="table align-items-center mb-0">
+                                        <table class="table align-items-center mb-0" id="datatable">
                                             <thead>
                                                 <tr>
                                                     <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Name</th>
@@ -33,20 +33,23 @@
                                                 </tr>
                                             </thead>
                                             <tbody>
-                                                <% packs.map(cat=>{ %>
+                                                <% packs.map(cat=>{ 
+                                                    const descriptionText = cat.description_fr.substring(0, 20) + (cat.description_fr.length > 20 ? "..." : "");
+
+                                                    %>
                                                     <tr>
                                                         <td>
                                                             <div class="d-flex px-2 py-1">
                                                                 <div class="d-flex flex-column justify-content-center">
                                                                     <h6 class="mb-0 text-sm">
-                                                                        <%= cat.name %>
+                                                                        <%= cat.name_fr %>
                                                                     </h6>
                                                                 </div>
                                                             </div>
                                                         </td>
                                                         <td>
                                                             <p class="text-xs font-weight-bold mb-0">
-                                                                <%= cat.description%>
+                                                                <%= descriptionText %>
                                                             </p>
                                                         </td>
                                                         <td>
@@ -56,10 +59,12 @@
                                                         </td>
                                                         <td class="align-middle">
                                                             <center>
-                                                                <a data-id="<%= cat.id %>" data-nom='<%= cat.name %>' class="text-secondary font-weight-bold text-xs" id="delete_btn" data-bs-target="#delete" href="" data-bs-toggle="modal" data-toggle="tooltip" data-original-title="delete pack">
+                                                                <a data-id="<%= cat.id %>" data-nom='<%= cat.name_fr %>' class="text-secondary font-weight-bold text-xs" id="delete_btn" data-bs-target="#delete" href="" data-bs-toggle="modal" data-toggle="tooltip" data-original-title="delete pack">
                                                                     <i class="fas fa-trash-alt" style="font-size: large; color: rgb(187, 18, 18);" class="pe-2 btn-tooltip" data-bs-toggle="tooltip" data-bs-placement="top" data-container="body" title="delete" data-animation="true"></i>
                                                                 </a>
-                                                                <a data-id="<%= cat.id %>" data-nom='<%= cat.name %>' data-description='<%= cat.description %>' data-tota_price="<%= cat.total_price %>" data-products="<%= JSON.stringify(cat.products) %>" id="edit_btn" href="" data-bs-toggle="modal" data-bs-target="#edit" class="ms-3 text-secondary font-weight-bold text-xs" data-toggle="tooltip" data-original-title="Edit pack">
+                                                                <a data-id="<%= cat.id %>" data-nom_fr='<%= cat.name_fr %>' data-nom_ar='<%= cat.name_ar %>' data-image='<%= cat.image %>' data-nom_en='<%= cat.name_en %>' data-description_fr='<%= cat.description_fr %>' data-description_ar='<%= cat.description_ar %>'
+                                                                    data-description_en='<%= cat.description_en %>' data-tota_price="<%= cat.total_price %>" data-products="<%= JSON.stringify(cat.products) %>" id="edit_btn" href="" data-bs-toggle="modal" data-bs-target="#edit"
+                                                                    class="ms-3 text-secondary font-weight-bold text-xs" data-toggle="tooltip" data-original-title="Edit pack">
                                                                     <i class="fas fa-edit" style="font-size: large; color: rgb(23, 23, 177);" data-bs-toggle="tooltip" data-bs-placement="top" title="edit" data-container="body" data-animation="true"></i>
                                                                 </a>
 
@@ -90,19 +95,52 @@
                     </div>
                     <div class="modal-body">
                         <div class="row">
-                            <div class="col-lg-5">
-                                <label for="name">Name</label>
+                            <div class="col-lg-4">
+                                <label for="name_fr">Nom Francais</label>
                                 <div class="input-group mb-3">
-                                    <input id="name" name="name" type="text" class="form-control" placeholder="name..." aria-label="name" aria-describedby="name-addon">
+                                    <input id="name_fr" name="name_fr" type="text" class="form-control" placeholder="name..." aria-label="name_fr" aria-describedby="name-addon">
                                 </div>
                             </div>
-
-                            <div class="col-lg-12">
-                                <label for="description">description</label>
+                            <div class="col-lg-4">
+                                <label for="name_ar">Nom Arabe</label>
                                 <div class="input-group mb-3">
-                                    <textarea name="description" id="description" rows="4" class="form-control" placeholder="description of the product..."></textarea>
+                                    <input id="name_ar" name="name_ar" type="text" class="form-control" placeholder="name..." aria-label="name_ar" aria-describedby="name-addon">
                                 </div>
                             </div>
+                            <div class="col-lg-4">
+                                <label for="name_en">Nom Anglais</label>
+                                <div class="input-group mb-3">
+                                    <input id="name_en" name="name_en" type="text" class="form-control" placeholder="name..." aria-label="name_en" aria-describedby="name-addon">
+                                </div>
+                            </div>
+                            <hr class="horizontal dark">
+                            <div class="col-lg-11">
+                                <label for="description_fr">description Francais</label>
+                                <div class="input-group mb-3">
+                                    <textarea name="description_fr" id="description_fr" rows="2" class="form-control" placeholder="description of the product..."></textarea>
+                                </div>
+                            </div>
+                            <div class="col-lg-11">
+                                <label for="description_ar">description Arabe</label>
+                                <div class="input-group mb-3">
+                                    <textarea name="description_ar" id="description_ar" rows="2" class="form-control" placeholder="description of the product..."></textarea>
+                                </div>
+                            </div>
+                            <div class="col-lg-11">
+                                <label for="description_en">description Anglais</label>
+                                <div class="input-group mb-3">
+                                    <textarea name="description_en" id="description_en" rows="2" class="form-control" placeholder="description of the product..."></textarea>
+                                </div>
+                            </div>
+                            <hr class="horizontal dark">
+                            <div class="col-lg-6">
+                                <div class="card">
+                                    <form class="form-control dropzone dz-clickable" id="dropzone">
+                                        <div class="dz-default dz-message"><button class="dz-button" type="button">Drop files here to upload</button></div>
+                                    </form>
+                                </div>
+                            </div>
+                            <hr class="horizontal dark mt-3">
                             <div class="col-lg-3 offset-9">
                                 <button type="button" id="add_product" class="btn btn-primary btn-sm">ADD product</button>
                             </div>
@@ -110,15 +148,7 @@
                             <div class="col-lg-12">
                                 <div>Products</div>
                                 <div class="row" id="product_list">
-                                    <!-- <div class="col-lg-2">
-                                        <div class="input-group mb-3">
-                                            <select class="form-control" id="products" name="products">
-                                                <% products.map(prod=>{ %>
-                                                    <option value="<%= prod.id %>" data-price="<%= prod.price %>"><%= prod.name %></option>
-                                                <% }) %>
-                                            </select>
-                                        </div>
-                                    </div> -->
+
                                 </div>
                             </div>
                             <div class="col-lg-4 offset-8">
@@ -170,16 +200,58 @@
 
                             <input type="hidden" id="edit_id" name="edit_id" value="">
 
-                            <label for="edit_name">name</label>
-                            <div class="input-group col-sm-6 mb-3">
-                                <input type="text" id='edit_name' name='edit_name' class="form-control" placeholder="name" required>
-                            </div>
-                            <div class="col-lg-12">
-                                <label for="description">description</label>
-                                <div class="input-group mb-3">
-                                    <textarea name="edit_description" id="edit_description" rows="4" class="form-control" placeholder="description of the product..."></textarea>
+                            <div class="col-lg-4">
+                                <label for="edit_name">Nom francais</label>
+                                <div class="input-group col-sm-6 mb-3">
+                                    <input type="text" id='edit_name_fr' name='edit_name_fr' class="form-control" placeholder="name" required>
                                 </div>
                             </div>
+                            <div class="col-lg-4">
+                                <label for="edit_name">Nom arabe</label>
+                                <div class="input-group col-sm-6 mb-3">
+                                    <input type="text" id='edit_name_ar' name='edit_name_ar' class="form-control" placeholder="name" required>
+                                </div>
+                            </div>
+                            <div class="col-lg-4">
+                                <label for="edit_name">Nom anglais</label>
+                                <div class="input-group col-sm-6 mb-3">
+                                    <input type="text" id='edit_name_en' name='edit_name_en' class="form-control" placeholder="name" required>
+                                </div>
+                            </div>
+                            <hr class="horizontal dark">
+                            <div class="col-lg-11">
+                                <label for="description_fr">description francais</label>
+                                <div class="input-group mb-3">
+                                    <textarea name="edit_description_fr" id="edit_description_fr" rows="2" class="form-control" placeholder="description of the product..."></textarea>
+                                </div>
+                            </div>
+                            <div class="col-lg-11">
+                                <label for="description_ar">description arabe</label>
+                                <div class="input-group mb-3">
+                                    <textarea name="edit_description_ar" id="edit_description_ar" rows="2" class="form-control" placeholder="description of the product..."></textarea>
+                                </div>
+                            </div>
+                            <div class="col-lg-11">
+                                <label for="description_en">description anglais</label>
+                                <div class="input-group mb-3">
+                                    <textarea name="edit_description_en" id="edit_description_en" rows="2" class="form-control" placeholder="description of the product..."></textarea>
+                                </div>
+                            </div>
+                            <hr class="horizontal dark">
+                            <div class="col-lg-12 mt-2 mb-2">
+                                <div class="row" id="image_viewer">
+                                </div>
+                            </div>
+                            <div class="col-lg-5" id="upload_container">
+                                <label for="images">Upload new Images</label>
+                                <div class="card">
+                                    <form class="form-control dropzone dz-clickable" id="edit_dropzone">
+
+                                        <div class="dz-default dz-message"><button class="dz-button" type="button">Drop files here to upload</button></div>
+                                    </form>
+                                </div>
+                            </div>
+                            <hr class="horizontal dark mt-3">
                             <div class="col-lg-3 offset-9">
                                 <button type="button" id="add_product_edit" class="btn btn-primary btn-sm">ADD product</button>
                             </div>
@@ -211,7 +283,31 @@
                 </div>
             </div>
         </div>
+        <script src="../assets/js/plugins/dropzone.min.js"></script>
+        <script type="text/javascript">
+            Dropzone.autoDiscover = false;
+            var drop = document.getElementById('dropzone');
+            var myDropzone = new Dropzone(drop, {
+                url: "/file/post",
+                addRemoveLinks: true,
+                maxFiles: 1, // Allow only 1 file
+                acceptedFiles: 'image/*', // Accept only images
+                init: function() {
+                    // When a file is added, remove previous one (to enforce single upload)
+                    this.on("addedfile", function(file) {
+                        if (this.files.length > 1) {
+                            this.removeFile(this.files[0]); // Remove the older file
+                        }
+                    });
+                }
+            });
+            var edit_drop = document.getElementById('edit_dropzone')
+            var edit_Dropzone = new Dropzone(edit_drop, {
+                url: "/file/post",
+                addRemoveLinks: true
 
+            });
+        </script>
         <script>
             document.addEventListener("DOMContentLoaded", function() {
                 const addProductBtn = document.getElementById("add_product");
@@ -236,7 +332,7 @@
                         <div class="input-group mb-3">
                             <select class="form-control" name="products[]">
                                 <% products.forEach(prod => { %>
-                                    <option value="<%= prod.id %>" data-price="<%= prod.price %>"><%= prod.name %></option>
+                                    <option value="<%= prod.id %>" data-price="<%= prod.price %>"><%= prod.name_fr %></option>
                                 <% }) %>
                             </select>
                             <button type="button" class="badge bg-gradient-danger remove_product" style="border-color:#ef4444">X</button>
@@ -268,23 +364,35 @@
 
         <script>
             $('#add').click(function() {
-                var name = $('#name').val();
-                var description = $('#description').val();
+                var formData = new FormData();
+
+                formData.append("name_fr", $('#name_fr').val());
+                formData.append("name_en", $('#name_en').val());
+                formData.append("name_ar", $('#name_ar').val());
+
+                formData.append("description_fr", $('#description_fr').val());
+                formData.append("description_ar", $('#description_ar').val());
+                formData.append("description_en", $('#description_en').val());
+
+                var images = myDropzone.files;
+                images.forEach(image => {
+                    formData.append("images", image);
+                });
 
                 var products = [];
                 $('#product_list select').each(function() {
                     products.push($(this).val());
                 });
-                console.log(products)
+                formData.append("products", products);
+
+                console.log(formData)
                 $.ajax({
                     url: '/packs/add',
                     method: 'post',
                     contentType: "application/json",
-                    data: JSON.stringify({
-                        name,
-                        description,
-                        products
-                    }),
+                    data: formData,
+                    processData: false,
+                    contentType: false,
                     success: function(response) {
                         console.log(response);
                         Swal.fire({
@@ -350,35 +458,72 @@
         </script>
         <script>
             // UPDATE THE PRODUCT
+            var edited_img = false;
             $(document).on("click", "a[id='edit_btn']", function() {
+                edited_img = false;
+                $("#image_viewer").empty();
+
                 var products = `<%- JSON.stringify(products) %>`;
                 products = JSON.parse(products);
 
                 let id = $(this).attr("data-id");
-                let name = $(this).attr("data-nom");
-                let description = $(this).attr("data-description");
+
+                let name_fr = $(this).attr("data-nom_fr");
+                let name_en = $(this).attr("data-nom_en");
+                let name_ar = $(this).attr("data-nom_ar");
+
+                let description_fr = $(this).attr("data-description_fr");
+                let description_en = $(this).attr("data-description_en");
+                let description_ar = $(this).attr("data-description_ar");
+                let image = $(this).attr("data-image");
+
                 let total_price = $(this).attr("data-tota_price");
                 let selected_products = JSON.parse($(this).attr("data-products"));
 
                 $("#edit_id").val(id);
-                $("#edit_name").val(name);
-                $("#edit_description").val(description);
+
+                $("#edit_name_fr").val(name_fr);
+                $("#edit_name_en").val(name_en);
+                $("#edit_name_ar").val(name_ar);
+
+                $("#edit_description_fr").val(description_fr);
+                $("#edit_description_en").val(description_en);
+                $("#edit_description_ar").val(description_ar);
+
                 $("#edit_price").text(total_price + " DA");
+                if (image) {
+                    edited_img = true;
 
-                console.log(id, name, description, total_price);
+                    let imageHtml = `
+                                <div class="col-md-4">
+                                    <div class="card card-profile card-plain image-card">
+                                        <div class="card-body text-center bg-white shadow border-radius-lg p-3" style="border :2px solid #82d616">
+                                            <a href="javascript:;">
+                                                <img class="w-100 border-radius-md" src="uploads/${image.trim()}" alt="Product Image">
+                                            </a>
+                                            <p class="mt-3 mb-1 d-md-block d-none">${image.split('/').pop().replace(/^\d+_/, '')}</p>
+                                            <a href="#" class="mb-0 text-xs font-weight-bolder text-danger text-gradient text-uppercase delete-image delete-btn" data-image="${image.trim()}">delete</a>
+                                        </div>
+                                    </div>
+                                </div>
+                            `;
+
+                    $("#image_viewer").append(imageHtml);
+                    $("#upload_container").hide();
+                }
+                console.log(products);
                 console.log("selected_products:", selected_products);
-
                 // Create the product list
                 let product_list = $("#edit_product_list");
                 product_list.html("");
 
                 selected_products.forEach(product => {
-                    let selected = selected_products.find(p => p.id == product.id);
+                    let selected = products.find(p => p.id == product.id);
                     let productItem = `
                         <div class="col-lg-3 product-item">
                             <div class="input-group mb-3">
                                 <select class="form-control product-select" name="products[]">
-                                    <option value="${product.id}" data-price="${product.price}" ${selected ? "selected" : ""}>${product.name}</option>
+                                    <option value="${selected.id}" data-price="${selected.price}" ${selected ? "selected" : ""}>${selected.name_fr}</option>
                                 </select>
                                 <button type="button" class="badge bg-gradient-danger remove_product" style="border-color:#ef4444">X</button>
                             </div>
@@ -396,7 +541,7 @@
                             <div class="input-group mb-3">
                                 <select class="form-control product-select" name="products[]">
                                     <% products.forEach(product => { %>
-                                        <option value="<%= product.id %>" data-price="<%= product.price %>"><%= product.name %></option>
+                                        <option value="<%= product.id %>" data-price="<%= product.price %>"><%= product.name_fr %></option>
                                     <% }) %>
                                 </select>
                                 <button type="button" class="badge bg-gradient-danger remove_product" style="border-color:#ef4444">X</button>
@@ -425,28 +570,74 @@
                     $("#edit_price").text(total.toFixed(2) + " DA");
                 }
             });
+            // Delete image
+            $(document).on("click", ".delete-image", function(e) {
+                e.preventDefault();
+
+                let imageElement = $(this).closest(".col-md-4"); // Récupère le conteneur de l'image
+                let imageName = $(this).attr("data-image"); // Récupère le nom de l'image
+                let pack_id = $("#edit_id").val(); // ID du produit
+
+                $.ajax({
+                    url: "/packs/deleteimage", // Endpoint pour supprimer l'image côté serveur
+                    type: "DELETE",
+                    data: {
+                        image: imageName,
+                        id: pack_id
+                    },
+                    success: function(response) {
+                        if (response.success) {
+                            imageElement.remove(); // Supprime l'image du DOM après succès
+                            $("#upload_container").show();
+                            edited_img = false;
+                        } else {
+                            alert("Erreur lors de la suppression de l'image.");
+                        }
+                    },
+                    error: function() {
+                        Swal.fire({
+                            icon: 'error',
+                            title: 'Error',
+                            text: 'Something went wrong. Please try again.',
+                            confirmButtonText: 'OK'
+                        });
+                    }
+                });
+            });
             // UPDATE THE PRODUCT
             $(document).on("click", "button[id='modal_edit']", function() {
 
-                let id = $("#edit_id").val();
-                let name = $("#edit_name").val();
-                let description = $("#edit_description").val();
+                var formData = new FormData();
+                formData.append("id", $('#edit_id').val());
+                formData.append("name_fr", $('#edit_name_fr').val());
+                formData.append("name_en", $('#edit_name_en').val());
+                formData.append("name_ar", $('#edit_name_ar').val());
+
+                formData.append("description_fr", $('#edit_description_fr').val());
+                formData.append("description_en", $('#edit_description_en').val());
+                formData.append("description_ar", $('#edit_description_ar').val());
 
                 let products = [];
                 $("#edit_product_list select").each(function() {
                     products.push($(this).val());
                 });
+                formData.append("products", products);
+
+                if (!edited_img) {
+
+                    var images = edit_Dropzone.files;
+                    images.forEach(image => {
+                        formData.append("images", image);
+                    });
+                }
 
                 $.ajax({
                     url: '/packs/update',
                     method: 'PUT',
                     contentType: "application/json",
-                    data: JSON.stringify({
-                        id,
-                        name,
-                        description,
-                        products
-                    }),
+                    data: formData,
+                    processData: false,
+                    contentType: false,
                     success: function(response) {
                         Swal.fire({
                             icon: 'success',
@@ -468,7 +659,6 @@
                     }
                 });
             });
-
         </script>
 
         <%- include('./partials/footer'); %>
