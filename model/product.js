@@ -7,9 +7,31 @@ module.exports = class ProductModel {
 
     // Get all products
     static async getProducts() {
+            try {
+                const [products] = await db.execute(`
+                SELECT product.*, category.name_fr AS category_name_fr, category.name_en AS category_name_en, category.name_ar AS category_name_ar
+                FROM product 
+                JOIN category ON product.category_id = category.id ORDER BY id DESC
+            `);
+
+                for (const product of products) {
+                    const [images] = await db.execute(`
+                    SELECT image_url FROM product_images WHERE product_id = ?
+                `, [product.id]);
+                    product.images = images.map(img => img.image_url);
+                }
+
+                return { success: true, data: products };
+            } catch (error) {
+                console.log("error => ", error);
+                return { success: false, error: error.message };
+            }
+        }
+        // get getProductsForPacks
+    static async getProductsForPacks() {
         try {
             const [products] = await db.execute(`
-                SELECT product.*, category.name_fr AS category_name_fr, category.name_en AS category_name_en, category.name_ar AS category_name_ar
+                SELECT product.id, product.name_fr, product.price
                 FROM product 
                 JOIN category ON product.category_id = category.id ORDER BY id DESC
             `);
@@ -54,16 +76,20 @@ module.exports = class ProductModel {
         }
     }
 
-    static async addProduct(name, category, description, price, stock, best_selling, image_names) {
+    static async addProduct(name_fr, name_en, name_ar, category, description_fr, description_ar, description_en, price, stock, best_selling, top_rating, new_product, image_names) {
+        best_selling = best_selling == "true" ? 1 : 0;
+        top_rating = top_rating == "true" ? 1 : 0;
+        new_product = new_product == "true" ? 1 : 0;
+
         const connection = await db.getConnection();
         try {
             await connection.beginTransaction();
-
             const [res] = await connection.execute(`
-                INSERT INTO product (name_fr, category_id, description, price, stock, best_selling)
-                VALUES (?, ?, ?, ?, ?, ?)`, [name, category, description, price, stock, best_selling]);
+                INSERT INTO product (name_fr, name_en, name_ar, category_id,  desc_fr, desc_ar, desc_en, price, stock, best_selling, top_rating, new_product)
+                VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`, [name_fr, name_en, name_ar, category, description_fr, description_ar, description_en, price, stock, best_selling, top_rating, new_product]);
 
             const productId = res.insertId; // ID du produit ajouté
+            console.log("productId => ", productId);
 
             if (image_names.length > 0) {
                 const imageValues = image_names.map(img => [productId, img]);
@@ -123,14 +149,18 @@ module.exports = class ProductModel {
             }
         }
         // update product
-    static async updateProduct(id, name, category, description, price, stock, best_selling, image_names) {
+    static async updateProduct(id, name_fr, name_ar, name_en, desc_fr, desc_ar, desc_en, category, price, stock, best_selling, new_product, top_rating, image_names) {
+        best_selling = best_selling == "true" ? 1 : 0;
+        top_rating = top_rating == "true" ? 1 : 0;
+        new_product = new_product == "true" ? 1 : 0;
+
         const connection = await db.getConnection();
         try {
             await connection.beginTransaction();
 
             await connection.execute(`
-                UPDATE product SET name_fr = ?, category_id = ?, description = ?, price = ?, stock = ?, best_selling = ?
-                WHERE id = ?`, [name, category, description, price, stock, best_selling, id]);
+                UPDATE product SET name_fr = ?,name_ar = ?,name_en = ?, desc_fr = ?, desc_ar = ?, desc_en = ?, category_id = ?, price = ?, stock = ?, best_selling = ?, new_product = ?, top_rating = ?
+                WHERE id = ?`, [name_fr, name_ar, name_en, desc_fr, desc_ar, desc_en, category, price, stock, best_selling, new_product, top_rating, id]);
 
             if (image_names.length > 0) {
 

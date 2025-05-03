@@ -8,7 +8,7 @@ const storage = multer.diskStorage({
     },
     filename: function(req, file, cb) {
         const timestamp = Date.now(); // Récupère le timestamp en millisecondes
-        const name = req.body.name.replace(/\s+/g, "_"); // Nettoie le nom
+        const name = req.body.name_fr.replace(/\s+/g, "_"); // Nettoie le nom
         const extension = path.extname(file.originalname); // Garde l'extension originale
         const filename = `${timestamp}_${name}${extension}`; // Format final
         cb(null, filename);

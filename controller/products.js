@@ -30,16 +30,16 @@ exports.productsList = async(req, res, next) => {
     return res.status(200).json(products);
 }
 exports.addProduct = async(req, res) => {
-    const { name, category, description, price, stock, best_selling } = req.body;
+    const { name_fr, name_en, name_ar, category, description_fr, description_ar, description_en, price, stock, best_selling, top_rating, new_product } = req.body;
 
-    if (!name || !category || !description || !price || !stock || best_selling === undefined) {
+    if (!name_fr || !name_en || !name_ar || !category || !description_fr || !description_ar || !description_en || !price || !stock || best_selling === undefined || top_rating === undefined || new_product === undefined) {
         return res.status(400).json({ message: "Please fill in all fields" });
     }
-    console.log("addProduct => ", name, category, description, price, stock, best_selling);
+    console.log("addProduct => ", name_fr, name_en, name_ar, category, description_fr, description_ar, description_en, price, stock, best_selling, top_rating, new_product);
 
     const image_names = req.files.map(file => file.filename);
 
-    const result = await ProductModel.addProduct(name, category, description, price, stock, best_selling, image_names);
+    const result = await ProductModel.addProduct(name_fr, name_en, name_ar, category, description_fr, description_ar, description_en, price, stock, best_selling, top_rating, new_product, image_names);
 
     if (result.success) {
         return res.status(200).json({ message: "Product added successfully!", images: image_names });
@@ -80,15 +80,17 @@ exports.deleteProductIMAGE = async(req, res) => {
 
 // update product
 exports.updateProduct = async(req, res) => {
-    const { id, name, category, description, price, stock, best_selling } = req.body;
+    const { id, name_fr, name_ar, name_en, desc_fr, desc_ar, desc_en, category, price, stock, best_selling, new_product, top_rating } = req.body;
 
-    if (!id || !name || !category || !description || !price || !stock || best_selling === undefined) {
+    console.log(id, name_fr, name_ar, name_en, desc_fr, desc_ar, desc_en, category, price, stock, best_selling, new_product, top_rating);
+
+    if (!id || !name_fr || !name_ar || !name_en || !category || !desc_fr || !desc_ar || !desc_en || !price || !stock || best_selling === undefined || new_product === undefined || best_selling === top_rating) {
         return res.status(400).json({ message: "Please fill in all fields" });
     }
 
     const image_names = req.files.map(file => file.filename);
 
-    const result = await ProductModel.updateProduct(id, name, category, description, price, stock, best_selling, image_names);
+    const result = await ProductModel.updateProduct(id, name_fr, name_ar, name_en, desc_fr, desc_ar, desc_en, category, price, stock, best_selling, new_product, top_rating, image_names);
 
     if (result.success) {
         return res.status(200).json({ message: "Product updated successfully!", images: image_names });
