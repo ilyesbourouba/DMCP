@@ -7,7 +7,7 @@ exports.renderCMDPage = async(req, res, next) => {
     const data = await CommandeModel.getAllCMD();
     const status = await CommandeModel.getStatus();
     // console.log("data are => ", data);
-    console.log("status are => ", status);
+    // console.log("status are => ", status);
     let commandes = [];
     if (data != null && data != undefined && data.length > 0) {
         commandes = data;
@@ -66,7 +66,7 @@ exports.getCMDByClient = async(req, res, next) => {
 }
 exports.updateStatus = async(req, res, next) => {
     const { id, status } = req.body;
-    console.log(id, status)
+    // console.log(id, status)
     if (!id || !status) {
         return res.status(400).json({ message: "Please fill in all fields" });
     }
