@@ -1,6 +1,6 @@
 // create a model for category
 const db = require("../config/DB");
-
+require('dotenv').config();
 module.exports = class CategoryModel {
     constructor() {}
 
@@ -20,9 +20,10 @@ module.exports = class CategoryModel {
         }
     }
     static async addCategory(name_fr, name_ar, name_en, image_name) {
-        console.log(name_fr, name_ar, name_en, image_name[0]);
+        var image = process.env.IMAGE_PATH + image_name[0];
+        console.log(image);
         try {
-            const [res] = await db.execute(`INSERT INTO category (name_fr, name_en, name_ar, image) VALUES (?, ?, ?, ?)`, [name_fr, name_en, name_ar, image_name[0]]);
+            const [res] = await db.execute(`INSERT INTO category (name_fr, name_en, name_ar, image) VALUES (?, ?, ?, ?)`, [name_fr, name_en, name_ar, image]);
             console.log('Category added successfully:', res);
             return {
                 success: true,
@@ -60,7 +61,8 @@ module.exports = class CategoryModel {
                     data: res
                 };
             } else {
-                const [res] = await db.execute(`UPDATE category SET name_fr = ?, name_en = ?, name_ar = ?, image = ? WHERE id = ?`, [name_fr, name_en, name_ar, image_name, id]);
+                var image = process.env.IMAGE_PATH + image_name
+                const [res] = await db.execute(`UPDATE category SET name_fr = ?, name_en = ?, name_ar = ?, image = ? WHERE id = ?`, [name_fr, name_en, name_ar, image, id]);
                 return {
                     success: true,
                     data: res

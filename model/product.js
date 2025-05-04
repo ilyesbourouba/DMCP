@@ -1,7 +1,7 @@
 const db = require("../config/DB");
 const fs = require('fs');
 const path = require('path');
-
+require('dotenv').config();
 module.exports = class ProductModel {
     constructor() {}
 
@@ -92,7 +92,8 @@ module.exports = class ProductModel {
             console.log("productId => ", productId);
 
             if (image_names.length > 0) {
-                const imageValues = image_names.map(img => [productId, img]);
+
+                const imageValues = image_names.map(img => [productId, process.env.IMAGE_PATH + img]);
                 await connection.query(`
                     INSERT INTO product_images (product_id, image_url) VALUES ?`, [imageValues]);
             }
@@ -163,8 +164,7 @@ module.exports = class ProductModel {
                 WHERE id = ?`, [name_fr, name_ar, name_en, desc_fr, desc_ar, desc_en, category, price, stock, best_selling, new_product, top_rating, id]);
 
             if (image_names.length > 0) {
-
-                const imageValues = image_names.map(img => [id, img]);
+                const imageValues = image_names.map(img => [id, process.env.IMAGE_PATH + img]);
                 await connection.query(`
                     INSERT INTO product_images (product_id, image_url) VALUES ?`, [imageValues]);
             }

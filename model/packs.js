@@ -1,6 +1,6 @@
 const db = require("../config/DB");
 const PanierModel = require('../model/panier');
-
+require('dotenv').config();
 module.exports = class PackModel {
     constructor() {}
 
@@ -47,13 +47,14 @@ module.exports = class PackModel {
 
     // Add a new pack with products
     static async addPack(name_fr, name_ar, name_en, description_fr, description_ar, description_en, productIds, image_name) {
+        var image = process.env.IMAGE_PATH + image_name;
         const connection = await db.getConnection();
         try {
             await connection.beginTransaction();
 
             const [packRes] = await connection.execute(
                 `INSERT INTO pack (name_fr, name_ar, name_en, description_fr, description_ar, description_en, image) 
-                    VALUES (?, ?, ?, ?, ?, ?, ?)`, [name_fr, name_ar, name_en, description_fr, description_ar, description_en, image_name]
+                    VALUES (?, ?, ?, ?, ?, ?, ?)`, [name_fr, name_ar, name_en, description_fr, description_ar, description_en, image]
             );
 
             const packId = packRes.insertId;
@@ -105,8 +106,9 @@ module.exports = class PackModel {
                     `UPDATE pack SET name_fr = ?, name_ar = ?, name_en = ?, description_fr = ?, description_ar = ?, description_en = ? WHERE id = ?`, [name_fr, name_ar, name_en, description_fr, description_ar, description_en, id]
                 );
             } else {
+                var image = process.env.IMAGE_PATH + image_name;
                 await connection.execute(
-                    `UPDATE pack SET name_fr = ?, name_ar = ?, name_en = ?, description_fr = ?, description_ar = ?, description_en = ?, image = ? WHERE id = ?`, [name_fr, name_ar, name_en, description_fr, description_ar, description_en, image_name, id]
+                    `UPDATE pack SET name_fr = ?, name_ar = ?, name_en = ?, description_fr = ?, description_ar = ?, description_en = ?, image = ? WHERE id = ?`, [name_fr, name_ar, name_en, description_fr, description_ar, description_en, image, id]
                 );
             }
 
