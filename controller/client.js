@@ -2,7 +2,7 @@ const bcrypt = require('bcryptjs/dist/bcrypt');
 const ClientModel = require('../model/client');
 
 
-exports.clientPage = async(req, res, next) => {
+exports.clientPage = async (req, res, next) => {
     const { user } = req;
     // get client list
     const { success, data } = await ClientModel.getAll();
@@ -18,7 +18,7 @@ exports.clientPage = async(req, res, next) => {
     });
 }
 
-exports.checkLogin = async(req, res, next) => {
+exports.checkLogin = async (req, res, next) => {
 
     const { phone, password } = req.body;
 
@@ -47,12 +47,15 @@ exports.checkLogin = async(req, res, next) => {
 
 }
 
-exports.registerClient = async(req, res, next) => {
-    const { username, phone, email, adr, password } = req.body;
+exports.registerClient = async (req, res, next) => {
+    const { username, phone, email, adr, wilaya, password } = req.body;
     try {
         if (!username || !phone || !email || !adr || !password) {
             return res.status(400).json({ message: "empty_fields" });
         }
+        console.log("****************************")
+        console.log("wilaya => ", wilaya);
+        console.log("****************************")
 
         const client = await ClientModel.getClientByPhoneEmail(phone.trim(), email.trim());
         console.log(client)
@@ -76,7 +79,7 @@ exports.registerClient = async(req, res, next) => {
 }
 
 // update client 
-exports.updateClient = async(req, res, next) => {
+exports.updateClient = async (req, res, next) => {
     const { id, username, phone, email, adr } = req.body;
     try {
         console.log(id, username, phone, email, adr);
