@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Hôte : 127.0.0.1
--- Généré le : dim. 04 mai 2025 à 12:42
+-- Généré le : lun. 12 mai 2025 à 01:08
 -- Version du serveur : 10.4.27-MariaDB
 -- Version de PHP : 8.1.12
 
@@ -40,12 +40,12 @@ CREATE TABLE `category` (
 --
 
 INSERT INTO `category` (`id`, `name_en`, `name_fr`, `name_ar`, `image`) VALUES
-(3, 'llyes_en', 'llyes_FR', 'لييس', 'https://i.pinimg.com/564x/c1/41/67/c14167b5aa47dbc8b4e61faf54460173.jpg'),
-(4, 'dino_EN', 'dino_FR', 'ديناصور', 'https://i.pinimg.com/564x/c1/41/67/c14167b5aa47dbc8b4e61faf54460173.jpg'),
-(8, 'srir_EN', 'srir', 'غامض', 'https://i.pinimg.com/564x/c1/41/67/c14167b5aa47dbc8b4e61faf54460173.jpg'),
-(11, 'Deadpool_EN', 'Deadpool_FR', 'تجمع القتلى', 'https://i.pinimg.com/564x/c1/41/67/c14167b5aa47dbc8b4e61faf54460173.jpg'),
-(13, 'NACER DJITLI', 'caty', 'DJITLI', 'https://i.pinimg.com/564x/c1/41/67/c14167b5aa47dbc8b4e61faf54460173.jpg'),
-(18, 'test img', 'test img', 'test img', 'http://localhost:3000/uploads/1746317558481_test_img.png');
+(3, 'llyes_en', 'llyes_FR', 'لييس', 'http://localhost:3000/uploads/1746646806271_llyes_FR.png'),
+(4, 'dino_EN', 'dino_FR', 'ديناصور', 'http://localhost:3000/uploads/1746646798854_dino_FR.png'),
+(8, 'srir_EN', 'srir', 'غامض', 'http://localhost:3000/uploads/1746646818017_srir.png'),
+(11, 'Deadpool_EN', 'Deadpool_FR', 'تجمع القتلى', 'http://localhost:3000/uploads/1746646788005_Deadpool_FR.png'),
+(13, 'NACER DJITLI', 'caty', 'DJITLI', 'http://localhost:3000/uploads/1746646780057_caty.png'),
+(18, 'test img', 'test img', 'test img', 'http://localhost:3000/uploads/1746646828643_test_img.png');
 
 -- --------------------------------------------------------
 
@@ -59,6 +59,7 @@ CREATE TABLE `client` (
   `phone` varchar(255) NOT NULL,
   `email` varchar(255) NOT NULL,
   `adr` text NOT NULL,
+  `wilaya` varchar(255) NOT NULL,
   `password` varchar(255) NOT NULL,
   `token` varchar(255) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
@@ -67,9 +68,9 @@ CREATE TABLE `client` (
 -- Déchargement des données de la table `client`
 --
 
-INSERT INTO `client` (`id`, `name`, `phone`, `email`, `adr`, `password`, `token`) VALUES
-(1, 'ilyes', '0551316015', 'mapdoua@gmail.com', 'zeralda', '$2a$12$jFthR95e3SulaVDIOTY4dumqNJM.gUP1HoyZR/rIbimsXGDKRmvoG', '$2a$12$jFthR95e3SulaVDIOTY4dumqNJM.gUP1HoyZR/rIbimsXGDKRmvoG'),
-(15, 'maroua', '0551316018', 'maroua@gmail.com', 'zeralda', '$2a$10$Iz15ndJXYZbIl3x/J3LC2.bLotBNSxG.BH3YNM9UAHtEDnlWHkjTW', NULL);
+INSERT INTO `client` (`id`, `name`, `phone`, `email`, `adr`, `wilaya`, `password`, `token`) VALUES
+(1, 'ilyes', '0551316015', 'mapdoua@gmail.com', 'zeralda', '0', '$2a$12$jFthR95e3SulaVDIOTY4dumqNJM.gUP1HoyZR/rIbimsXGDKRmvoG', '$2a$12$jFthR95e3SulaVDIOTY4dumqNJM.gUP1HoyZR/rIbimsXGDKRmvoG'),
+(15, 'maroua', '0551316018', 'maroua@gmail.com', 'zeralda', '0', '$2a$10$Iz15ndJXYZbIl3x/J3LC2.bLotBNSxG.BH3YNM9UAHtEDnlWHkjTW', NULL);
 
 -- --------------------------------------------------------
 
@@ -94,7 +95,9 @@ INSERT INTO `commande` (`id`, `client_id`, `total`, `date_commande`, `status_id`
 (5, 1, 530, '2025-04-29 22:50:44', 1),
 (6, 1, 530, '2025-04-29 22:57:50', 5),
 (10, 1, 170, '2025-04-30 23:39:54', 4),
-(11, 1, 290, '2025-05-01 19:15:09', 3);
+(11, 1, 290, '2025-05-01 19:15:09', 3),
+(12, 1, 996, '2025-05-10 19:44:06', 1),
+(13, 1, 223, '2025-05-10 20:09:16', 1);
 
 -- --------------------------------------------------------
 
@@ -117,7 +120,8 @@ INSERT INTO `commande_product` (`commande_id`, `product_id`, `quantity`) VALUES
 (6, 6, 2),
 (10, 6, 1),
 (11, 2, 1),
-(11, 6, 1);
+(11, 6, 1),
+(13, 6, 1);
 
 -- --------------------------------------------------------
 
@@ -195,7 +199,7 @@ CREATE TABLE `pack` (
 
 INSERT INTO `pack` (`id`, `name_en`, `name_fr`, `name_ar`, `description_fr`, `description_ar`, `description_en`, `total_price`, `image`) VALUES
 (4, 'extension ', 'prolongation', 'امتداد', 'Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry\'s standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.', 'امتدادامتداد امتداد امتداد امتداد امتداد امتداد  امتدادامتداد امتداد امتداد امتداد امتداد امتداد  امتدادامتداد امتداد امتداد امتداد امتداد امتداد  ', 'publishing', 0, 'http://192.168.100.7:3000/uploads/1746231154093_ilyes.png'),
-(13, 'bourouba ilyes', 'ilyes', 'bourouba', 'ilyesEdit ', 'ilyesEdit ', 'ilyesEdit ', 0, 'http://192.168.100.7:3000/uploads/1746317890087_ilyes.png');
+(13, 'bourouba ilyes', 'ilyes', 'bourouba', 'Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry\'s standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.', 'ilyesEdit ', 'ilyesEdit ', 0, 'http://192.168.100.7:3000/uploads/1746317890087_ilyes.png');
 
 -- --------------------------------------------------------
 
@@ -231,14 +235,6 @@ CREATE TABLE `panier` (
   `quantity` int(11) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
 
---
--- Déchargement des données de la table `panier`
---
-
-INSERT INTO `panier` (`client_id`, `product_id`, `quantity`) VALUES
-(1, 2, 1),
-(1, 6, 1);
-
 -- --------------------------------------------------------
 
 --
@@ -266,10 +262,10 @@ CREATE TABLE `product` (
 --
 
 INSERT INTO `product` (`id`, `name_fr`, `name_en`, `name_ar`, `desc_fr`, `desc_en`, `desc_ar`, `price`, `stock`, `category_id`, `best_selling`, `new_product`, `top_rating`) VALUES
-(2, 'verre', 'glass', 'زجاج', 'Alors que David affronte Kevin, un groupe d\'hommes armés intervient.', 'While David confronts Kevin, a group of armed men intervene.', 'بينما يواجه ديفيد كيفن، تتدخل مجموعة من الرجال المسلحين.', 120, 45, 18, 1, 1, 0),
-(6, 'name_fr', 'name_en', 'اسم عربي', 'desc_fr', 'La transparence, le respect, l\'union, la solidarité et le triomphe sont les valeurs fondamentales qui ont guidé notre succès et continueront à nous renforcer à l\'avenir.\n* ilyes bourouba \n* meroua souici', 'desc_ar', 120, 1000, 8, 1, 1, 1),
-(8, 'Nom francais', 'Nom anglais', 'Nom arabe', 'Edit Category\r\n', 'Edit Category\r\n', 'Edit Category\r\n', 9, 9, 3, 0, 0, 1),
-(11, 'tes img', 'tes img', 'tes img', 'tes img', 'tes img', 'tes img', 2, 12, 18, 0, 1, 1);
+(2, 'verre', 'glass', 'زجاج', 'Alors que David affronte Kevin, un groupe d\'hommes armés intervient.', 'While David confronts Kevin, a group of armed men intervene.', 'بينما يواجه ديفيد كيفن، تتدخل مجموعة من الرجال المسلحين.', 120, 45, 13, 1, 1, 0),
+(6, 'name_fr', 'name_en', 'اسم عربي', 'desc_fr', 'La transparence, le respect, l\'union, la solidarité et le triomphe sont les valeurs fondamentales qui ont guidé notre succès et continueront à nous renforcer à l\'avenir.\r\n* ilyes bourouba \r\n* meroua souici', 'desc_ar', 120, 1000, 18, 1, 1, 1),
+(8, 'Nom francais', 'Nom anglais', 'Nom arabe', 'Edit Category\r\n', 'Edit Category\r\n', 'Edit Category\r\n', 9, 9, 11, 0, 0, 1),
+(11, 'Lorem Ipsum', 'tes img', 'tes img', 'Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry\'s standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.', 'tes img', 'tes img', 2, 12, 18, 0, 1, 1);
 
 -- --------------------------------------------------------
 
@@ -310,11 +306,13 @@ CREATE TABLE `product_images` (
 --
 
 INSERT INTO `product_images` (`id`, `product_id`, `image_url`) VALUES
-(9, 6, 'https://i.pinimg.com/564x/c1/41/67/c14167b5aa47dbc8b4e61faf54460173.jpg'),
-(12, 8, 'https://i.pinimg.com/564x/c1/41/67/c14167b5aa47dbc8b4e61faf54460173.jpg'),
-(14, 8, 'https://i.pinimg.com/564x/c1/41/67/c14167b5aa47dbc8b4e61faf54460173.jpg'),
 (15, 11, 'http://localhost:3000/uploads/1746317999558_tes_img.png'),
-(16, 2, 'http://localhost:3000/uploads/1746318052879_verre.png');
+(20, 6, 'http://localhost:3000/uploads/1746744950667_name_fr.png'),
+(21, 6, 'http://localhost:3000/uploads/1746744950671_name_fr.png'),
+(22, 8, 'http://localhost:3000/uploads/1746745021245_Nom_francais.png'),
+(23, 8, 'http://localhost:3000/uploads/1746745021245_Nom_francais.png'),
+(24, 2, 'http://localhost:3000/uploads/1746745036310_verre.png'),
+(25, 2, 'http://localhost:3000/uploads/1746745036310_verre.png');
 
 -- --------------------------------------------------------
 
@@ -447,7 +445,7 @@ ALTER TABLE `client`
 -- AUTO_INCREMENT pour la table `commande`
 --
 ALTER TABLE `commande`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=12;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=14;
 
 --
 -- AUTO_INCREMENT pour la table `commande_status`
@@ -477,7 +475,7 @@ ALTER TABLE `product_feature`
 -- AUTO_INCREMENT pour la table `product_images`
 --
 ALTER TABLE `product_images`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=18;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=26;
 
 --
 -- AUTO_INCREMENT pour la table `user`
