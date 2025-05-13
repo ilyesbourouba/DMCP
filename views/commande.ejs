@@ -2,13 +2,14 @@
     <%- include('./partials/header'); %>
         <style>
             /* Style for the search row */
-            
+
             .search-row th {
                 padding: 4px !important;
                 vertical-align: middle !important;
             }
+
             /* Style for search inputs */
-            
+
             .column-search,
             .status-search {
                 width: 100%;
@@ -18,29 +19,33 @@
                 border-radius: 4px;
                 background-color: white;
             }
+
             /* Make the select match the input style */
-            
+
             .status-search {
                 height: calc(1.5em + 0.75rem + 2px);
                 padding: 0.375rem 0.75rem;
             }
+
             /* Remove extra padding from header */
-            
+
             .dataTables_scrollHeadInner {
                 padding-bottom: 0 !important;
             }
-            
+
             .search-row th {
                 pointer-events: none;
             }
+
             /* Re-enable pointer events for inputs */
-            
+
             .search-row th input,
             .search-row th select {
                 pointer-events: auto;
             }
+
             /* Visual indication for non-sortable header */
-            
+
             .no-sort {
                 background-image: none !important;
                 cursor: default !important;
@@ -61,58 +66,87 @@
                         </div>
                         <div class="card-body px-0 pb-0">
                             <div class="table-responsive">
-                                <div class="dataTable-wrapper dataTable-loading no-footer sortable searchable fixed-columns">
+                                <div
+                                    class="dataTable-wrapper dataTable-loading no-footer sortable searchable fixed-columns">
 
                                     <div class="dataTable-container">
                                         <table class="table align-items-center mb-0" id="datatable_cmd">
                                             <thead>
                                                 <tr>
-                                                    <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">numero</th>
-                                                    <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Date</th>
-                                                    <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Client name</th>
-                                                    <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Client telephone</th>
-                                                    <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Prix</th>
-                                                    <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Status</th>
-                                                    <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Operations</th>
+                                                    <th
+                                                        class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">
+                                                        numero</th>
+                                                    <th
+                                                        class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">
+                                                        Date</th>
+                                                    <th
+                                                        class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">
+                                                        Client name</th>
+                                                    <th
+                                                        class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">
+                                                        Client telephone</th>
+                                                    <th
+                                                        class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">
+                                                        Prix</th>
+                                                    <th
+                                                        class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">
+                                                        Status</th>
+                                                    <th
+                                                        class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">
+                                                        Operations</th>
                                                 </tr>
                                                 <tr class="search-row">
-                                                    <th><input type="text" placeholder="Search..." class="column-search" onclick="event.stopPropagation()" /></th>
-                                                    <th><input type="text" placeholder="Search..." class="column-search" onclick="event.stopPropagation()" /></th>
-                                                    <th><input type="text" placeholder="Search..." class="column-search" onclick="event.stopPropagation()" /></th>
-                                                    <th><input type="text" placeholder="Search..." class="column-search" onclick="event.stopPropagation()" /></th>
-                                                    <th><input type="text" placeholder="Search..." class="column-search" onclick="event.stopPropagation()" /></th>
+                                                    <th><input type="text" placeholder="Search..." class="column-search"
+                                                            onclick="event.stopPropagation()" /></th>
+                                                    <th><input type="text" placeholder="Search..." class="column-search"
+                                                            onclick="event.stopPropagation()" /></th>
+                                                    <th><input type="text" placeholder="Search..." class="column-search"
+                                                            onclick="event.stopPropagation()" /></th>
+                                                    <th><input type="text" placeholder="Search..." class="column-search"
+                                                            onclick="event.stopPropagation()" /></th>
+                                                    <th><input type="text" placeholder="Search..." class="column-search"
+                                                            onclick="event.stopPropagation()" /></th>
                                                     <th><select class="form-select status-search">
-                                                        <option value="">All Status</option>
-                                                        <option value="en attente">En attente</option>
-                                                        <option value="en cours de livraison">En cours de livraison</option>
-                                                        <option value="livré">Livré</option>
-                                                        <option value="payé">Payé</option>
-                                                        <option value="annulé">Annulé</option>
-                                                    </select></th>
+                                                            <option value="">All Status</option>
+                                                            <option value="en attente">En attente</option>
+                                                            <option value="en cours de livraison">En cours de livraison
+                                                            </option>
+                                                            <option value="livré">Livré</option>
+                                                            <option value="payé">Payé</option>
+                                                            <option value="annulé">Annulé</option>
+                                                        </select></th>
                                                     <th></th>
                                                 </tr>
                                             </thead>
                                             <tbody>
-                                                <% commandes.map(commande=>{ 
-                                                    const formattedDate = `${commande.date_commande.getDate()} ${commande.date_commande.toLocaleString('default', { month: 'short' })} ${commande.date_commande.getFullYear()} at ${String(commande.date_commande.getHours()).padStart(2, '0')}:${String(commande.date_commande.getMinutes()).padStart(2, '0')}`;
+                                                <% commandes.map(commande=>{
+                                                    const formattedDate = `${commande.date_commande.getDate()}
+                                                    ${commande.date_commande.toLocaleString('default', { month: 'short'
+                                                    })} ${commande.date_commande.getFullYear()} at
+                                                    ${String(commande.date_commande.getHours()).padStart(2,
+                                                    '0')}:${String(commande.date_commande.getMinutes()).padStart(2,
+                                                    '0')}`;
                                                     let color = "dark";
                                                     if (commande.status_fr === 'en attente') {
-                                                        color = 'warning';
+                                                    color = 'warning';
                                                     } else if (commande.status_fr === 'en cours de livraison') {
-                                                        color = 'info';
+                                                    color = 'info';
                                                     } else if (commande.status_fr === 'livré') {
-                                                        color = 'success';
+                                                    color = 'success';
                                                     } else if (commande.status_fr === 'payé') {
-                                                        color = 'success';
+                                                    color = 'success';
                                                     } else if (commande.status_fr === 'annulé') {
-                                                        color = 'danger';
+                                                    color = 'danger';
                                                     }
                                                     %>
                                                     <tr>
                                                         <td>
                                                             <div class="d-flex px-2 py-1">
                                                                 <div class="d-flex flex-column justify-content-center">
-                                                                    <button class="btn btn-icon-only btn-rounded btn-outline-success mb-0 me-3 p-3 btn-sm d-flex align-items-center justify-content-center"><%= commande.id %></button>
+                                                                    <button
+                                                                        class="btn btn-icon-only btn-rounded btn-outline-success mb-0 me-3 p-3 btn-sm d-flex align-items-center justify-content-center">
+                                                                        <%= commande.id %>
+                                                                    </button>
                                                                 </div>
                                                             </div>
                                                         </td>
@@ -157,7 +191,10 @@
                                                             <div class="d-flex px-2 py-1">
                                                                 <div class="d-flex flex-column justify-content-center">
                                                                     <h6 class="mb-0 text-sm">
-                                                                        <span class="badge bg-gradient-<%= color %> badge-sm my-auto ms-auto me-3"><%= commande.status_fr %></span>
+                                                                        <span
+                                                                            class="badge bg-gradient-<%= color %> badge-sm my-auto ms-auto me-3">
+                                                                            <%= commande.status_fr %>
+                                                                        </span>
 
                                                                     </h6>
                                                                 </div>
@@ -165,12 +202,31 @@
                                                         </td>
                                                         <td class="align-middle">
                                                             <center>
-                                                                <a data-products="<%= JSON.stringify(commande.products) %>" id="show_btn" href="" data-bs-toggle="modal" data-bs-target="#show" class="ms-3 text-secondary font-weight-bold text-xs" data-toggle="tooltip" data-original-title="show products">
-                                                                    <i class="fas fa-list" style="font-size: large; color: rgb(23, 177, 36);" data-bs-toggle="tooltip" data-bs-placement="top" title="edit" data-container="body" data-animation="true"></i>
+                                                                <a data-products="<%= JSON.stringify(commande.products) %>"
+                                                                    id="show_btn" href="" data-bs-toggle="modal"
+                                                                    data-bs-target="#show"
+                                                                    class="ms-3 text-secondary font-weight-bold text-xs"
+                                                                    data-toggle="tooltip"
+                                                                    data-original-title="show products">
+                                                                    <i class="fas fa-list"
+                                                                        style="font-size: large; color: rgb(23, 177, 36);"
+                                                                        data-bs-toggle="tooltip" data-bs-placement="top"
+                                                                        title="edit" data-container="body"
+                                                                        data-animation="true"></i>
                                                                 </a>
-                                                                <a data-id="<%= commande.id %>" data-status_id="<%= commande.status_id %>" data-status="<%= commande.status_fr %>" id="edit_btn" href="" data-bs-toggle="modal" data-bs-target="#edit" class="ms-3 text-secondary font-weight-bold text-xs" data-toggle="tooltip"
+                                                                <a data-id="<%= commande.id %>"
+                                                                    data-status_id="<%= commande.status_id %>"
+                                                                    data-status="<%= commande.status_fr %>"
+                                                                    id="edit_btn" href="" data-bs-toggle="modal"
+                                                                    data-bs-target="#edit"
+                                                                    class="ms-3 text-secondary font-weight-bold text-xs"
+                                                                    data-toggle="tooltip"
                                                                     data-original-title="Edit category">
-                                                                    <i class="fas fa-edit" style="font-size: large; color: rgb(23, 23, 177);" data-bs-toggle="tooltip" data-bs-placement="top" title="edit" data-container="body" data-animation="true"></i>
+                                                                    <i class="fas fa-edit"
+                                                                        style="font-size: large; color: rgb(23, 23, 177);"
+                                                                        data-bs-toggle="tooltip" data-bs-placement="top"
+                                                                        title="edit" data-container="body"
+                                                                        data-animation="true"></i>
                                                                 </a>
                                                             </center>
                                                         </td>
@@ -192,7 +248,8 @@
         </div>
 
         <!-- Modal edit -->
-        <div class="modal fade" id="edit" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal fade" id="edit" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+            aria-hidden="true">
             <div class="modal-dialog modal-dialog-centered modal-md" role="document">
                 <div class="modal-content">
                     <div class="modal-header">
@@ -210,10 +267,12 @@
                                     <label for="status">Status</label>
                                     <div class="input-group mb-3">
                                         <select class="form-control" id="edit_status" name="edit_status">
-                                        <% status.map(statu=>{ %>
-                                            <option value="<%= statu.id %>"><%= statu.status_fr %></option>
-                                        <% }) %>
-                                    </select>
+                                            <% status.map(statu=>{ %>
+                                                <option value="<%= statu.id %>">
+                                                    <%= statu.status_fr %>
+                                                </option>
+                                                <% }) %>
+                                        </select>
                                     </div>
                                 </div>
                             </center>
@@ -230,7 +289,8 @@
         </div>
 
         <!-- Modal SHOW -->
-        <div class="modal fade" id="show" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal fade" id="show" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+            aria-hidden="true">
             <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
                 <div class="modal-content">
                     <div class="modal-header">
@@ -267,18 +327,24 @@
 
 
         <script>
-            $("a[id='edit_btn']").click(function() {
-
+            $("a[id='edit_btn']").click(function () {
+                var statusList = JSON.parse(`<%- JSON.stringify(status) %>`);
                 let id_edit = $(this).attr('data-id');
                 let status = $(this).attr("data-status");
                 let status_id = $(this).attr("data-status_id");
+                // Clear the current options
+                $('#edit_status').empty();
+                // Populate the select with new options
+                statusList.forEach(function (statu) {
+                    let selected = statu.id == status_id ? 'selected' : '';
+                    $('#edit_status').append(`<option value="${statu.id}" ${selected}>${statu.status_fr}</option>`);
+                });
+
                 $('#edit_id').val(id_edit);
-                // $(`#edit_status option[value="${status_id}"]`).remove();
-                // $('#edit_status').prepend(`<option value="${status_id}" selected>${status}</option>`);
             });
 
             // udpate the Commande 
-            $("button[id='modal_edit']").click(function() {
+            $("button[id='modal_edit']").click(function () {
                 var id = $('#edit_id').val();
                 var status = $('#edit_status').val();
 
@@ -289,7 +355,7 @@
                         id: id,
                         status: status
                     },
-                    success: function(response) {
+                    success: function (response) {
                         Swal.fire({
                             icon: 'success',
                             title: 'Commande Updated!',
@@ -299,7 +365,7 @@
                             location.reload();
                         });
                     },
-                    error: function() {
+                    error: function () {
                         Swal.fire({
                             icon: 'error',
                             title: 'Error',
@@ -311,7 +377,7 @@
             });
         </script>
         <script>
-            $("a[id='show_btn']").click(function(e) {
+            $("a[id='show_btn']").click(function (e) {
                 let products = JSON.parse($(this).attr('data-products'));
                 console.log(products);
                 let html = '';
@@ -330,25 +396,25 @@
         <%- include('./partials/footer'); %>
             <script>
                 new DataTable('#datatable_cmd', {
-                    initComplete: function() {
+                    initComplete: function () {
                         // Prevent sorting when clicking on search inputs
-                        $('.column-search, .status-search').on('click', function(e) {
+                        $('.column-search, .status-search').on('click', function (e) {
                             e.stopPropagation();
                         });
 
                         // Apply the search functionality
-                        this.api().columns().every(function(index) {
+                        this.api().columns().every(function (index) {
                             var column = this;
 
                             if (index === 6) return; // Skip operations column
 
                             if (index === 5) { // Status column
-                                $('.status-search').on('change', function(e) {
+                                $('.status-search').on('change', function (e) {
                                     e.stopPropagation();
                                     column.search(this.value).draw();
                                 });
                             } else {
-                                $('.column-search').eq(index).on('keyup change', function(e) {
+                                $('.column-search').eq(index).on('keyup change', function (e) {
                                     e.stopPropagation();
                                     if (column.search() !== this.value) {
                                         column.search(this.value).draw();
@@ -358,7 +424,7 @@
                         });
                     },
                     // Disable sorting for the search row
-                    headerCallback: function(thead, data, start, end, display) {
+                    headerCallback: function (thead, data, start, end, display) {
                         $(thead).find('.search-row th').addClass('no-sort');
                     }
                 });

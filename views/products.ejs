@@ -14,14 +14,14 @@
                 background: #d0d1d3;
                 text-align: center;
             }
-            
+
             .image-card img {
                 width: 100%;
                 height: 200px;
                 object-fit: cover;
                 border-radius: 8px;
             }
-            
+
             .image-card .delete-btn {
                 color: red;
                 font-weight: bold;
@@ -41,7 +41,8 @@
                                 </div>
                                 <div class="ms-auto my-auto mt-lg-0 mt-4">
                                     <div class="ms-auto my-auto">
-                                        <a href="#" class="btn btn-primary btn-sm mb-0" data-bs-toggle="modal" data-bs-target="#import">+&nbsp; New Product</a>
+                                        <a href="#" class="btn btn-primary btn-sm mb-0" data-bs-toggle="modal"
+                                            data-bs-target="#import">+&nbsp; New Product</a>
 
 
                                     </div>
@@ -50,20 +51,37 @@
                         </div>
                         <div class="card-body px-0 pb-0">
                             <div class="table-responsive">
-                                <div class="dataTable-wrapper dataTable-loading no-footer sortable searchable fixed-columns">
+                                <div
+                                    class="dataTable-wrapper dataTable-loading no-footer sortable searchable fixed-columns">
 
                                     <div class="dataTable-container">
                                         <table class="table align-items-center mb-0" id="datatable">
                                             <thead>
                                                 <tr>
-                                                    <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Name</th>
-                                                    <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2">Category</th>
-                                                    <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Price</th>
-                                                    <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Stock</th>
-                                                    <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Best selling</th>
-                                                    <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">New products</th>
-                                                    <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Top rating</th>
-                                                    <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Operations</th>
+                                                    <th
+                                                        class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">
+                                                        Name</th>
+                                                    <th
+                                                        class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2">
+                                                        Category</th>
+                                                    <th
+                                                        class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">
+                                                        Price</th>
+                                                    <th
+                                                        class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">
+                                                        Stock</th>
+                                                    <th
+                                                        class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">
+                                                        Best selling</th>
+                                                    <th
+                                                        class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">
+                                                        New products</th>
+                                                    <th
+                                                        class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">
+                                                        Top rating</th>
+                                                    <th
+                                                        class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">
+                                                        Operations</th>
                                                 </tr>
                                             </thead>
                                             <tbody>
@@ -80,37 +98,79 @@
                                                         </td>
                                                         <td>
                                                             <p class="text-xs font-weight-bold mb-0">
-                                                                <%= product.category_name_fr  %>
+                                                                <%= product.category_name_fr %>
                                                             </p>
                                                         </td>
                                                         <td class="align-middle text-center text-sm">
-                                                            <span class="text-secondary text-xs font-weight-bold"><%= product.price%> DA</span>
+                                                            <span class="text-secondary text-xs font-weight-bold">
+                                                                <%= product.price%> DA
+                                                            </span>
                                                         </td>
                                                         <td class="align-middle text-center">
-                                                            <span class="text-secondary text-xs font-weight-bold"><%= product.stock %> piece</span>
+                                                            <span class="text-secondary text-xs font-weight-bold">
+                                                                <%= product.stock %> piece
+                                                            </span>
                                                         </td>
                                                         <td class="align-middle text-center text-sm">
-                                                            <% let best_color=""; if(product.best_selling) {best_color="success"} else {best_color="danger"}  %>
-                                                                <span class="badge badge-sm bg-gradient-<%= best_color %>">&nbsp;&nbsp;</span>
+                                                            <% let best_color="" ; if(product.best_selling)
+                                                                {best_color="success" } else {best_color="danger" } %>
+                                                                <span
+                                                                    class="badge badge-sm bg-gradient-<%= best_color %>">&nbsp;&nbsp;</span>
                                                         </td>
                                                         <td class="align-middle text-center text-sm">
-                                                            <% let new_prod_color=""; if(product.new_product) {new_prod_color="success"} else {new_prod_color="danger"}  %>
-                                                                <span class="badge badge-sm bg-gradient-<%= new_prod_color %>">&nbsp;&nbsp;</span>
+                                                            <% let new_prod_color="" ; if(product.new_product)
+                                                                {new_prod_color="success" } else
+                                                                {new_prod_color="danger" } %>
+                                                                <span
+                                                                    class="badge badge-sm bg-gradient-<%= new_prod_color %>">&nbsp;&nbsp;</span>
                                                         </td>
                                                         <td class="align-middle text-center text-sm">
-                                                            <% let top_prod_color=""; if(product.top_rating) {top_prod_color="success"} else {top_prod_color="danger"}  %>
-                                                                <span class="badge badge-sm bg-gradient-<%= top_prod_color %>">&nbsp;&nbsp;</span>
+                                                            <% let top_prod_color="" ; if(product.top_rating)
+                                                                {top_prod_color="success" } else
+                                                                {top_prod_color="danger" } %>
+                                                                <span
+                                                                    class="badge badge-sm bg-gradient-<%= top_prod_color %>">&nbsp;&nbsp;</span>
                                                         </td>
                                                         <td class="align-middle">
                                                             <center>
-                                                                <a data-id="<%= product.id %>" data-nom='<%= product.name_fr %>' class="text-secondary font-weight-bold text-xs" id="delete_btn" data-bs-target="#delete" href="" data-bs-toggle="modal" data-toggle="tooltip" data-original-title="delete product">
-                                                                    <i class="fas fa-trash-alt" style="font-size: large; color: rgb(187, 18, 18);" class="pe-2 btn-tooltip" data-bs-toggle="tooltip" data-bs-placement="top" data-container="body" title="delete" data-animation="true"></i>
+                                                                <a data-id="<%= product.id %>"
+                                                                    data-nom='<%= product.name_fr %>'
+                                                                    class="text-secondary font-weight-bold text-xs"
+                                                                    id="delete_btn" data-bs-target="#delete" href=""
+                                                                    data-bs-toggle="modal" data-toggle="tooltip"
+                                                                    data-original-title="delete product">
+                                                                    <i class="fas fa-trash-alt"
+                                                                        style="font-size: large; color: rgb(187, 18, 18);"
+                                                                        class="pe-2 btn-tooltip"
+                                                                        data-bs-toggle="tooltip" data-bs-placement="top"
+                                                                        data-container="body" title="delete"
+                                                                        data-animation="true"></i>
                                                                 </a>
-                                                                <a data-id="<%= product.id %>" data-name_fr='<%= product.name_fr %>' data-name_ar='<%= product.name_ar %>' data-name_en='<%= product.name_en %>' data-description_fr='<%= product.desc_fr %>' data-description_ar='<%= product.desc_ar %>' data-description_en='<%= product.desc_en %>'
-                                                                    data-price='<%= product.price %>' data-stock='<%= product.stock %>' data-best_selling='<%= product.best_selling %>' data-new_product='<%= product.new_product %>' data-top_rating='<%= product.top_rating %>'
-                                                                    data-category_id='<%= product.category_id %>' data-category_name='<%= product.category_namef_r %>' data-images="<%= product.images %>" id="edit_btn" href="" data-bs-toggle="modal" data-bs-target="#edit"
-                                                                    class="ms-3 text-secondary font-weight-bold text-xs" data-toggle="tooltip" data-original-title="Edit product">
-                                                                    <i class="fas fa-edit" style="font-size: large; color: rgb(23, 23, 177);" data-bs-toggle="tooltip" data-bs-placement="top" title="edit" data-container="body" data-animation="true"></i>
+                                                                <a data-id="<%= product.id %>"
+                                                                    data-name_fr='<%= product.name_fr %>'
+                                                                    data-name_ar='<%= product.name_ar %>'
+                                                                    data-name_en='<%= product.name_en %>'
+                                                                    data-description_fr='<%= product.desc_fr %>'
+                                                                    data-description_ar='<%= product.desc_ar %>'
+                                                                    data-description_en='<%= product.desc_en %>'
+                                                                    data-price='<%= product.price %>'
+                                                                    data-stock='<%= product.stock %>'
+                                                                    data-best_selling='<%= product.best_selling %>'
+                                                                    data-new_product='<%= product.new_product %>'
+                                                                    data-top_rating='<%= product.top_rating %>'
+                                                                    data-category_id='<%= product.category_id %>'
+                                                                    data-category_name='<%= product.category_namef_r %>'
+                                                                    data-images="<%= product.images %>" id="edit_btn"
+                                                                    href="" data-bs-toggle="modal"
+                                                                    data-bs-target="#edit"
+                                                                    class="ms-3 text-secondary font-weight-bold text-xs"
+                                                                    data-toggle="tooltip"
+                                                                    data-original-title="Edit product">
+                                                                    <i class="fas fa-edit"
+                                                                        style="font-size: large; color: rgb(23, 23, 177);"
+                                                                        data-bs-toggle="tooltip" data-bs-placement="top"
+                                                                        title="edit" data-container="body"
+                                                                        data-animation="true"></i>
                                                                 </a>
 
                                                             </center>
@@ -146,20 +206,23 @@
                             <div class="col-lg-4">
                                 <label for="name">Nom Francais</label>
                                 <div class="input-group mb-3">
-                                    <input id="name_fr" name="name_fr" type="text" class="form-control" placeholder="name..." aria-label="name" aria-describedby="name-addon">
+                                    <input id="name_fr" name="name_fr" type="text" class="form-control"
+                                        placeholder="name..." aria-label="name" aria-describedby="name-addon">
                                 </div>
                             </div>
 
                             <div class="col-lg-4">
                                 <label for="name_ar">Nom Arabe</label>
                                 <div class="input-group mb-3">
-                                    <input id="name_ar" name="name_ar" type="text" class="form-control" placeholder="name..." aria-label="name_ar" aria-describedby="name_ar-addon">
+                                    <input id="name_ar" name="name_ar" type="text" class="form-control"
+                                        placeholder="name..." aria-label="name_ar" aria-describedby="name_ar-addon">
                                 </div>
                             </div>
                             <div class="col-lg-4">
                                 <label for="name_en">Nom Anglais</label>
                                 <div class="input-group mb-3">
-                                    <input id="name_en" name="name_en" type="text" class="form-control" placeholder="name..." aria-label="name_en" aria-describedby="name_en-addon">
+                                    <input id="name_en" name="name_en" type="text" class="form-control"
+                                        placeholder="name..." aria-label="name_en" aria-describedby="name_en-addon">
                                 </div>
                             </div>
 
@@ -170,29 +233,35 @@
                                 <div class="input-group mb-3">
                                     <select class="form-control" id="Category" name="Category">
                                         <% category.map(cat=>{ %>
-                                            <option value="<%= cat.id %>"><%= cat.name_fr %></option>
-                                        <% }) %>
+                                            <option value="<%= cat.id %>">
+                                                <%= cat.name_fr %>
+                                            </option>
+                                            <% }) %>
                                     </select>
                                 </div>
                             </div>
                             <div class="col-lg-3">
                                 <label for="price">Price</label>
                                 <div class="input-group mb-3">
-                                    <input id="price" name="price" type="number" class="form-control" placeholder="price..." aria-label="price" aria-describedby="price-addon">
+                                    <input id="price" name="price" type="number" class="form-control"
+                                        placeholder="price..." aria-label="price" aria-describedby="price-addon">
                                 </div>
                             </div>
                             <div class="col-lg-3">
                                 <label for="stock">Stock</label>
                                 <div class="input-group mb-3">
-                                    <input id="stock" name="stock" type="number" class="form-control" placeholder="stock..." aria-label="stock" aria-describedby="stock-addon">
+                                    <input id="stock" name="stock" type="number" class="form-control"
+                                        placeholder="stock..." aria-label="stock" aria-describedby="stock-addon">
                                 </div>
                             </div>
 
                             <hr class="horizontal dark">
                             <div class="col-lg-4 d-flex align-items-center mt-3">
                                 <div class="form-check form-switch">
-                                    <input class="form-check-input" type="checkbox" id="best_selling" name="best_selling">
-                                    <label class=" form-check-label ms-2 " for="best_selling"><b>Best selling</b></label>
+                                    <input class="form-check-input" type="checkbox" id="best_selling"
+                                        name="best_selling">
+                                    <label class=" form-check-label ms-2 " for="best_selling"><b>Best
+                                            selling</b></label>
                                 </div>
                             </div>
                             <div class="col-lg-4 d-flex align-items-center mt-3">
@@ -204,7 +273,8 @@
                             <div class="col-lg-4 d-flex align-items-center mt-3">
                                 <div class="form-check form-switch">
                                     <input class="form-check-input" type="checkbox" id="top_rating" name="top_rating">
-                                    <label class=" form-check-label ms-2 " for="top_rating"><b>Top rating product</b></label>
+                                    <label class=" form-check-label ms-2 " for="top_rating"><b>Top rating
+                                            product</b></label>
                                 </div>
                             </div>
                             <hr class="horizontal dark">
@@ -212,19 +282,22 @@
                             <div class="col-lg-12">
                                 <label for="description">description Francais</label>
                                 <div class="input-group mb-3">
-                                    <textarea name="description_fr" id="description_fr" rows="3" class="form-control" placeholder="description of the product..."></textarea>
+                                    <textarea name="description_fr" id="description_fr" rows="3" class="form-control"
+                                        placeholder="description of the product..."></textarea>
                                 </div>
                             </div>
                             <div class="col-lg-12">
                                 <label for="description_ar">description Arabe</label>
                                 <div class="input-group mb-3">
-                                    <textarea name="description_ar" id="description_ar" rows="3" class="form-control" placeholder="description of the product..."></textarea>
+                                    <textarea name="description_ar" id="description_ar" rows="3" class="form-control"
+                                        placeholder="description of the product..."></textarea>
                                 </div>
                             </div>
                             <div class="col-lg-12">
                                 <label for="description_en">description Anglais</label>
                                 <div class="input-group mb-3">
-                                    <textarea name="description_en" id="description_en" rows="3" class="form-control" placeholder="description of the product..."></textarea>
+                                    <textarea name="description_en" id="description_en" rows="3" class="form-control"
+                                        placeholder="description of the product..."></textarea>
                                 </div>
                             </div>
 
@@ -233,7 +306,8 @@
                             <div class="col-lg-12">
                                 <div class="card">
                                     <form class="form-control dropzone dz-clickable" id="dropzone">
-                                        <div class="dz-default dz-message"><button class="dz-button" type="button">Drop files here to upload</button></div>
+                                        <div class="dz-default dz-message"><button class="dz-button" type="button">Drop
+                                                files here to upload</button></div>
                                     </form>
                                 </div>
                             </div>
@@ -241,7 +315,8 @@
                         </div>
                     </div>
                     <div class="modal-footer">
-                        <button type="button" class="btn bg-gradient-secondary btn-sm" data-bs-dismiss="modal">Close</button>
+                        <button type="button" class="btn bg-gradient-secondary btn-sm"
+                            data-bs-dismiss="modal">Close</button>
                         <button type="button" id="add_Prod" class="btn btn-primary btn-sm">ADD</button>
                     </div>
                 </div>
@@ -249,7 +324,8 @@
         </div>
 
         <!-- Modal delete -->
-        <div class="modal fade" id="delete" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal fade" id="delete" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+            aria-hidden="true">
             <div class="modal-dialog modal-dialog-centered" role="document">
                 <div class="modal-content">
                     <div class="modal-header">
@@ -271,7 +347,8 @@
         </div>
 
         <!-- Modal edit -->
-        <div class="modal fade" id="edit" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal fade" id="edit" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+            aria-hidden="true">
             <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
                 <div class="modal-content">
                     <div class="modal-header">
@@ -286,19 +363,22 @@
                             <div class="col-lg-4">
                                 <label for="name_fr">Nom francais</label>
                                 <div class="input-group mb-3">
-                                    <input id="edit_name_fr" name="edit_name_fr" type="text" class="form-control" placeholder="name..." aria-label="name_fr" aria-describedby="name-addon">
+                                    <input id="edit_name_fr" name="edit_name_fr" type="text" class="form-control"
+                                        placeholder="name..." aria-label="name_fr" aria-describedby="name-addon">
                                 </div>
                             </div>
                             <div class="col-lg-4">
                                 <label for="name_ar">Nom arabe</label>
                                 <div class="input-group mb-3">
-                                    <input id="edit_name_ar" name="edit_name_ar" type="text" class="form-control" placeholder="name..." aria-label="name_ar" aria-describedby="name-addon">
+                                    <input id="edit_name_ar" name="edit_name_ar" type="text" class="form-control"
+                                        placeholder="name..." aria-label="name_ar" aria-describedby="name-addon">
                                 </div>
                             </div>
                             <div class="col-lg-4">
                                 <label for="name_en">Nom anglais</label>
                                 <div class="input-group mb-3">
-                                    <input id="edit_name_en" name="edit_name_en" type="text" class="form-control" placeholder="name..." aria-label="name_en" aria-describedby="name-addon">
+                                    <input id="edit_name_en" name="edit_name_en" type="text" class="form-control"
+                                        placeholder="name..." aria-label="name_en" aria-describedby="name-addon">
                                 </div>
                             </div>
 
@@ -309,21 +389,25 @@
                                 <div class="input-group mb-3">
                                     <select class="form-control" id="edit_Category" name="edit_Category">
                                         <% category.map(cat=>{ %>
-                                            <option value="<%= cat.id %>"><%= cat.name_fr %></option>
-                                        <% }) %>
+                                            <option value="<%= cat.id %>">
+                                                <%= cat.name_fr %>
+                                            </option>
+                                            <% }) %>
                                     </select>
                                 </div>
                             </div>
                             <div class="col-lg-4">
                                 <label for="price">Price</label>
                                 <div class="input-group mb-3">
-                                    <input id="edit_price" name="edit_price" type="number" class="form-control" placeholder="price..." aria-label="price" aria-describedby="price-addon">
+                                    <input id="edit_price" name="edit_price" type="number" class="form-control"
+                                        placeholder="price..." aria-label="price" aria-describedby="price-addon">
                                 </div>
                             </div>
                             <div class="col-lg-3">
                                 <label for="stock">Stock</label>
                                 <div class="input-group mb-3">
-                                    <input id="edit_stock" name="edit_stock" type="number" class="form-control" placeholder="stock..." aria-label="stock" aria-describedby="stock-addon">
+                                    <input id="edit_stock" name="edit_stock" type="number" class="form-control"
+                                        placeholder="stock..." aria-label="stock" aria-describedby="stock-addon">
                                 </div>
                             </div>
 
@@ -331,21 +415,26 @@
 
                             <div class="col-lg-4 d-flex align-items-center mt-3">
                                 <div class="form-check form-switch">
-                                    <input class="form-check-input" type="checkbox" id="edit_best_selling" name="edit_best_selling">
-                                    <label class=" form-check-label ms-2 " for="best_selling"><b>Best selling</b></label>
+                                    <input class="form-check-input" type="checkbox" id="edit_best_selling"
+                                        name="edit_best_selling">
+                                    <label class=" form-check-label ms-2 " for="best_selling"><b>Best
+                                            selling</b></label>
                                 </div>
                             </div>
 
                             <div class="col-lg-4 d-flex align-items-center mt-3">
                                 <div class="form-check form-switch">
-                                    <input class="form-check-input" type="checkbox" id="edit_new_prod" name="edit_new_prod">
-                                    <label class=" form-check-label ms-2 " for="edit_new_prod"><b>New product</b></label>
+                                    <input class="form-check-input" type="checkbox" id="edit_new_prod"
+                                        name="edit_new_prod">
+                                    <label class=" form-check-label ms-2 " for="edit_new_prod"><b>New
+                                            product</b></label>
                                 </div>
                             </div>
 
                             <div class="col-lg-4 d-flex align-items-center mt-3">
                                 <div class="form-check form-switch">
-                                    <input class="form-check-input" type="checkbox" id="edit_top_prod" name="edit_top_prod">
+                                    <input class="form-check-input" type="checkbox" id="edit_top_prod"
+                                        name="edit_top_prod">
                                     <label class=" form-check-label ms-2 " for="edit_top_prod"><b>Top rating</b></label>
                                 </div>
                             </div>
@@ -355,19 +444,22 @@
                             <div class="col-lg-12">
                                 <label for="description">description Francais</label>
                                 <div class="input-group mb-3">
-                                    <textarea name="edit_description_fr" id="edit_description_fr" rows="3" class="form-control" placeholder="description of the product..."></textarea>
+                                    <textarea name="edit_description_fr" id="edit_description_fr" rows="3"
+                                        class="form-control" placeholder="description of the product..."></textarea>
                                 </div>
                             </div>
                             <div class="col-lg-12">
                                 <label for="description">description Arabe</label>
                                 <div class="input-group mb-3">
-                                    <textarea name="edit_description_ar" id="edit_description_ar" rows="3" class="form-control" placeholder="description of the product..."></textarea>
+                                    <textarea name="edit_description_ar" id="edit_description_ar" rows="3"
+                                        class="form-control" placeholder="description of the product..."></textarea>
                                 </div>
                             </div>
                             <div class="col-lg-12">
                                 <label for="description">description Anglais</label>
                                 <div class="input-group mb-3">
-                                    <textarea name="edit_description_en" id="edit_description_en" rows="3" class="form-control" placeholder="description of the product..."></textarea>
+                                    <textarea name="edit_description_en" id="edit_description_en" rows="3"
+                                        class="form-control" placeholder="description of the product..."></textarea>
                                 </div>
                             </div>
 
@@ -382,7 +474,8 @@
                                 <div class="card">
                                     <form class="form-control dropzone dz-clickable" id="edit_dropzone">
 
-                                        <div class="dz-default dz-message"><button class="dz-button" type="button">Drop files here to upload</button></div>
+                                        <div class="dz-default dz-message"><button class="dz-button" type="button">Drop
+                                                files here to upload</button></div>
                                     </form>
                                 </div>
                             </div>
@@ -409,7 +502,7 @@
         </script>
         <script>
             // CREATE
-            $('#add_Prod').click(function() {
+            $('#add_Prod').click(function () {
                 var formData = new FormData();
 
                 formData.append("name_fr", $('#name_fr').val());
@@ -439,7 +532,7 @@
                     data: formData,
                     processData: false,
                     contentType: false,
-                    success: function(response) {
+                    success: function (response) {
                         Swal.fire({
                             icon: "success",
                             title: "Product Added!",
@@ -449,7 +542,7 @@
                             location.reload();
                         });
                     },
-                    error: function(response) {
+                    error: function (response) {
                         console.log(response)
                         Swal.fire({
                             icon: "error",
@@ -464,7 +557,7 @@
 
         <script>
             // DELETE
-            $("a[id='delete_btn']").click(function() {
+            $("a[id='delete_btn']").click(function () {
 
                 let id_delete = $(this).attr('data-id');
                 let nom = $(this).attr("data-nom");
@@ -474,7 +567,7 @@
 
             });
 
-            $("button[id='modal_delete']").click(function() {
+            $("button[id='modal_delete']").click(function () {
                 let id = $("#delete_id").val();
 
                 $.ajax({
@@ -483,7 +576,7 @@
                         id
                     },
                     method: 'DELETE',
-                    success: function(response) {
+                    success: function (response) {
                         Swal.fire({
                             icon: 'success',
                             title: 'Product Deleted!',
@@ -493,7 +586,7 @@
                             location.reload();
                         });
                     },
-                    error: function() {
+                    error: function () {
                         Swal.fire({
                             icon: 'error',
                             title: 'Error',
@@ -507,13 +600,15 @@
         <script>
             // EDIT
             Dropzone.autoDiscover = false;
-            var edit_drop = document.getElementById('edit_dropzone')
+            var edit_drop = document.getElementById('edit_dropzone');
+            var categories = JSON.parse(`<%- JSON.stringify(category) %>`);
+
             var edit_Dropzone = new Dropzone(edit_drop, {
                 url: "/file/post",
                 addRemoveLinks: true
 
             });
-            $("a[id='edit_btn']").click(function() {
+            $("a[id='edit_btn']").click(function () {
 
                 $("#image_viewer").empty();
 
@@ -530,7 +625,6 @@
                 let price = $(this).attr("data-price");
                 let stock = $(this).attr("data-stock");
                 let category_id = $(this).attr("data-category_id");
-                let category_name = $(this).attr("data-category_name");
 
                 let best_selling = $(this).attr("data-best_selling");
                 let new_product = $(this).attr("data-new_product");
@@ -548,8 +642,13 @@
 
                 $("#edit_price").val(price);
                 $("#edit_stock").val(stock);
+                console.log(categories);
+                $("#edit_Category").empty();
+                categories.forEach(category => {
+                    let selected = category.id == category_id ? "selected" : "";
+                    $("#edit_Category").append(`<option value="${category.id}" ${selected}>${category.name_fr}</option>`);
+                });
                 $("#edit_category_id").val(category_id);
-                $("#edit_category_name").val(category_name);
 
                 $("#edit_best_selling").prop("checked", best_selling === "1" || best_selling === "true");
                 $("#edit_top_prod").prop("checked", top_rating === "1" || top_rating === "true");
@@ -579,7 +678,7 @@
             });
 
             // Delete image
-            $(document).on("click", ".delete-image", function(e) {
+            $(document).on("click", ".delete-image", function (e) {
                 e.preventDefault();
 
                 let imageElement = $(this).closest(".col-md-4"); // Récupère le conteneur de l'image
@@ -596,7 +695,7 @@
                         image: imageName,
                         id: productId
                     },
-                    success: function(response) {
+                    success: function (response) {
                         if (response.success) {
                             imageElement.remove(); // Supprime l'image du DOM après succès
                         } else {
@@ -604,7 +703,7 @@
                         }
                     },
 
-                    success: function(response) {
+                    success: function (response) {
 
                         Swal.fire({
                             icon: "success",
@@ -615,7 +714,7 @@
                             imageElement.remove();
                         });
                     },
-                    error: function(response) {
+                    error: function (response) {
                         console.log(response)
                         Swal.fire({
                             icon: "error",
@@ -628,7 +727,7 @@
             });
 
             //update the product
-            $("button[id='modal_edit']").click(function() {
+            $("button[id='modal_edit']").click(function () {
                 var formData = new FormData();
 
                 formData.append("id", $('#edit_id').val());
@@ -660,7 +759,7 @@
                     data: formData,
                     processData: false,
                     contentType: false,
-                    success: function(response) {
+                    success: function (response) {
                         Swal.fire({
                             icon: "success",
                             title: "Product Updated!",
@@ -670,7 +769,7 @@
                             location.reload();
                         });
                     },
-                    error: function(response) {
+                    error: function (response) {
                         console.log(response);
 
                         Swal.fire({
