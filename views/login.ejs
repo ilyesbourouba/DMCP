@@ -5,7 +5,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <link rel="apple-touch-icon" sizes="76x76" href="../../../assets1/img/apple-icon.png">
-    <link rel="icon" type="image/png" href="../../../assets1/img/favicon.png">
+    <link rel="icon" type="image/png" href="../../../assets1/img/icone.png">
     <title>
         CMS Platform
     </title>
@@ -37,45 +37,60 @@
 
                                 <div class="card-body">
                                     <form role="form" action="/login" method="post">
-                                        <% if (error === 'missing') { %>
+                                        <% if (error==='missing' ) { %>
                                             <p class="text-danger">Please provide both username and password.</p>
-                                            <% } else if (error === 'user-not-found') { %>
-                                                <p class="text-danger">User not found. Please check your credentials.</p>
-                                                <% } else if (error === 'invalid-credentials') { %>
+                                            <% } else if (error==='user-not-found' ) { %>
+                                                <p class="text-danger">User not found. Please check your credentials.
+                                                </p>
+                                                <% } else if (error==='invalid-credentials' ) { %>
                                                     <p class="text-danger">Invalid credentials. Please try again.</p>
-                                                    <% } else if (error === 'server-error') { %>
-                                                        <p class="text-danger">An error occurred on the server. Please try again later.</p>
-                                                        <% }  else if (error === 'no-token') { %>
+                                                    <% } else if (error==='server-error' ) { %>
+                                                        <p class="text-danger">An error occurred on the server. Please
+                                                            try again later.</p>
+                                                        <% } else if (error==='no-token' ) { %>
                                                             <p class="text-danger">Veuillez vous connecter.</p>
-                                                            <% } else if (error === 'no-permission') { %>
-                                                                <p class="text-danger">You do not have permission to access this page. Please contact your administrator.</p>
-                                                                <% } else{  %>
+                                                            <% } else if (error==='no-permission' ) { %>
+                                                                <p class="text-danger">You do not have permission to
+                                                                    access this page. Please contact your administrator.
+                                                                </p>
+                                                                <% } else{ %>
                                                                     <p class="text-danger">
                                                                         <%= error %>
                                                                     </p>
                                                                     <% } %>
                                                                         <div class="mb-3">
-                                                                            <input id="username" name="username" type="text" class="form-control form-control-lg" placeholder="Username">
+                                                                            <input id="username" name="username"
+                                                                                type="text"
+                                                                                class="form-control form-control-lg"
+                                                                                placeholder="Username">
                                                                         </div>
                                                                         <div class="mb-2">
-                                                                            <input id="password" name="password" type="password" class="form-control form-control-lg" placeholder="Password">
+                                                                            <input id="password" name="password"
+                                                                                type="password"
+                                                                                class="form-control form-control-lg"
+                                                                                placeholder="Password">
                                                                         </div>
                                                                         <div class=" form-check form-switch ">
                                                                         </div>
                                                                         <div class="text-center ">
-                                                                            <button type="submit" class="btn btn-lg bg_color text-white btn-lg w-100  mb-0 ">Sign
-                                            in</button>
+                                                                            <button type="submit"
+                                                                                class="btn btn-lg bg_color text-white btn-lg w-100  mb-0 ">Sign
+                                                                                in</button>
                                                                         </div>
                                     </form>
                                 </div>
 
                             </div>
                         </div>
-                        <div class="col-6 d-lg-flex d-none h-100 my-auto pe-0 position-absolute top-0 end-0 text-center justify-content-center flex-column ">
-                            <div class="position-relative h-100 m-3 bg_color px-7 border-radius-lg d-flex flex-column justify-content-center ">
-                                <img src="../../../assets1/img/shapes/pattern-lines.svg " alt="pattern-lines " class="position-absolute opacity-4 start-0 ">
+                        <div
+                            class="col-6 d-lg-flex d-none h-100 my-auto pe-0 position-absolute top-0 end-0 text-center justify-content-center flex-column ">
+                            <div
+                                class="position-relative h-100 m-3 bg_color px-7 border-radius-lg d-flex flex-column justify-content-center ">
+                                <img src="../../../assets1/img/shapes/pattern-lines.svg " alt="pattern-lines "
+                                    class="position-absolute opacity-4 start-0 ">
                                 <div class="position-relative ">
-                                    <img class="max-width-400 w-75 position-relative z-index-2 " src="../../assets1/img/rb_3152.png" alt="chat-img ">
+                                    <img class="max-width-400 w-75 position-relative z-index-2 "
+                                        src="../../assets1/img/rb_3152.png" alt="chat-img ">
                                 </div>
                                 <h4 class="mt-5 font-weight-bolder text-uppercase text-white ">CMS Platform</h4>
                             </div>
