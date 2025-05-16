@@ -27,7 +27,9 @@ app.use(express.urlencoded({ extended: false }));
 app.use(express.json()); // Support for JSON body parsing
 
 // Session Setup
-app.set('trust proxy', 1);
+cookie: {
+    secure: false
+}
 app.use(session({
     secret: process.env.SESSION_SECRET || 'secret',
     resave: false,
