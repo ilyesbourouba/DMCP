@@ -6,7 +6,7 @@ const router = express.Router();
 const { categoryPage, getCategory, getCategoryById, addCategory, updateCategory, deleteCategory, deleteCategoryIMAGE } = require("../controller/category");
 
 
-router.get("/", isAuthenticated, categoryPage);
+router.get("/", categoryPage);
 
 router.get("/getall", getCategory);
 router.get("/:id", getCategoryById);
