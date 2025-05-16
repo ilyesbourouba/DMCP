@@ -27,11 +27,19 @@ app.use(express.urlencoded({ extended: false }));
 app.use(express.json()); // Support for JSON body parsing
 
 // Session Setup
+app.set('trust proxy', 1);
 app.use(session({
     secret: process.env.SESSION_SECRET || 'secret',
     resave: false,
-    saveUninitialized: false
+    saveUninitialized: false,
+    cookie: {
+        secure: process.env.NODE_ENV === 'production', // only true on real server
+        httpOnly: true,
+        sameSite: 'lax',
+        maxAge: 1000 * 60 * 60 * 24 // 1 day
+    }
 }));
+
 
 // Passport Middleware
 app.use(passport.initialize());
