@@ -15,35 +15,77 @@
                         </div>
                         <div class="card-body px-0 pb-0">
                             <div class="table-responsive">
-                                <div class="dataTable-wrapper dataTable-loading no-footer sortable searchable fixed-columns">
+                                <div
+                                    class="dataTable-wrapper dataTable-loading no-footer sortable searchable fixed-columns">
 
                                     <div class="dataTable-container">
-                                        <table class="table align-items-center mb-0 ">
+                                        <table class="table align-items-center mb-0 " id="datatable">
                                             <thead>
                                                 <tr>
-                                                    <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Price</th>
-                                                    <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Operations</th>
+                                                    <th
+                                                        class="text-uppercase text-info text-xxs font-weight-bolder opacity-7">
+                                                        Code wilaya</th>
+                                                    <th
+                                                        class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">
+                                                        Wilaya</th>
+                                                    <th
+                                                        class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">
+                                                        Price</th>
+                                                    <th
+                                                        class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">
+                                                        Operations</th>
                                                 </tr>
                                             </thead>
                                             <tbody>
-                                                <tr>
-                                                    <td>
-                                                        <div class="d-flex px-2 py-1">
-                                                            <div class="d-flex flex-column justify-content-center">
-                                                                <h6 class="mb-0 text-sm">
-                                                                    <%= livraison.price %> DA
-                                                                </h6>
+                                                <% livraisons.map(livraison=>{ %>
+                                                    <tr>
+                                                        <td>
+                                                            <div class="d-flex px-2 py-1">
+                                                                <div class="d-flex flex-column justify-content-center">
+                                                                    <h6 class="mb-0 text-sm text-info ">
+                                                                        #<%= livraison.wilaya %>
+                                                                    </h6>
+                                                                </div>
                                                             </div>
-                                                        </div>
-                                                    </td>
-                                                    <td class="align-middle">
-                                                        <center>
-                                                            <a data-price="<%= livraison.price %>" id="edit_btn" href="" data-bs-toggle="modal" data-bs-target="#edit" class="ms-3 text-secondary font-weight-bold text-xs" data-toggle="tooltip" data-original-title="Edit category">
-                                                                <i class="fas fa-edit" style="font-size: large; color: rgb(23, 23, 177);" data-bs-toggle="tooltip" data-bs-placement="top" title="edit" data-container="body" data-animation="true"></i>
-                                                            </a>
-                                                        </center>
-                                                    </td>
-                                                </tr>
+                                                        </td>
+                                                        <td>
+                                                            <div class="d-flex px-2 py-1">
+                                                                <div class="d-flex flex-column justify-content-center">
+                                                                    <h6 class="mb-0 text-sm">
+                                                                        <%= livraison.wilaya_name %>
+                                                                    </h6>
+                                                                </div>
+                                                            </div>
+                                                        </td>
+                                                        <td>
+                                                            <div class="d-flex px-2 py-1">
+                                                                <div class="d-flex flex-column justify-content-center">
+                                                                    <h6 class="mb-0 text-sm">
+                                                                        <%= livraison.price %>.00 DA
+                                                                    </h6>
+                                                                </div>
+                                                            </div>
+                                                        </td>
+                                                        <td class="align-middle">
+                                                            <center>
+                                                                <a data-price="<%= livraison.price %>"
+                                                                    data-wilaya="<%= livraison.wilaya %>"
+                                                                    data-wilaya_name="<%= livraison.wilaya_name %>"
+                                                                    id="edit_btn" href="" data-bs-toggle="modal"
+                                                                    data-bs-target="#edit"
+                                                                    class="ms-3 text-secondary font-weight-bold text-xs"
+                                                                    data-toggle="tooltip"
+                                                                    data-original-title="Edit category">
+                                                                    <i class="fas fa-edit"
+                                                                        style="font-size: large; color: rgb(23, 23, 177);"
+                                                                        data-bs-toggle="tooltip" data-bs-placement="top"
+                                                                        title="edit" data-container="body"
+                                                                        data-animation="true"></i>
+                                                                </a>
+                                                            </center>
+                                                        </td>
+                                                    </tr>
+                                                    <% }) %>
 
                                             </tbody>
                                         </table>
@@ -58,7 +100,8 @@
         </div>
 
         <!-- Modal edit -->
-        <div class="modal fade" id="edit" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal fade" id="edit" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+            aria-hidden="true">
             <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
                 <div class="modal-content">
                     <div class="modal-header">
@@ -72,9 +115,17 @@
 
                             <input type="hidden" id="edit_id" name="edit_id" value="">
                             <div class="col-lg-4">
+                                <label for="edit_wilaya_name">wilaya</label>
+                                <div class="input-group col-sm-6 mb-3">
+                                    <input type="text" id='edit_wilaya_name' name='edit_wilaya_name'
+                                        class="form-control" placeholder="wilaya_name" disabled>
+                                </div>
+                            </div>
+                            <div class="col-lg-4">
                                 <label for="edit_price">Price</label>
                                 <div class="input-group col-sm-6 mb-3">
-                                    <input type="text" id='edit_price' name='edit_price' class="form-control" placeholder="price" required>
+                                    <input type="text" id='edit_price' name='edit_price' class="form-control"
+                                        placeholder="price" required>
                                 </div>
                             </div>
 
@@ -90,22 +141,29 @@
         </div>
 
         <script>
-            $("a[id='edit_btn']").click(function() {
+            $("a[id='edit_btn']").click(function () {
 
                 let price = $(this).attr("data-price");
+                let wilaya = $(this).attr("data-wilaya");
+                let wilaya_name = $(this).attr("data-wilaya_name");
+
                 $("#edit_price").val(price);
+                $("#edit_id").val(wilaya);
+                $("#edit_wilaya_name").val(wilaya_name);
             });
 
-            $("button[id='modal_edit']").click(function() {
+            $("button[id='modal_edit']").click(function () {
                 var price = $("#edit_price").val();
+                var wilaya = $("#edit_id").val();
 
                 $.ajax({
                     url: '/livraison/updateprice/',
                     method: 'PUT',
                     data: {
-                        price
+                        price,
+                        wilaya
                     },
-                    success: function(response) {
+                    success: function (response) {
                         Swal.fire({
                             icon: 'success',
                             title: 'Livraison Updated!',
@@ -115,7 +173,7 @@
                             location.reload();
                         });
                     },
-                    error: function() {
+                    error: function () {
                         Swal.fire({
                             icon: 'error',
                             title: 'Error',

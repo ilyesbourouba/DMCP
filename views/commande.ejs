@@ -396,6 +396,7 @@
         <%- include('./partials/footer'); %>
             <script>
                 new DataTable('#datatable_cmd', {
+                    order: [],
                     initComplete: function () {
                         // Prevent sorting when clicking on search inputs
                         $('.column-search, .status-search').on('click', function (e) {

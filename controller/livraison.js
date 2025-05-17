@@ -1,36 +1,36 @@
 const LivraisonModel = require('../model/livraison');
 
-exports.livraisonPage = async(req, res, next) => {
+exports.livraisonPage = async (req, res, next) => {
     const { user } = req;
-    const [data] = await LivraisonModel.getPrice();
-    let livraison = [];
+    const data = await LivraisonModel.getPrices();
+
+    let livraisons = [];
     if (data.length != 0) {
-        livraison = data;
+        livraisons = data;
     }
-    console.log("livraison =>", livraison);
 
     return res.render('livraison', {
         user,
         sectionName: "Livraison",
         pageName: "Livraison",
-        livraison
+        livraisons
     });
 }
 
-exports.getLivraisonPrice = async(req, res, next) => {
+exports.getLivraisonPrice = async (req, res, next) => {
 
-    const [data] = await LivraisonModel.getPrice();
+    const data = await LivraisonModel.getPrices();
     console.log(data)
 
     return res.status(200).json(data);
 }
 
-exports.updateLivraisonPrice = async(req, res, next) => {
-    const { price } = req.body;
+exports.updateLivraisonPrice = async (req, res, next) => {
+    const { wilaya, price } = req.body;
     console.log(price);
-    if (!price) return res.status(400).json({ message: "Price is required" });
+    if (!wilaya || !price) return res.status(400).json({ message: "Price && wilaya are required" });
 
-    const result = await LivraisonModel.updatePrice(price);
+    const result = await LivraisonModel.updatePrice(wilaya, price);
     if (result) return res.status(200).json({ message: "Price updated successfully" });
     return res.status(500).json({ message: "Internal server error" });
 }
