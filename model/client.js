@@ -1,7 +1,7 @@
 const db = require("../config/DB");
 
 module.exports = class ClientModel {
-    constructor() {}
+    constructor() { }
 
     static async getAll() {
         try {
@@ -108,10 +108,10 @@ module.exports = class ClientModel {
             return error;
         }
     }
-    static async createClient(name, phone, email, adr, password) {
+    static async createClient(name, phone, email, adr, wilaya, password) {
         try {
-            const sql = `INSERT INTO client (name, phone, email, adr, password) VALUES (?, ?, ?, ?, ?)`;
-            const [res] = await db.execute(sql, [name, phone, email, adr, password]);
+            const sql = `INSERT INTO client (name, phone, email, adr, wilaya, password) VALUES (?, ?, ?, ?,?, ?)`;
+            const [res] = await db.execute(sql, [name, phone, email, adr, wilaya, password]);
             if (res.affectedRows > 0) return {
                 success: true,
             };
@@ -127,10 +127,10 @@ module.exports = class ClientModel {
     }
 
     // update client without password
-    static async updateClient(id, name, phone, email, adr) {
+    static async updateClient(id, name, phone, email, adr, wilaya) {
         try {
-            const sql = `UPDATE client SET name = ?, phone = ?, email = ?, adr = ? WHERE id = ?`;
-            const [res] = await db.execute(sql, [name, phone, email, adr, id]);
+            const sql = `UPDATE client SET name = ?, phone = ?, email = ?, adr = ?, wilaya = ? WHERE id = ? `;
+            const [res] = await db.execute(sql, [name, phone, email, adr, wilaya, id]);
 
             const sql2 = `select client.* from client where id = ?`;
             const [res2] = await db.execute(sql2, [id]);

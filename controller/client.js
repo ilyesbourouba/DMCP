@@ -66,7 +66,7 @@ exports.registerClient = async (req, res, next) => {
         const hashedPassword = await bcrypt.hashSync(password.trim(), 10);
 
 
-        const data = await ClientModel.createClient(username.trim(), phone.trim(), email.trim(), adr.trim(), hashedPassword);
+        const data = await ClientModel.createClient(username.trim(), phone.trim(), email.trim(), adr.trim(), wilaya, hashedPassword);
 
         console.log(data)
 
@@ -80,10 +80,10 @@ exports.registerClient = async (req, res, next) => {
 
 // update client 
 exports.updateClient = async (req, res, next) => {
-    const { id, username, phone, email, adr } = req.body;
+    const { id, username, phone, email, adr, wilaya } = req.body;
     try {
-        console.log(id, username, phone, email, adr);
-        if (!id || !username || !phone || !email || !adr) {
+        console.log(id, username, phone, email, adr, wilaya);
+        if (!id || !username || !phone || !email || !adr || !wilaya) {
             return res.status(400).json("empty_fields");
         }
         // check if the new phone or email don"t exist
@@ -93,7 +93,7 @@ exports.updateClient = async (req, res, next) => {
         if (clientNew)
             return res.status(400).json({ message: "user_exists" });
 
-        const data = await ClientModel.updateClient(id, username.trim(), phone.trim(), email.trim(), adr.trim());
+        const data = await ClientModel.updateClient(id, username.trim(), phone.trim(), email.trim(), adr.trim(), wilaya);
 
         console.log(data);
 
