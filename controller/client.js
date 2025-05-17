@@ -116,7 +116,7 @@ exports.forgetPassword = async (req, res, next) => {
 
         let client = await ClientModel.getClientByEmail(email.trim());
 
-        if (!client) return res.status(400).json({ message: "user_not_found" });
+        if (!client) return res.status(400).json({ message: "user not found" });
 
         client = client[0];
         console.log("client => ", client);
@@ -126,18 +126,18 @@ exports.forgetPassword = async (req, res, next) => {
         // send the code to the client email
         const mailer = await sendEmail(email, code);
         console.log("mailer => ", mailer);
-        if (!mailer) return res.status(400).json({ message: "email_not_sent" });
+        if (!mailer) return res.status(400).json({ message: "email not sent" });
 
         // save the code in the database
         const data = await ClientModel.updateClientCode(client.id, code);
         console.log(data);
         if (!data)
-            return res.status(400).json({ message: "user_not_found" });
+            return res.status(400).json({ message: "user not found" });
         return res.status(200).json({ message: "code_sent" });
 
 
     } catch (error) {
-        return res.status(500).json({ message: "server_error" });
+        return res.status(500).json({ message: "server error" });
     }
 }
 
@@ -171,19 +171,21 @@ const sendEmail = async (email, code) => {
 exports.checkCode = async (req, res, next) => {
     const { code } = req.body;
     try {
+
+        console.log("code => ", code);
         if (!code)
-            return res.status(400).json({ message: "empty_fields" });
+            return res.status(400).json({ message: "empty fields" });
 
         let checkCode = await ClientModel.checkCode(code.trim());
         console.log(checkCode);
 
         if (!checkCode)
-            return res.status(400).json({ message: "invalid_code" });
+            return res.status(400).json({ message: "invalid code" });
 
         return res.status(200).json({ message: "code_valid" });
     }
     catch (error) {
-        return res.status(500).json({ message: "server_error" });
+        return res.status(500).json({ message: "server error" });
     }
 
 }
@@ -198,13 +200,13 @@ exports.resetPassword = async (req, res, next) => {
         console.log(checkCode);
 
         if (!checkCode)
-            return res.status(400).json({ message: "invalid_code" });
+            return res.status(400).json({ message: "invalid code" });
 
         const hashedPassword = await bcrypt.hashSync(password.trim(), 10);
-        const data = await ClientModel.updateClientPassword(checkCode.id, hashedPassword);
+        const data = await ClientModel.updateClientPassword(code.trim(), hashedPassword);
         console.log(data);
         if (!data)
-            return res.status(400).json({ message: "user_not_found" });
+            return res.status(400).json({ message: "user not found" });
         return res.status(200).json({ message: "password_updated" });
     }
     catch (error) {
@@ -220,7 +222,7 @@ exports.deleteClient = async (req, res, next) => {
         const data = await ClientModel.deleteClient(id);
         console.log(data);
         if (!data)
-            return res.status(400).json({ message: "user_not_found" });
+            return res.status(400).json({ message: "user not found" });
         return res.status(200).json({ message: "client_deleted" });
     } catch (error) {
         return res.status(500).json({ message: "server_error" });

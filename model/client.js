@@ -168,5 +168,27 @@ module.exports = class ClientModel {
             return error;
         }
     }
+    static async checkCode(code) {
+        try {
+            const sql = `SELECT * FROM client WHERE reset = ? `;
+            const [res] = await db.execute(sql, [code]);
+
+            if (res.length > 0) return true;
+            return false;
+        } catch (error) {
+            return error;
+        }
+    }
+    static async updateClientPassword(code, password) {
+        try {
+            const sql = `UPDATE client SET password = ?, reset = NULL WHERE reset = ? `;
+            const [res] = await db.execute(sql, [password, code]);
+
+            if (res.affectedRows > 0) return true;
+            return false;
+        } catch (error) {
+            return error;
+        }
+    }
 
 };
