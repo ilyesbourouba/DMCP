@@ -108,6 +108,17 @@ module.exports = class ClientModel {
             return error;
         }
     }
+    static async getClientByEmail(mail) {
+        try {
+            const sql = `SELECT * FROM client WHERE email = ? `;
+
+            const [res] = await db.execute(sql, [mail]);
+            if (res.length > 0) return [res][0];
+            return false;
+        } catch (error) {
+            return error;
+        }
+    }
     static async createClient(name, phone, email, adr, wilaya, password) {
         try {
             const sql = `INSERT INTO client (name, phone, email, adr, wilaya, password) VALUES (?, ?, ?, ?,?, ?)`;
@@ -144,6 +155,17 @@ module.exports = class ClientModel {
                 success: false,
                 error: error.message
             }
+        }
+    }
+    static async updateClientCode(id, code) {
+        try {
+            const sql = `UPDATE client SET reset = ? WHERE id = ? `;
+            const [res] = await db.execute(sql, [code, id]);
+
+            if (res.affectedRows > 0) return true;
+            return false;
+        } catch (error) {
+            return error;
         }
     }
 

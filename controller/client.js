@@ -1,3 +1,4 @@
+const nodemailer = require('nodemailer');
 const bcrypt = require('bcryptjs/dist/bcrypt');
 const ClientModel = require('../model/client');
 
@@ -102,6 +103,126 @@ exports.updateClient = async (req, res, next) => {
     } catch (error) {
         console.error(error);
 
+        return res.status(500).json({ message: "server_error" });
+    }
+}
+
+exports.forgetPassword = async (req, res, next) => {
+    const { email } = req.body;
+    try {
+        if (!email) {
+            return res.status(400).json({ message: "empty_fields" });
+        }
+
+        let client = await ClientModel.getClientByEmail(email.trim());
+
+        if (!client) return res.status(400).json({ message: "user_not_found" });
+
+        client = client[0];
+        console.log("client => ", client);
+        // generate a unique code with 5 digits
+        const code = Math.floor(10000 + Math.random() * 90000);
+        console.log("code => ", code);
+        // send the code to the client email
+        const mailer = await sendEmail(email, code);
+        console.log("mailer => ", mailer);
+        if (!mailer) return res.status(400).json({ message: "email_not_sent" });
+
+        // save the code in the database
+        const data = await ClientModel.updateClientCode(client.id, code);
+        console.log(data);
+        if (!data)
+            return res.status(400).json({ message: "user_not_found" });
+        return res.status(200).json({ message: "code_sent" });
+
+
+    } catch (error) {
+        return res.status(500).json({ message: "server_error" });
+    }
+}
+
+// create the function to send email
+const sendEmail = async (email, code) => {
+    const transporter = nodemailer.createTransport({
+        service: 'gmail',
+        auth: {
+            user: 'dmcps23@gmail.com',
+            pass: 'moas zzhd flan micz'
+        }
+    });
+    const mailOptions = {
+        from: 'DMCP support <dmcps23@gmail.com>',
+        to: email,
+        subject: 'DMCP - Password Reset Code',
+        text: `Hello, \n\n Your password reset code is: ${code} \n\n If you didn't request this code, please ignore this email. \n\n Thank you, \n DMCP Team`
+    };
+
+    try {
+        const info = await transporter.sendMail(mailOptions);
+        console.log('Email sent: ' + info.response);
+        return true;
+    } catch (error) {
+        console.log('Error sending email:', error);
+        return false;
+    }
+}
+
+// check if the code is correct
+exports.checkCode = async (req, res, next) => {
+    const { code } = req.body;
+    try {
+        if (!code)
+            return res.status(400).json({ message: "empty_fields" });
+
+        let checkCode = await ClientModel.checkCode(code.trim());
+        console.log(checkCode);
+
+        if (!checkCode)
+            return res.status(400).json({ message: "invalid_code" });
+
+        return res.status(200).json({ message: "code_valid" });
+    }
+    catch (error) {
+        return res.status(500).json({ message: "server_error" });
+    }
+
+}
+
+exports.resetPassword = async (req, res, next) => {
+    const { code, password } = req.body;
+    try {
+        if (!code || !password)
+            return res.status(400).json({ message: "empty_fields" });
+
+        let checkCode = await ClientModel.checkCode(code.trim());
+        console.log(checkCode);
+
+        if (!checkCode)
+            return res.status(400).json({ message: "invalid_code" });
+
+        const hashedPassword = await bcrypt.hashSync(password.trim(), 10);
+        const data = await ClientModel.updateClientPassword(checkCode.id, hashedPassword);
+        console.log(data);
+        if (!data)
+            return res.status(400).json({ message: "user_not_found" });
+        return res.status(200).json({ message: "password_updated" });
+    }
+    catch (error) {
+        return res.status(500).json({ message: "server_error" });
+    }
+}
+exports.deleteClient = async (req, res, next) => {
+    const { id } = req.body;
+    try {
+        if (!id) {
+            return res.status(400).json({ message: "empty_fields" });
+        }
+        const data = await ClientModel.deleteClient(id);
+        console.log(data);
+        if (!data)
+            return res.status(400).json({ message: "user_not_found" });
+        return res.status(200).json({ message: "client_deleted" });
+    } catch (error) {
         return res.status(500).json({ message: "server_error" });
     }
 }
