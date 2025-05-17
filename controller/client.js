@@ -1,7 +1,7 @@
 const nodemailer = require('nodemailer');
 const bcrypt = require('bcryptjs/dist/bcrypt');
 const ClientModel = require('../model/client');
-
+require("dotenv").config();
 
 exports.clientPage = async (req, res, next) => {
     const { user } = req;
@@ -146,12 +146,12 @@ const sendEmail = async (email, code) => {
     const transporter = nodemailer.createTransport({
         service: 'gmail',
         auth: {
-            user: 'dmcps23@gmail.com',
-            pass: 'moas zzhd flan micz'
+            user: process.env.mail,
+            pass: process.env.mail_password
         }
     });
     const mailOptions = {
-        from: 'DMCP support <dmcps23@gmail.com>',
+        from: 'DMCP support <' + process.env.mail + '>',
         to: email,
         subject: 'DMCP - Password Reset Code',
         text: `Hello, \n\n Your password reset code is: ${code} \n\n If you didn't request this code, please ignore this email. \n\n Thank you, \n DMCP Team`
