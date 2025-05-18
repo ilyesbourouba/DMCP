@@ -1,6 +1,8 @@
 const express = require("express");
 const path = require("path");
+const { RedisStore } = require("connect-redis");
 const session = require('express-session');
+const { createClient } = require("redis");
 const passport = require('passport');
 const cors = require('cors');
 require('dotenv').config();
@@ -26,11 +28,20 @@ app.set("views", path.join(__dirname, '/views'));
 app.use(express.urlencoded({ extended: false }));
 app.use(express.json()); // Support for JSON body parsing
 
+// Initialize client.
+let redisClient = createClient();
+redisClient.connect().catch(console.error);
+// Initialize store.
+let redisStore = new RedisStore({
+    client: redisClient,
+    prefix: "myapp:",
+});
 // Session Setup
 app.use(session({
     secret: process.env.SESSION_SECRET || 'secret',
     resave: false,
-    saveUninitialized: false
+    saveUninitialized: false,
+    store: redisStore,
 }));
 
 // Passport Middleware
