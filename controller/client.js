@@ -193,18 +193,20 @@ exports.checkCode = async (req, res, next) => {
 exports.resetPassword = async (req, res, next) => {
     const { code, password } = req.body;
     try {
+        console.log("code => ", code);
+        console.log("password => ", password);
         if (!code || !password)
             return res.status(400).json({ message: "empty_fields" });
 
         let checkCode = await ClientModel.checkCode(code.trim());
-        console.log(checkCode);
+        console.log("checkCode => ", checkCode);
 
         if (!checkCode)
             return res.status(400).json({ message: "invalid code" });
 
         const hashedPassword = await bcrypt.hashSync(password.trim(), 10);
         const data = await ClientModel.updateClientPassword(code.trim(), hashedPassword);
-        console.log(data);
+        console.log("updated result => ", data);
         if (!data)
             return res.status(400).json({ message: "user not found" });
         return res.status(200).json({ message: "password_updated" });
