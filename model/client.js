@@ -191,4 +191,17 @@ module.exports = class ClientModel {
         }
     }
 
+    static async deleteClient(id) {
+        try {
+            // update the client phone and email to 00
+            const sql = `UPDATE client SET phone = '00', email = '00' WHERE id = ? `;
+            const [res] = await db.execute(sql, [id]);
+
+            if (res.affectedRows > 0) return true;
+            return false;
+        } catch (error) {
+            return error;
+        }
+    }
+
 };
