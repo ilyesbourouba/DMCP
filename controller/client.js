@@ -216,11 +216,26 @@ exports.resetPassword = async (req, res, next) => {
     }
 }
 exports.deleteClient = async (req, res, next) => {
-    const { id } = req.body;
+    const { id, password } = req.body;
+
     try {
-        if (!id) {
+        console.log("id => ", id);
+        console.log("password => ", password);
+        if (!id || !password) {
+            console.log("empty fields");
             return res.status(400).json({ message: "empty_fields" });
         }
+        // check if the client exists
+        const client = await ClientModel.findById(id);
+        console.log("client => ", client);
+        if (!client)
+            return res.status(400).json({ message: "user_not_found" });
+        // check if the password is correct
+        if (!bcrypt.compareSync(password.trim(), client.password)) {
+            return res.status(400).json({ message: "invalid_credentials" });
+        }
+        // delete the client
+        console.log("deleting client...");
         const data = await ClientModel.deleteClient(id);
         console.log(data);
         if (!data)
