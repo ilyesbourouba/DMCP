@@ -252,7 +252,6 @@ exports.googleLogin = async (req, res, next) => {
     const googleClient = new OAuth2Client(process.env.GOOGLE_CLIENT_ID);
 
     const { idToken } = req.body;
-    console.log("Received ID token:", idToken);
 
     if (!idToken) {
         return res.status(400).json({ message: "no_token_provided" });
@@ -281,10 +280,13 @@ exports.googleLogin = async (req, res, next) => {
     try {
         // 1) Find existing by Google ID
         let client = await ClientModel.findByGoogleId(googleId);
+        console.log("Client found by Google ID:", client);
 
         // 2) If not, find by email (maybe they signed up with phone/password)
         if (!client) {
             client = await ClientModel.findByEmail(email);
+            console.log("Client found by email:", client);
+
             if (client) {
                 // link them to this googleId
                 await ClientModel.linkGoogleId(client.id, googleId);
@@ -293,12 +295,19 @@ exports.googleLogin = async (req, res, next) => {
 
         // 3) If still no client, create a new one
         if (!client) {
-            client = await ClientModel.createWithGoogle({
+            console.log("Creating new client with Google ID");
+            client = await ClientModel.createGoogleClient(
                 name,
                 email,
                 googleId,
-                avatarUrl,
-            });
+            );
+            console.log("New client created:", client);
+            if (!client.success) {
+                console.error("❌ Failed to create Google client:", client.error);
+                return res.status(500).json({ message: "server_error" });
+            }
+            return res.status(200).json(client.data);
+
         }
 
         // 5) Return user + token
