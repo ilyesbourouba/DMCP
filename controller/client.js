@@ -2,6 +2,9 @@ const nodemailer = require('nodemailer');
 const bcrypt = require('bcryptjs/dist/bcrypt');
 const ClientModel = require('../model/client');
 require("dotenv").config();
+const { OAuth2Client } = require("google-auth-library");
+
+
 
 exports.clientPage = async (req, res, next) => {
     const { user } = req;
@@ -44,8 +47,6 @@ exports.checkLogin = async (req, res, next) => {
     } catch (error) {
         return res.status(500).json({ message: "server_error" });
     }
-
-
 }
 
 exports.registerClient = async (req, res, next) => {
@@ -242,6 +243,68 @@ exports.deleteClient = async (req, res, next) => {
             return res.status(400).json({ message: "user not found" });
         return res.status(200).json({ message: "client_deleted" });
     } catch (error) {
+        return res.status(500).json({ message: "server_error" });
+    }
+}
+
+exports.googleLogin = async (req, res, next) => {
+
+    const googleClient = new OAuth2Client(process.env.GOOGLE_CLIENT_ID);
+
+    const { idToken } = req.body;
+    console.log("Received ID token:", idToken);
+
+    if (!idToken) {
+        return res.status(400).json({ message: "no_token_provided" });
+    }
+
+    let payload;
+    try {
+        const ticket = await googleClient.verifyIdToken({
+            idToken,
+            audience: process.env.GOOGLE_CLIENT_ID,
+        });
+        payload = ticket.getPayload();
+    } catch (err) {
+        console.error("🔐 Invalid Google ID token:", err);
+        return res.status(400).json({ message: "invalid_credentials" });
+    }
+
+    const googleId = payload.sub;
+    const email = payload.email;
+    const name = payload.name || "";
+
+    console.log("Google ID:", googleId);
+    console.log("Email:", email);
+    console.log("Name:", name);
+
+    try {
+        // 1) Find existing by Google ID
+        let client = await ClientModel.findByGoogleId(googleId);
+
+        // 2) If not, find by email (maybe they signed up with phone/password)
+        if (!client) {
+            client = await ClientModel.findByEmail(email);
+            if (client) {
+                // link them to this googleId
+                await ClientModel.linkGoogleId(client.id, googleId);
+            }
+        }
+
+        // 3) If still no client, create a new one
+        if (!client) {
+            client = await ClientModel.createWithGoogle({
+                name,
+                email,
+                googleId,
+                avatarUrl,
+            });
+        }
+
+        // 5) Return user + token
+        return res.status(200).json(client);
+    } catch (err) {
+        console.error("❌ Error in googleLogin controller:", err);
         return res.status(500).json({ message: "server_error" });
     }
 }

@@ -204,4 +204,44 @@ module.exports = class ClientModel {
         }
     }
 
+    static async findByGoogleId(googleId) {
+        const [rows] = await db.execute(
+            `SELECT * FROM client WHERE google_id = ? LIMIT 1`,
+            [googleId]
+        );
+        return rows[0] || null;
+    }
+
+    static async findByEmail(email) {
+        const [rows] = await db.execute(
+            `SELECT * FROM client WHERE email = ? LIMIT 1`,
+            [email]
+        );
+        return rows[0] || null;
+    }
+
+    static async createGoogleClient(name, phone, email, adr, wilaya, googleId) {
+        try {
+            const sql = `INSERT INTO client (name, phone, email, adr, wilaya, google_id) VALUES (?, ?, ?, ?, ?, ?)`;
+            const [res] = await db.execute(sql, [name, "", email, "", "", googleId]);
+            if (res.affectedRows > 0) return {
+                success: true,
+            };
+            return {
+                success: false,
+            };
+        } catch (error) {
+            return {
+                success: false,
+                error: error.message
+            }
+        }
+    }
+
+    static async linkGoogleId(id, googleId) {
+        await db.execute(
+            `UPDATE client SET google_id = ? WHERE id = ?`,
+            [googleId, id]
+        );
+    }
 };

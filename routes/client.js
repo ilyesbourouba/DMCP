@@ -4,10 +4,11 @@ const { isAuthenticated } = require("../config/authcheck");
 const clientController = require("../controller/client");
 
 const router = express.Router();
-const { clientPage, checkLogin, registerClient, updateClient, forgetPassword, checkCode, resetPassword, deleteClient } = clientController;
+const { clientPage, checkLogin, registerClient, updateClient, forgetPassword, checkCode, resetPassword, deleteClient, googleLogin } = clientController;
 
 router.get("/", isAuthenticated, clientPage);
 router.post('/login', checkLogin);
+router.post('/googlelogin', googleLogin);
 router.post('/create', registerClient);
 router.put("/update", updateClient);
 router.post("/resetpassword", forgetPassword);
