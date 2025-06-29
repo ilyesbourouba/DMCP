@@ -223,8 +223,8 @@ module.exports = class ClientModel {
     static async createGoogleClient(name, email, googleId) {
         console.log("Creating Google client with name:", name, "email:", email, "googleId:", googleId);
         try {
-            const sql = `INSERT INTO client (name, phone, password, email, adr, wilaya, token, google_id) VALUES (?, ?, ?, ?, ?, ?, ?)`;
-            const [res] = await db.execute(sql, [name, "0551316019", "$2a$10$6W7bA.8Z2QO9g0V22LR6IO0QASkx20Mzzrd35K/44pk7a0r0BucDm", email, "", "16", "10", googleId]);
+            const sql = `INSERT INTO client (name, phone, password, email, adr, wilaya, token, google_id) VALUES (?, ?, ?, ?, ?, ?, ?, ?)`;
+            const [res] = await db.execute(sql, [name, "0000000000", "$2a$10$6W7bA.8Z2QO9g0V22LR6IO0QASkx20Mzzrd35K/44pk7a0r0BucDm", email, "alger", "16", "10", googleId]);
             if (res.affectedRows > 0) return {
                 success: true,
                 //return the whole client
