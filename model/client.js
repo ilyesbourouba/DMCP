@@ -225,19 +225,13 @@ module.exports = class ClientModel {
         try {
             const sql = `INSERT INTO client (name, phone, password, email, adr, wilaya, token, google_id) VALUES (?, ?, ?, ?, ?, ?, ?, ?)`;
             const [res] = await db.execute(sql, [name, "0000000000", "$2a$10$6W7bA.8Z2QO9g0V22LR6IO0QASkx20Mzzrd35K/44pk7a0r0BucDm", email, "alger", "16", "10", googleId]);
-            if (res.affectedRows > 0) return {
-                success: true,
-                //return the whole client
-                data: {
-                    id: res.insertId,
-                    name: name,
-                    phone: "",
-                    email: email,
-                    adr: "",
-                    wilaya: "",
-                    google_id: googleId
-                }
-            };
+            if (res.affectedRows > 0) {
+                const [newClient] = await db.execute(`SELECT * FROM client WHERE google_id = ?`, [googleId]);
+                return {
+                    success: true,
+                    data: newClient[0]
+                };
+            }
             return {
                 success: false,
             };
