@@ -38,9 +38,9 @@
                                     <div class="numbers">
                                         <p class="text-sm mb-0 text-capitalize font-weight-bold">Meilleur produit</p>
                                         <h5 class="font-weight-bolder mb-0">
-                                            <%= totalRevenueByProduct[0].name_fr %>
+                                            <%= totalRevenueByProduct[0]?.name_fr || 'No data' %>
                                                 <span class="text-success text-sm font-weight-bolder">
-                                                    <%= totalRevenueByProduct[0].total_revenue %>.00 DA
+                                                    <%= totalRevenueByProduct[0]?.total_sold || 0 %>.00 DA
                                                 </span>
                                         </h5>
                                     </div>
