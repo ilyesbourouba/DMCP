@@ -63,9 +63,9 @@
                                         <p class="text-sm mb-0 text-capitalize font-weight-bold">Meilleur Categorie par
                                             nombre de vente</p>
                                         <h5 class="font-weight-bolder mb-0">
-                                            <%= bestCategorySellsByitem.name_fr %>
+                                            <%= bestCategorySellsByitem?.name_fr || 'No data' %>
                                                 <span class="text-success text-sm font-weight-bolder">
-                                                    <%= bestCategorySellsByitem.total_sold %>.00 items
+                                                    <%= bestCategorySellsByitem?.total_sold || 0 %>.00 items
                                                 </span>
                                         </h5>
                                     </div>
