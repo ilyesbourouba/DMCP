@@ -1,5 +1,5 @@
 const StatsModel = require('../model/stats');
-
+const ContactsModel = require('../model/contacts');
 
 exports.dashboardPage = async (req, res, next) => {
     let status = [];
@@ -43,4 +43,32 @@ exports.dashboardPage = async (req, res, next) => {
         chiffreAffaire,
         bestCategorySellsByitem
     });
+}
+
+exports.contactsPage = async (req, res, next) => {
+
+    let contacts = [];
+    const contactsData = await ContactsModel.getContacts();
+    if (contactsData.success) contacts = contactsData.data[0];
+    console.log(contacts);
+
+    res.render('contacts', {
+        user: req.user,
+        sectionName: 'Contacts',
+        pageName: 'Contacts',
+        contacts
+    });
+}
+exports.updateContacts = async (req, res, next) => {
+    const { phone, adr, mail, facebook, instagram, google_play, ios } = req.body;
+
+    console.log(phone, adr, mail, facebook, instagram, google_play, ios);
+
+    const updateContacts = await ContactsModel.updateContacts(phone, adr, mail, facebook, instagram, google_play, ios);
+
+    if (updateContacts.success) {
+        return res.json({ success: true, message: 'Contacts updated successfully' });
+    } else {
+        return res.json({ success: false, message: 'Error updating contacts' });
+    }
 }

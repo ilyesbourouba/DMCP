@@ -1,0 +1,132 @@
+<%- include('./partials/sidebar'); %>
+    <%- include('./partials/header'); %>
+
+        <div class="container-fluid py-4">
+            <div class="row">
+                <div class="col-12">
+                    <div class="card">
+                        <!-- Card header -->
+                        <div class="card-header pb-0">
+                            <div class="d-lg-flex">
+                                <div>
+                                    <h5 class="mb-0">Contacts of DMCP</h5>
+                                </div>
+
+                            </div>
+                        </div>
+                        <div class="card-body px-0 pb-0">
+                            <div class="card-body pt-0">
+                                <div class="row">
+                                    <div class="col-6">
+                                        <label class="form-label">Phone number</label>
+                                        <div class="input-group">
+                                            <input id="phone" name="phone" class="form-control" type="text"
+                                                required="required" value="<%= contacts.phone %>">
+                                        </div>
+                                    </div>
+                                    <div class="col-6">
+                                        <label class="form-label">Location(adresse)</label>
+                                        <div class="input-group">
+                                            <input id="adr" name="adr" class="form-control" type="text"
+                                                required="required" value="<%= contacts.address %>">
+                                        </div>
+                                    </div>
+
+                                    <div class="col-6">
+                                        <label class="form-label">E-mail</label>
+                                        <div class="input-group">
+                                            <input id="mail" name="mail" class="form-control" type="text"
+                                                required="required" value="<%= contacts.email %>">
+                                        </div>
+                                    </div>
+                                    <div class=" col-6">
+                                        <label class="form-label">Facebook</label>
+                                        <div class="input-group">
+                                            <input id="facebook" name="facebook" class="form-control" type="text"
+                                                required="required" value="<%= contacts.facebook %>">
+                                        </div>
+                                    </div>
+                                    <div class=" col-6">
+                                        <label class="form-label">Instagram</label>
+                                        <div class="input-group">
+                                            <input id="instagram" name="instagram" class="form-control" type="text"
+                                                required="required" value="<%= contacts.instagram %>">
+                                        </div>
+                                    </div>
+
+                                    <div class=" col-6">
+                                        <label class="form-label">GOOGLE PLAY</label>
+                                        <div class="input-group">
+                                            <input id="google_play" name="google_play" class="form-control" type="text"
+                                                required="required" value="<%= contacts.google_store %>">
+                                        </div>
+                                    </div>
+                                    <div class=" col-6">
+                                        <label class="form-label">IOS</label>
+                                        <div class="input-group">
+                                            <input id="ios" name="ios" class="form-control" type="text"
+                                                required="required" value="<%= contacts.apple_store %>">
+                                        </div>
+                                    </div>
+
+
+                                </div>
+                                <div class=" col-2 offset-10 text-center">
+                                    <button id="save" class="btn bg-gradient-success w-100 my-4 mb-2">Save</button>
+                                </div>
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+
+        <script>
+            // get contact info from the input fields with jqruery and print them
+            $('#save').click(function () {
+                var phone = $('#phone').val();
+                var mail = $('#mail').val();
+                var adr = $('#adr').val();
+                var facebook = $('#facebook').val();
+                var instagram = $('#instagram').val();
+                var google_play = $('#google_play').val();
+                var ios = $('#ios').val();
+                console.log(phone, adr, mail, facebook, instagram, google_play, ios);
+                // send them to the server with ajax
+                $.ajax({
+                    url: '/dashboard/contact',
+                    type: 'POST',
+                    data: {
+                        phone: phone,
+                        adr: adr,
+                        mail: mail,
+                        facebook: facebook,
+                        instagram: instagram,
+                        google_play: google_play,
+                        ios: ios
+                    },
+                    success: function (response) {
+                        Swal.fire({
+                            icon: "success",
+                            title: "Contacts Updated!",
+                            text: "The Contacts has been updated successfully.",
+                            confirmButtonText: "OK"
+                        }).then(() => {
+                            location.reload();
+                        });
+                    },
+                    error: function (xhr, status, error) {
+                        Swal.fire({
+                            icon: "error",
+                            title: "Error",
+                            text: "Something went wrong. Please try again.",
+                            confirmButtonText: "OK"
+                        });
+                    }
+                });
+            });
+        </script>
+
+        <%- include('./partials/footer'); %>
