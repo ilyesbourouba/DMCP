@@ -28,7 +28,7 @@ exports.addToPanier = async (req, res) => {
 
     let result; // declare it first
 
-    if (!checkPanier || checkPanier.length === 0) {
+    if (!checkPanier || checkPanier.length == 0) {
         result = await PanierModel.addToPanier(client_id, product_id, quantity);
     } else {
         // var sum = quantity + checkPanier["quantity"];
