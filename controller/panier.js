@@ -1,6 +1,6 @@
 const PanierModel = require('../model/panier');
 
-exports.getPanier = async(req, res) => {
+exports.getPanier = async (req, res) => {
     const { client } = req.body;
 
     if (!client) {
@@ -16,7 +16,7 @@ exports.getPanier = async(req, res) => {
     return res.status(200).json([]);
 };
 
-exports.addToPanier = async(req, res) => {
+exports.addToPanier = async (req, res) => {
     const { product_id, client_id, quantity } = req.body;
 
     if (!product_id || !client_id || !quantity) {
@@ -24,11 +24,11 @@ exports.addToPanier = async(req, res) => {
     }
     console.log("DATA => ", product_id, client_id, quantity);
     const checkPanier = await PanierModel.find(client_id, product_id);
-    console.log(checkPanier);
+    console.log("checkPanier =>", checkPanier);
 
     let result; // declare it first
 
-    if (checkPanier == null) {
+    if (!checkPanier || checkPanier.length === 0) {
         result = await PanierModel.addToPanier(client_id, product_id, quantity);
     } else {
         // var sum = quantity + checkPanier["quantity"];
@@ -43,7 +43,7 @@ exports.addToPanier = async(req, res) => {
     return res.status(500).json({ message: "Error getting panier : " + result.error });
 };
 
-exports.deleteFromPanier = async(req, res) => {
+exports.deleteFromPanier = async (req, res) => {
     const { product_id, client_id } = req.body;
 
     if (!product_id || !client_id) {
