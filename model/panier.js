@@ -1,7 +1,7 @@
 const db = require("../config/DB");
 
 module.exports = class PanierModel {
-    constructor() {}
+    constructor() { }
 
     static async getAll() {
         try {
@@ -23,7 +23,7 @@ module.exports = class PanierModel {
         try {
             const [paniers] = await db.execute(`SELECT product.id, product.name_fr, product.name_en, product.name_ar, product.price, panier.quantity 
                                             FROM panier 
-                                            JOIN product ON product.id = panier.product_id WHERE panier.client_id = 1;`, [clientId]);
+                                            JOIN product ON product.id = panier.product_id WHERE panier.client_id = ?;`, [clientId]);
 
             for (const panier of paniers) {
                 const [images] = await db.execute(`
