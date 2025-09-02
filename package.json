@@ -1,7 +1,7 @@
 {
-  "name": "rma_quality",
+  "name": "DMCP CMS",
   "version": "1.0.0",
-  "description": "Project for RMA requests by DAQP",
+  "description": "Project for DMCP CMS",
   "main": "app.js",
   "scripts": {
     "start": "nodemon app.js",

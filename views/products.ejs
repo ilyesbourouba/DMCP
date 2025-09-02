@@ -301,7 +301,18 @@
                                 </div>
                             </div>
 
+                            <hr class="horizontal dark mt-3">
+                            <div class="col-lg-3 offset-9">
+                                <button type="button" id="add_prefs" class="btn btn-primary btn-sm">ADD
+                                    PREFS</button>
+                            </div>
 
+                            <div class="col-lg-12">
+                                <div>Prefs</div>
+                                <div class="row" id="prefs_list">
+
+                                </div>
+                            </div>
 
                             <div class="col-lg-12">
                                 <div class="card">
@@ -500,6 +511,35 @@
 
             });
         </script>
+
+        <script>
+            document.addEventListener("DOMContentLoaded", function () {
+                const addPrefsBtn = document.getElementById("add_prefs");
+                const prefsList = document.getElementById("prefs_list");
+
+                addPrefsBtn.addEventListener("click", function () {
+                    const prefsItem = document.createElement("div");
+                    prefsItem.classList.add("col-lg-3", "prefs-item");
+
+                    prefsItem.innerHTML = `
+                        <div class="input-group mb-3">
+                            <input name="products[]" type="text" class="form-control" placeholder="pref name...">
+                            <button type="button" class="badge bg-gradient-danger remove_prefs" style="border-color:#ef4444">X</button>
+                        </div>
+                    `;
+
+                    prefsList.appendChild(prefsItem);
+
+                });
+
+                prefsList.addEventListener("click", function (event) {
+                    if (event.target.classList.contains("remove_prefs")) {
+                        event.target.closest(".prefs-item").remove();
+                    }
+                });
+            });
+        </script>
+
         <script>
             // CREATE
             $('#add_Prod').click(function () {
@@ -525,6 +565,12 @@
                 images.forEach(image => {
                     formData.append("images", image);
                 });
+
+                var prefs = [];
+                $('#prefs_list input').each(function () {
+                    prefs.push($(this).val());
+                });
+                formData.append("prefs", prefs);
 
                 $.ajax({
                     url: "/products/add",

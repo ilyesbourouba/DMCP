@@ -30,16 +30,16 @@ exports.productsList = async (req, res, next) => {
     return res.status(200).json(products);
 }
 exports.addProduct = async (req, res) => {
-    const { name_fr, name_en, name_ar, category, description_fr, description_ar, description_en, price, stock, best_selling, top_rating, new_product } = req.body;
+    const { name_fr, name_en, name_ar, category, description_fr, description_ar, description_en, price, stock, best_selling, top_rating, new_product, prefs } = req.body;
 
     if (!name_fr || !name_en || !name_ar || !category || !description_fr || !description_ar || !description_en || !price || !stock || best_selling === undefined || top_rating === undefined || new_product === undefined) {
         return res.status(400).json({ message: "Please fill in all fields" });
     }
-    console.log("addProduct => ", name_fr, name_en, name_ar, category, description_fr, description_ar, description_en, price, stock, best_selling, top_rating, new_product);
+    // console.log("addProduct => ", name_fr, name_en, name_ar, category, description_fr, description_ar, description_en, price, stock, best_selling, top_rating, new_product);
 
     const image_names = req.files.map(file => file.filename);
 
-    const result = await ProductModel.addProduct(name_fr, name_en, name_ar, category, description_fr, description_ar, description_en, price, stock, best_selling, top_rating, new_product, image_names);
+    const result = await ProductModel.addProduct(name_fr, name_en, name_ar, category, description_fr, description_ar, description_en, price, stock, best_selling, top_rating, new_product, image_names, prefs);
 
     if (result.success) {
         return res.status(200).json({ message: "Product added successfully!", images: image_names });
