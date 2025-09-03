@@ -1,7 +1,7 @@
 const ProductModel = require('../model/product');
 const CategoryModel = require('../model/category');
 
-exports.productsPage = async (req, res, next) => {
+exports.productsPage = async(req, res, next) => {
 
     let products = [];
     let category = [];
@@ -11,6 +11,7 @@ exports.productsPage = async (req, res, next) => {
 
     if (Categories.success) category = Categories.data;
     if (success) products = data;
+    console.log(products);
 
     return res.render('products', {
         user: req.user,
@@ -20,7 +21,7 @@ exports.productsPage = async (req, res, next) => {
         category
     });
 }
-exports.productsList = async (req, res, next) => {
+exports.productsList = async(req, res, next) => {
     let products = [];
 
     const { success, data } = await ProductModel.getProducts();
@@ -29,7 +30,7 @@ exports.productsList = async (req, res, next) => {
     console.table(products);
     return res.status(200).json(products);
 }
-exports.addProduct = async (req, res) => {
+exports.addProduct = async(req, res) => {
     const { name_fr, name_en, name_ar, category, description_fr, description_ar, description_en, price, stock, best_selling, top_rating, new_product, prefs } = req.body;
 
     if (!name_fr || !name_en || !name_ar || !category || !description_fr || !description_ar || !description_en || !price || !stock || best_selling === undefined || top_rating === undefined || new_product === undefined) {
@@ -48,7 +49,7 @@ exports.addProduct = async (req, res) => {
 };
 
 // delete product
-exports.deleteProduct = async (req, res) => {
+exports.deleteProduct = async(req, res) => {
     const { id } = req.body;
 
     if (!id) return res.status(400).json({ message: "Please provide a product id" });
@@ -65,7 +66,7 @@ exports.deleteProduct = async (req, res) => {
 };
 
 // delete product image
-exports.deleteProductIMAGE = async (req, res) => {
+exports.deleteProductIMAGE = async(req, res) => {
     const { id, image } = req.body;
 
     if (!id || !image) return res.status(400).json({ message: "Please provide a product id and image" });
@@ -79,10 +80,10 @@ exports.deleteProductIMAGE = async (req, res) => {
 };
 
 // update product
-exports.updateProduct = async (req, res) => {
-    const { id, name_fr, name_ar, name_en, desc_fr, desc_ar, desc_en, category, price, stock, best_selling, new_product, top_rating } = req.body;
+exports.updateProduct = async(req, res) => {
+    const { id, name_fr, name_ar, name_en, desc_fr, desc_ar, desc_en, category, price, stock, best_selling, new_product, top_rating, prefs } = req.body;
 
-    console.log(id, name_fr, name_ar, name_en, desc_fr, desc_ar, desc_en, category, price, stock, best_selling, new_product, top_rating);
+    console.log("new prefs => ", prefs);
 
     if (!id || !name_fr || !name_ar || !name_en || !category || !desc_fr || !desc_ar || !desc_en || !price || !stock || best_selling === undefined || new_product === undefined || best_selling === undefined) {
         return res.status(400).json({ message: "Please fill in all fields" });
@@ -90,7 +91,7 @@ exports.updateProduct = async (req, res) => {
 
     const image_names = req.files.map(file => file.filename);
 
-    const result = await ProductModel.updateProduct(id, name_fr, name_ar, name_en, desc_fr, desc_ar, desc_en, category, price, stock, best_selling, new_product, top_rating, image_names);
+    const result = await ProductModel.updateProduct(id, name_fr, name_ar, name_en, desc_fr, desc_ar, desc_en, category, price, stock, best_selling, new_product, top_rating, image_names, prefs);
 
     if (result.success) {
         return res.status(200).json({ message: "Product updated successfully!", images: image_names });
