@@ -308,6 +308,7 @@
                                     <thead>
                                         <tr>
                                             <th class="text-left text-sm p-0 pb-2 ps-3">Product</th>
+                                            <th class="text-left text-sm p-0 pb-2 ps-1">Feature</th>
                                             <th class="text-left text-sm p-0 pb-2 ps-1">Quantity</th>
                                         </tr>
                                     </thead>
@@ -384,6 +385,7 @@
                 products.forEach(product => {
                     html += `<tr>
                                 <td class="text-left text-sm "><h6 class="text-sm mb-0">${product.name_fr}</h6></td>
+                                <td class="text-left text-sm"><h6 class="text-sm mb-0">${product.feature_name || '—'}</h6></td>
                                 <td class="text-left text-sm"><h6 class="text-sm mb-0">${product.quantity}</h6></td>
                             </tr>`;
                 });

@@ -783,11 +783,12 @@
 
         addPrefsBtn.addEventListener("click", function () {
             const prefsItem = document.createElement("div");
-            prefsItem.classList.add("col-lg-3", "prefs-item");
+            prefsItem.classList.add("col-lg-4", "prefs-item");
 
             prefsItem.innerHTML = `
                         <div class="input-group mb-3">
-                            <input name="products[]" type="text" class="form-control" placeholder="pref name...">
+                            <input type="text" class="form-control pref-name" placeholder="Feature name...">
+                            <input type="number" class="form-control pref-price" placeholder="Price (optional)" style="max-width:110px">
                             <button type="button" class="badge bg-gradient-danger remove_prefs" style="border-color:#ef4444">X</button>
                         </div>
                     `;
@@ -830,10 +831,14 @@
         });
 
         var prefs = [];
-        $("#prefs_list input").each(function () {
-            prefs.push($(this).val());
+        $("#prefs_list .prefs-item").each(function () {
+            var name = $(this).find('.pref-name').val().trim();
+            var price = $(this).find('.pref-price').val().trim();
+            if (name) {
+                prefs.push(price ? name + ':' + price : name);
+            }
         });
-        formData.append("prefs", prefs);
+        formData.append("prefs", prefs.join(','));
 
         $.ajax({
             url: "/products/add",
@@ -997,11 +1002,13 @@
         product_list.html("");
 
         selected_products.forEach((product) => {
+            let pName = product.name || product;
+            let pPrice = (product.price !== null && product.price !== undefined) ? product.price : '';
             let productItem = `
-                <div class="col-lg-3 product-item">
+                <div class="col-lg-4 product-item">
                     <div class="input-group mb-3">
-                        
-                        <input name="products[]" type="text" class="form-control" value="${product}" placeholder="pref name...">
+                        <input type="text" class="form-control pref-name" value="${pName}" placeholder="Feature name...">
+                        <input type="number" class="form-control pref-price" value="${pPrice}" placeholder="Price (optional)" style="max-width:110px">
                         <button type="button" class="badge bg-gradient-danger remove_product" style="border-color:#ef4444">X</button>
                     </div>
                 </div>
@@ -1014,15 +1021,15 @@
             .off("click")
             .on("click", function () {
                 let productItem = `
-                        <div class="col-lg-3 product-item">
+                        <div class="col-lg-4 product-item">
                             <div class="input-group mb-3">
-                                <input name="products[]" type="text" class="form-control" placeholder="pref name...">
+                                <input type="text" class="form-control pref-name" placeholder="Feature name...">
+                                <input type="number" class="form-control pref-price" placeholder="Price (optional)" style="max-width:110px">
                                 <button type="button" class="badge bg-gradient-danger remove_product" style="border-color:#ef4444">X</button>
                             </div>
                         </div>
                     `;
                 product_list.append(productItem);
-                updateTotalPriceEdit();
             });
 
         // Use delegated event handling to avoid multiple bindings
@@ -1110,10 +1117,14 @@
         });
 
         var prefs = [];
-        $("#edit_product_list input").each(function () {
-            prefs.push($(this).val());
+        $("#edit_product_list .product-item").each(function () {
+            var name = $(this).find('.pref-name').val().trim();
+            var price = $(this).find('.pref-price').val().trim();
+            if (name) {
+                prefs.push(price ? name + ':' + price : name);
+            }
         });
-        formData.append("prefs", prefs);
+        formData.append("prefs", prefs.join(','));
 
         $.ajax({
             url: "/products/update",

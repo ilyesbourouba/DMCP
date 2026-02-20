@@ -13,10 +13,11 @@ module.exports = class CommandeModel {
 
             for (const product of products) {
                 await db.execute(
-                    `INSERT INTO commande_product (commande_id, product_id, quantity) VALUES (?, ?, ?)`, [commande_id, product.product_id, product.quantity]
+                    `INSERT INTO commande_product (commande_id, product_id, quantity, feature_name) VALUES (?, ?, ?, ?)`,
+                    [commande_id, product.product_id, product.quantity, product.feature_name || null]
                 );
             }
-            // i want to delete the panier of the client after creating the commande
+            // Delete the panier of the client after creating the commande
             await db.execute(
                 `DELETE FROM panier WHERE client_id = ?`, [client_id]
             );
@@ -26,6 +27,7 @@ module.exports = class CommandeModel {
             return error;
         }
     }
+
     static async getCMDByClient(id_client) {
             try {
                 const [rows] = await db.execute(
@@ -49,7 +51,8 @@ module.exports = class CommandeModel {
                 for (const row of rows) {
                     const [products] = await db.execute(
                         `SELECT 
-                        commande_product.quantity, 
+                        commande_product.quantity,
+                        commande_product.feature_name,
                         product.name_en, 
                         product.name_fr, 
                         product.name_ar
@@ -91,7 +94,8 @@ module.exports = class CommandeModel {
                 for (const row of rows) {
                     const [products] = await db.execute(
                         `SELECT 
-                        commande_product.quantity, 
+                        commande_product.quantity,
+                        commande_product.feature_name,
                         product.name_fr
                     FROM commande_product 
                     JOIN product ON commande_product.product_id = product.id 
@@ -99,8 +103,6 @@ module.exports = class CommandeModel {
                     );
                     row.products = products;
                 };
-                // console.log("************ Commandes ************");
-                // console.log(rows);
                 return rows;
 
             } catch (error) {

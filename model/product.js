@@ -21,9 +21,13 @@ module.exports = class ProductModel {
                     product.images = images.map(img => img.image_url);
 
                     const [features] = await db.execute(`
-                    SELECT feature_fr FROM product_feature WHERE product_id = ?
+                    SELECT feature_fr, price FROM product_feature WHERE product_id = ?
                 `, [product.id]);
-                    product.features = features.map(feature => feature.feature_fr);
+                    // Return features as objects {name, price} for frontend to use
+                    product.features = features.map(f => ({
+                        name: f.feature_fr,
+                        price: f.price !== null ? parseFloat(f.price) : null
+                    }));
                 }
 
                 return { success: true, data: products };
@@ -81,6 +85,19 @@ module.exports = class ProductModel {
         }
     }
 
+    /**
+     * Parse a features string like "ALCO GEL 1L:400, ALCO GEL 5L:600, ALCO GEL 250ML"
+     * into an array of {name, price} objects.
+     */
+    static _parseFeatures(prefsStr) {
+        return prefsStr.split(",").map(item => {
+            const parts = item.trim().split(":");
+            const name = parts[0].trim();
+            const price = parts.length > 1 && parts[1].trim() !== '' ? parseFloat(parts[1].trim()) : null;
+            return { name, price };
+        }).filter(f => f.name.length > 0);
+    }
+
     static async addProduct(name_fr, name_en, name_ar, category, description_fr, description_ar, description_en, price, stock, best_selling, top_rating, new_product, image_names, prefs) {
         best_selling = best_selling == "true" ? 1 : 0;
         top_rating = top_rating == "true" ? 1 : 0;
@@ -93,21 +110,16 @@ module.exports = class ProductModel {
                 INSERT INTO product (name_fr, name_en, name_ar, category_id,  desc_fr, desc_ar, desc_en, price, stock, best_selling, top_rating, new_product)
                 VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`, [name_fr, name_en, name_ar, category, description_fr, description_ar, description_en, price, stock, best_selling, top_rating, new_product]);
 
-            const productId = res.insertId; // ID du produit ajouté
-            // console.log("productId => ", productId);
-            var prefs = prefs.split(",");
-            // console.log("prefs => ", prefs);
-            // console.log(prefs.length);
+            const productId = res.insertId;
 
-            if (prefs.length > 0) {
-
-                const prefValues = prefs.map(pref => [productId, pref.trim()]);
-                // console.log("prefValues => ", prefValues);
+            const parsedFeatures = ProductModel._parseFeatures(prefs);
+            if (parsedFeatures.length > 0) {
+                const prefValues = parsedFeatures.map(f => [productId, f.name, f.price]);
                 await connection.query(`
-                    INSERT INTO product_feature (product_id, feature_fr) VALUES ?`, [prefValues]);
+                    INSERT INTO product_feature (product_id, feature_fr, price) VALUES ?`, [prefValues]);
             }
-            if (image_names.length > 0) {
 
+            if (image_names.length > 0) {
                 const imageValues = image_names.map(img => [productId, process.env.IMAGE_PATH + img]);
                 await connection.query(`
                     INSERT INTO product_images (product_id, image_url) VALUES ?`, [imageValues]);
@@ -169,7 +181,6 @@ module.exports = class ProductModel {
         best_selling = best_selling == "true" ? 1 : 0;
         top_rating = top_rating == "true" ? 1 : 0;
         new_product = new_product == "true" ? 1 : 0;
-        var prefs = prefs.split(",");
 
         const connection = await db.getConnection();
         try {
@@ -185,17 +196,15 @@ module.exports = class ProductModel {
                     INSERT INTO product_images (product_id, image_url) VALUES ?`, [imageValues]);
             }
 
-            if (prefs.length > 0) {
-                const prefValues = prefs.map(pref => [id, pref.trim()]);
-                // delete the old prefs of that product and insert the new ones
-                await connection.query(`
-                    DELETE FROM product_feature WHERE product_id = ?`, [id]);
+            const parsedFeatures = ProductModel._parseFeatures(prefs);
+            // Delete old features and re-insert with new price info
+            await connection.query(`DELETE FROM product_feature WHERE product_id = ?`, [id]);
 
+            if (parsedFeatures.length > 0) {
+                const prefValues = parsedFeatures.map(f => [id, f.name, f.price]);
                 await connection.query(`
-                    INSERT INTO product_feature (product_id, feature_fr) VALUES ?`, [prefValues]);
+                    INSERT INTO product_feature (product_id, feature_fr, price) VALUES ?`, [prefValues]);
             }
-
-
 
             await connection.commit();
             connection.release();
